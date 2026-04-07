@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   title: {
@@ -14,23 +14,49 @@ const props = defineProps({
     type: Number,
     default: 100,
   },
+  data: {
+    type: Array,
+    required: true,
+  },
   unit: {
     type: String,
     default: '%',
   },
 });
 
+const hoveredItem = ref(null);
+
 const percentage = computed(() => {
   if (props.total === 0) return 0;
   return Math.min(100, Math.round((props.value / props.total) * 100));
 });
 
+// 컴퓨티드 속성 내 계산 예시 (가사 코드)
+const chartSegments = computed(() => {
+  const total = props.data.reduce((sum, item) => sum + item.value, 0);
+  const radius = 50;
+  const circumference = 2 * Math.PI * radius;
+
+  let currentOffset = 0;
+
+  return props.data.map((item) => {
+    const segmentValue = item.value;
+    const segmentLength = (segmentValue / total) * circumference;
+    const strokeArray = `${segmentLength} ${circumference - segmentLength}`;
+    const strokeDashoffset = circumference - currentOffset;
+
+    currentOffset += segmentLength;
+
+    return {
+      ...item,
+      strokeArray,
+      strokeDashoffset,
+    };
+  });
+});
+
 const radius = 50;
 const circumference = 2 * Math.PI * radius;
-
-const strokeDashoffset = computed(() => {
-  return circumference - (circumference * percentage.value) / 100;
-});
 </script>
 <template>
   <div class="flex flex-col items-center">
@@ -47,48 +73,46 @@ const strokeDashoffset = computed(() => {
         viewBox="0 0 120 120"
         class="w-full h-full -rotate-90 transform relative z-10"
       >
-        <defs>
-          <linearGradient
-            id="yellowGrad"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="0%"
-          >
-            <stop
-              offset="0%"
-              stop-color="#fcaf17"
-            />
-            <stop
-              offset="100%"
-              stop-color="#fdb913"
-            />
-          </linearGradient>
-        </defs>
-
         <circle
+          v-for="(segment, index) in chartSegments"
+          :key="index"
           cx="60"
           cy="60"
           :r="radius"
           fill="none"
-          stroke="url(#yellowGrad)"
+          :stroke="segment.color"
           stroke-width="12"
           stroke-linecap="round"
-          class="transition-all duration-500 ease-out"
+          class="transition-all duration-300 ease-out"
           :style="{
-            strokeDasharray: circumference,
-            strokeDashoffset: strokeDashoffset,
+            strokeDasharray: segment.strokeArray,
+            strokeDashoffset: segment.strokeDashoffset,
           }"
+          @mouseover="hoveredItem = segment"
+          @mouseleave="hoveredItem = null"
         />
       </svg>
 
       <div class="absolute flex flex-col items-center z-20">
-        <p class="text-4xl font-extrabold text-[#645b4c] tabular-nums">
-          {{ value }}<span class="text-xl font-bold ml-0.5">{{ unit }}</span>
-        </p>
-        <p class="text-xs text-[#a39b8f] tracking-widest uppercase mt-1">
-          of {{ total }} {{ unit }}
-        </p>
+        <template v-if="hoveredItem">
+          <p class="text-xl font-bold text-[#645b4c]">{{ hoveredItem.type }}</p>
+          <p class="text-2xl font-extrabold text-[#645b4c] tabular-nums">
+            {{ hoveredItem.value.toLocaleString() }}<span class="text-lg">원</span>
+            <!-- {{
+              Math.round(
+                (hoveredItem.value / chartSegments.reduce((sum, s) => sum + s.value, 0)) * 100
+              )
+            }} -->
+            <!-- <span class="text-lg">{{ unit }}</span> -->
+          </p>
+        </template>
+        <template v-else>
+          <p class="text-xl font-bold text-[#645b4c]">Total</p>
+          <p class="text-2xl font-extrabold text-[#645b4c] tabular-nums">
+            {{ chartSegments.reduce((sum, s) => sum + s.value, 0).toLocaleString()
+            }}<span class="text-lg">원</span>
+          </p>
+        </template>
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <script setup>
 import draggable from 'vuedraggable';
 
-import { ref } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { today, getLocalTimeZone } from '@internationalized/date';
 
 import { Calendar } from '@/components/ui/calendar';
@@ -12,8 +12,38 @@ import { weeklyActivity } from '@/data/activity';
 import PieChart from '@/components/PieChart.vue';
 import LineChart from '@/components/LineChart.vue';
 import DashboardContainer from '@/components/CardsContainer.vue';
+import { useTransactionStore } from '@/stores/transaction.js';
 
+const transaction = useTransactionStore();
 const date = ref(today(getLocalTimeZone()));
+
+// 전체 송금 데이터 (반응형 상태)
+const monthlyTrans = computed(() => transaction.monthlyTrans);
+
+// 총 금액 계산
+const totalAmount = computed(() => {
+  if (!monthlyTrans.value || monthlyTrans.value.length === 0) return 0;
+  return monthlyTrans.value.reduce((sum, t) => sum + t.amount, 0);
+});
+
+// PieChart 데이터 계산
+const pieData = computed(() => {
+  const transferSum = monthlyTrans.value
+    .filter((t) => t.type === 'TRANSFER')
+    .reduce((sum, t) => sum + t.amount, 0);
+  const paymentSum = monthlyTrans.value
+    .filter((t) => t.type === 'PAYMENT')
+    .reduce((sum, t) => sum + t.amount, 0);
+  return [
+    { type: 'TRANSFER', value: transferSum, color: '#ffcf69' }, // 밝은 노란색
+    { type: 'PAYMENT', value: paymentSum, color: '#fcaf17' }, // 어두운 노란색
+  ];
+});
+
+//
+onMounted(() => {
+  transaction.getUserTransaction(1);
+});
 
 const user = {
   name: 'User Name',
@@ -94,7 +124,9 @@ const resetLayout = () => {
 
             <PieChart
               v-else-if="element.type === 'pie'"
-              :value="myValue"
+              title="Transaction Types"
+              :value="100"
+              :data="pieData"
               :total="100"
               unit="%"
             />
