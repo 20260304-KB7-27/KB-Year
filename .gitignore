@@ -1,41 +1,119 @@
-# Logs
-logs
+# ==============================================================================
+# OS & System Files
+# ==============================================================================
+.DS_Store
+
+# ==============================================================================
+# Dependencies
+# ==============================================================================
+node_modules/
+jspm_packages/
+web_modules/
+bower_components/
+
+# ==============================================================================
+# Build & Output
+# ==============================================================================
+dist/
+dist-ssr/
+out/
+build/Release/
+
+# ==============================================================================
+# Logs & Runtime Data
+# ==============================================================================
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+pids/
+*.pid
+*.seed
+*.pid.lock
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+.node_repl_history
 
-node_modules
-.DS_Store
-dist
-dist-ssr
-coverage
+# ==============================================================================
+# Testing & Coverage
+# ==============================================================================
+coverage/
+*.lcov
+lib-cov/
+.nyc_output/
+/cypress/videos/
+/cypress/screenshots/
+__screenshots__/
+
+# ==============================================================================
+# Caches & Linting
+# ==============================================================================
+.npm/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+.cache/
+.parcel-cache/
+.temp/
+
+# ==============================================================================
+# Environments & Secrets
+# ==============================================================================
+.env
+.env.*
+!.env.example
 *.local
 
-# Editor directories and files
+# ==============================================================================
+# Frameworks, Bundlers & Tools
+# ==============================================================================
+# Vite
+*.timestamp-*-*.mjs
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Next.js / Nuxt.js / SvelteKit
+.next/
+.nuxt/
+.svelte-kit/
+
+# Documentation & Static Site Generators (Vuepress, Vitepress, Docusaurus)
+.vuepress/dist
+**/.vitepress/dist
+**/.vitepress/cache
+.docusaurus/
+
+# Yarn v3+ & Archives
+*.tgz
+.yarn-integrity
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Misc Tools & Cloud
+.serverless/
+.fusebox/
+.dynamodb/
+.firebase/
+.grunt/
+.lock-wscript
+.tern-port
+
+# ==============================================================================
+# Editors & IDEs
+# ==============================================================================
 .vscode/*
 !.vscode/extensions.json
-.idea
+.vscode-test/
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-
-*.tsbuildinfo
-
-.eslintcache
-
-# Cypress
-/cypress/videos/
-/cypress/screenshots/
-
-# Vitest
-__screenshots__/
-
-# Vite
-*.timestamp-*-*.mjs
-
-.env
