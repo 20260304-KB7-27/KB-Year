@@ -1,0 +1,2020 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "김철수",
+      "birthDate": "1995-05-20",
+      "gender": "MALE",
+      "email": "chulsoo@example.com"
+    },
+    {
+      "id": 2,
+      "name": "이영희",
+      "birthDate": "1998-08-15",
+      "gender": "FEMALE",
+      "email": "younghee@example.com"
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "type": "TRANSFER",
+      "amount": 42500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-01T08:12:45Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "점심 식사"
+    },
+    {
+      "id": 2,
+      "type": "PAYMENT",
+      "amount": 3400,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-01T14:22:10Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "편의점"
+    },
+    {
+      "id": 3,
+      "type": "TRANSFER",
+      "amount": 12000,
+      "category": "INCOME",
+      "timestamp": "2026-03-02T09:05:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피"
+    },
+    {
+      "id": 4,
+      "type": "PAYMENT",
+      "amount": 55000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-02T19:30:22Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "마트 장보기"
+    },
+    {
+      "id": 5,
+      "type": "TRANSFER",
+      "amount": 8000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-03T11:45:12Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "간식"
+    },
+    {
+      "id": 6,
+      "type": "TRANSFER",
+      "amount": 25000,
+      "category": "INCOME",
+      "timestamp": "2026-03-03T16:10:05Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "택시비 정산"
+    },
+    {
+      "id": 7,
+      "type": "PAYMENT",
+      "amount": 150000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-04T10:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "월세 보조"
+    },
+    {
+      "id": 8,
+      "type": "TRANSFER",
+      "amount": 4500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-04T12:30:45Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "지하철"
+    },
+    {
+      "id": 9,
+      "type": "TRANSFER",
+      "amount": 9200,
+      "category": "INCOME",
+      "timestamp": "2026-03-05T08:20:15Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "김밥천국"
+    },
+    {
+      "id": 10,
+      "type": "PAYMENT",
+      "amount": 21000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-05T20:05:30Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "치킨"
+    },
+    {
+      "id": 11,
+      "type": "TRANSFER",
+      "amount": 13000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-06T13:12:45Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "서점"
+    },
+    {
+      "id": 12,
+      "type": "TRANSFER",
+      "amount": 7500,
+      "category": "INCOME",
+      "timestamp": "2026-03-06T17:22:10Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "버블티"
+    },
+    {
+      "id": 13,
+      "type": "PAYMENT",
+      "amount": 32000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-07T09:05:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "미용실"
+    },
+    {
+      "id": 14,
+      "type": "TRANSFER",
+      "amount": 5400,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-07T15:30:22Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "버스비"
+    },
+    {
+      "id": 15,
+      "type": "TRANSFER",
+      "amount": 10000,
+      "category": "INCOME",
+      "timestamp": "2026-03-08T11:45:12Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "복권 당첨 분배"
+    },
+    {
+      "id": 16,
+      "type": "PAYMENT",
+      "amount": 42000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-08T19:10:05Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "영화 관람"
+    },
+    {
+      "id": 17,
+      "type": "TRANSFER",
+      "amount": 6500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-09T08:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "토스트"
+    },
+    {
+      "id": 18,
+      "type": "TRANSFER",
+      "amount": 12500,
+      "category": "INCOME",
+      "timestamp": "2026-03-09T13:30:45Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "점심 정산"
+    },
+    {
+      "id": 19,
+      "type": "PAYMENT",
+      "amount": 89000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-10T10:20:15Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "백화점"
+    },
+    {
+      "id": 20,
+      "type": "TRANSFER",
+      "amount": 3500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-10T18:05:30Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "다이소"
+    },
+    {
+      "id": 21,
+      "type": "TRANSFER",
+      "amount": 14000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-11T12:12:45Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "돈까스"
+    },
+    {
+      "id": 22,
+      "type": "PAYMENT",
+      "amount": 5600,
+      "category": "INCOME",
+      "timestamp": "2026-03-11T16:22:10Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "약국"
+    },
+    {
+      "id": 23,
+      "type": "TRANSFER",
+      "amount": 28000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-12T09:05:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "운동화"
+    },
+    {
+      "id": 24,
+      "type": "TRANSFER",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-12T14:30:22Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "편의점 커피"
+    },
+    {
+      "id": 25,
+      "type": "PAYMENT",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-03-13T11:45:12Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "분식"
+    },
+    {
+      "id": 26,
+      "type": "TRANSFER",
+      "amount": 67000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-13T19:10:05Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "외식"
+    },
+    {
+      "id": 27,
+      "type": "TRANSFER",
+      "amount": 1500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-14T08:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "껌"
+    },
+    {
+      "id": 28,
+      "type": "PAYMENT",
+      "amount": 35000,
+      "category": "INCOME",
+      "timestamp": "2026-03-14T15:30:45Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "주말 알바비"
+    },
+    {
+      "id": 29,
+      "type": "TRANSFER",
+      "amount": 9500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-15T10:20:15Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "문구류"
+    },
+    {
+      "id": 30,
+      "type": "TRANSFER",
+      "amount": 4800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-15T21:05:30Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "야식 음료"
+    },
+    {
+      "id": 31,
+      "type": "TRANSFER",
+      "amount": 12000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-16T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "햄버거"
+    },
+    {
+      "id": 32,
+      "type": "PAYMENT",
+      "amount": 3400,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-16T15:30:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "편의점"
+    },
+    {
+      "id": 33,
+      "type": "TRANSFER",
+      "amount": 5600,
+      "category": "INCOME",
+      "timestamp": "2026-03-17T11:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피값 송금"
+    },
+    {
+      "id": 34,
+      "type": "TRANSFER",
+      "amount": 9000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-17T18:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "제과점"
+    },
+    {
+      "id": 35,
+      "type": "PAYMENT",
+      "amount": 15000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-18T12:45:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "비빔밥"
+    },
+    {
+      "id": 36,
+      "type": "TRANSFER",
+      "amount": 4200,
+      "category": "INCOME",
+      "timestamp": "2026-03-18T17:10:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "잔돈"
+    },
+    {
+      "id": 37,
+      "type": "TRANSFER",
+      "amount": 23000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-19T10:15:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "셔츠 구매"
+    },
+    {
+      "id": 38,
+      "type": "PAYMENT",
+      "amount": 6700,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-19T20:40:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "맥주"
+    },
+    {
+      "id": 39,
+      "type": "TRANSFER",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-03-20T09:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "어제 저녁 정산"
+    },
+    {
+      "id": 40,
+      "type": "TRANSFER",
+      "amount": 3800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-20T16:55:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "군것질"
+    },
+    {
+      "id": 41,
+      "type": "PAYMENT",
+      "amount": 45000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-21T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "전시회"
+    },
+    {
+      "id": 42,
+      "type": "TRANSFER",
+      "amount": 8900,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-21T19:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "파스타"
+    },
+    {
+      "id": 43,
+      "type": "TRANSFER",
+      "amount": 15000,
+      "category": "INCOME",
+      "timestamp": "2026-03-22T11:45:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "친구 송금"
+    },
+    {
+      "id": 44,
+      "type": "PAYMENT",
+      "amount": 12000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-22T14:30:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "피자"
+    },
+    {
+      "id": 45,
+      "type": "TRANSFER",
+      "amount": 5500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-23T08:10:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "김밥"
+    },
+    {
+      "id": 46,
+      "type": "TRANSFER",
+      "amount": 2500,
+      "category": "INCOME",
+      "timestamp": "2026-03-23T13:40:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "간식비 정산"
+    },
+    {
+      "id": 47,
+      "type": "PAYMENT",
+      "amount": 33000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-24T10:20:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "주방용품"
+    },
+    {
+      "id": 48,
+      "type": "TRANSFER",
+      "amount": 6200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-24T18:15:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "라면"
+    },
+    {
+      "id": 49,
+      "type": "TRANSFER",
+      "amount": 19000,
+      "category": "INCOME",
+      "timestamp": "2026-03-25T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "반품 환불"
+    },
+    {
+      "id": 50,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-25T16:50:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "생수"
+    },
+    {
+      "id": 51,
+      "type": "TRANSFER",
+      "amount": 14500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-26T12:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "부대찌개"
+    },
+    {
+      "id": 52,
+      "type": "TRANSFER",
+      "amount": 3300,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-26T15:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "문구"
+    },
+    {
+      "id": 53,
+      "type": "PAYMENT",
+      "amount": 5600,
+      "category": "INCOME",
+      "timestamp": "2026-03-27T11:15:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피 빚"
+    },
+    {
+      "id": 54,
+      "type": "TRANSFER",
+      "amount": 8800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-27T18:45:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "빵"
+    },
+    {
+      "id": 55,
+      "type": "TRANSFER",
+      "amount": 21000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-28T12:55:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "초밥"
+    },
+    {
+      "id": 56,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "INCOME",
+      "timestamp": "2026-03-28T17:10:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "잔돈 반환"
+    },
+    {
+      "id": 57,
+      "type": "TRANSFER",
+      "amount": 25000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-29T10:40:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "영화"
+    },
+    {
+      "id": 58,
+      "type": "TRANSFER",
+      "amount": 6700,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-29T21:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "편의점 간식"
+    },
+    {
+      "id": 59,
+      "type": "PAYMENT",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-03-30T09:35:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "배달 정산"
+    },
+    {
+      "id": 60,
+      "type": "TRANSFER",
+      "amount": 3800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-30T16:50:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "음료"
+    },
+    {
+      "id": 61,
+      "type": "TRANSFER",
+      "amount": 13000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-31T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "순대국"
+    },
+    {
+      "id": 62,
+      "type": "PAYMENT",
+      "amount": 3200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-31T15:30:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "껌"
+    },
+    {
+      "id": 63,
+      "type": "TRANSFER",
+      "amount": 5500,
+      "category": "INCOME",
+      "timestamp": "2026-04-01T11:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피"
+    },
+    {
+      "id": 64,
+      "type": "TRANSFER",
+      "amount": 9200,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-01T18:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "샐러드"
+    },
+    {
+      "id": 65,
+      "type": "PAYMENT",
+      "amount": 15000,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-02T12:45:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "쌀국수"
+    },
+    {
+      "id": 66,
+      "type": "TRANSFER",
+      "amount": 4200,
+      "category": "INCOME",
+      "timestamp": "2026-04-02T17:10:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "심부름값"
+    },
+    {
+      "id": 67,
+      "type": "TRANSFER",
+      "amount": 23000,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-03T10:15:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "반팔티"
+    },
+    {
+      "id": 68,
+      "type": "PAYMENT",
+      "amount": 6700,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-03T20:40:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "야식"
+    },
+    {
+      "id": 69,
+      "type": "TRANSFER",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-04-04T09:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "떡볶이 정산"
+    },
+    {
+      "id": 70,
+      "type": "TRANSFER",
+      "amount": 3800,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-04T16:55:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "탄산수"
+    },
+    {
+      "id": 71,
+      "type": "PAYMENT",
+      "amount": 45000,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-05T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "신발"
+    },
+    {
+      "id": 72,
+      "type": "TRANSFER",
+      "amount": 8900,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-05T19:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "햄버거세트"
+    },
+    {
+      "id": 73,
+      "type": "TRANSFER",
+      "amount": 15000,
+      "category": "INCOME",
+      "timestamp": "2026-04-06T11:45:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "빌려준 돈"
+    },
+    {
+      "id": 74,
+      "type": "PAYMENT",
+      "amount": 12000,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-06T14:30:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "샌드위치"
+    },
+    {
+      "id": 75,
+      "type": "TRANSFER",
+      "amount": 5500,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-07T08:10:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "모닝커피"
+    },
+    {
+      "id": 76,
+      "type": "TRANSFER",
+      "amount": 2500,
+      "category": "INCOME",
+      "timestamp": "2026-03-01T13:40:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "버스비 정산"
+    },
+    {
+      "id": 77,
+      "type": "PAYMENT",
+      "amount": 33000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-02T10:20:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "화장품"
+    },
+    {
+      "id": 78,
+      "type": "TRANSFER",
+      "amount": 6200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-02T18:15:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "삼각김밥"
+    },
+    {
+      "id": 79,
+      "type": "TRANSFER",
+      "amount": 19000,
+      "category": "INCOME",
+      "timestamp": "2026-03-03T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "당근거래"
+    },
+    {
+      "id": 80,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-03T16:50:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "우유"
+    },
+    {
+      "id": 81,
+      "type": "TRANSFER",
+      "amount": 14500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-04T12:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "칼국수"
+    },
+    {
+      "id": 82,
+      "type": "TRANSFER",
+      "amount": 3300,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-04T15:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "수첩"
+    },
+    {
+      "id": 83,
+      "type": "PAYMENT",
+      "amount": 5600,
+      "category": "INCOME",
+      "timestamp": "2026-03-05T11:15:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피한잔"
+    },
+    {
+      "id": 84,
+      "type": "TRANSFER",
+      "amount": 8800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-05T18:45:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "도넛"
+    },
+    {
+      "id": 85,
+      "type": "TRANSFER",
+      "amount": 21000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-06T12:55:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "제육볶음"
+    },
+    {
+      "id": 86,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "INCOME",
+      "timestamp": "2026-03-06T17:10:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "잔돈"
+    },
+    {
+      "id": 87,
+      "type": "TRANSFER",
+      "amount": 25000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-07T10:40:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "티셔츠"
+    },
+    {
+      "id": 88,
+      "type": "TRANSFER",
+      "amount": 6700,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-07T21:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "라면&소시지"
+    },
+    {
+      "id": 89,
+      "type": "PAYMENT",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-03-08T09:35:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "카페 정산"
+    },
+    {
+      "id": 90,
+      "type": "TRANSFER",
+      "amount": 3800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-08T16:50:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "아이스크림"
+    },
+    {
+      "id": 91,
+      "type": "TRANSFER",
+      "amount": 13000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-09T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "설렁탕"
+    },
+    {
+      "id": 92,
+      "type": "PAYMENT",
+      "amount": 3200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-09T15:30:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "초콜릿"
+    },
+    {
+      "id": 93,
+      "type": "TRANSFER",
+      "amount": 5500,
+      "category": "INCOME",
+      "timestamp": "2026-03-10T11:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피"
+    },
+    {
+      "id": 94,
+      "type": "TRANSFER",
+      "amount": 9200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-10T18:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "요거트"
+    },
+    {
+      "id": 95,
+      "type": "PAYMENT",
+      "amount": 15000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-11T12:45:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "라멘"
+    },
+    {
+      "id": 96,
+      "type": "TRANSFER",
+      "amount": 4200,
+      "category": "INCOME",
+      "timestamp": "2026-03-11T17:10:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "간식"
+    },
+    {
+      "id": 97,
+      "type": "TRANSFER",
+      "amount": 23000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-12T10:15:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "양말 세트"
+    },
+    {
+      "id": 98,
+      "type": "PAYMENT",
+      "amount": 6700,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-12T20:40:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "과자"
+    },
+    {
+      "id": 99,
+      "type": "TRANSFER",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-03-13T09:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "밥값 정산"
+    },
+    {
+      "id": 100,
+      "type": "TRANSFER",
+      "amount": 3800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-13T16:55:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "사이다"
+    },
+    {
+      "id": 101,
+      "type": "PAYMENT",
+      "amount": 45000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-14T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "전시회"
+    },
+    {
+      "id": 102,
+      "type": "TRANSFER",
+      "amount": 8900,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-14T19:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "햄버거"
+    },
+    {
+      "id": 103,
+      "type": "TRANSFER",
+      "amount": 15000,
+      "category": "INCOME",
+      "timestamp": "2026-03-15T11:45:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "어제술값"
+    },
+    {
+      "id": 104,
+      "type": "PAYMENT",
+      "amount": 12000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-15T14:30:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "서브웨이"
+    },
+    {
+      "id": 105,
+      "type": "TRANSFER",
+      "amount": 5500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-16T08:10:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "토스트"
+    },
+    {
+      "id": 106,
+      "type": "TRANSFER",
+      "amount": 2500,
+      "category": "INCOME",
+      "timestamp": "2026-03-16T13:40:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "껌값"
+    },
+    {
+      "id": 107,
+      "type": "PAYMENT",
+      "amount": 33000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-17T10:20:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "도서구매"
+    },
+    {
+      "id": 108,
+      "type": "TRANSFER",
+      "amount": 6200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-17T18:15:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "우유"
+    },
+    {
+      "id": 109,
+      "type": "TRANSFER",
+      "amount": 19000,
+      "category": "INCOME",
+      "timestamp": "2026-03-18T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "키보드판매"
+    },
+    {
+      "id": 110,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-18T16:50:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "쥬스"
+    },
+    {
+      "id": 111,
+      "type": "TRANSFER",
+      "amount": 14500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-19T12:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "육개장"
+    },
+    {
+      "id": 112,
+      "type": "TRANSFER",
+      "amount": 3300,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-19T15:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "테이프"
+    },
+    {
+      "id": 113,
+      "type": "PAYMENT",
+      "amount": 5600,
+      "category": "INCOME",
+      "timestamp": "2026-03-20T11:15:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "라떼"
+    },
+    {
+      "id": 114,
+      "type": "TRANSFER",
+      "amount": 8800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-20T18:45:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "머핀"
+    },
+    {
+      "id": 115,
+      "type": "TRANSFER",
+      "amount": 21000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-21T12:55:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "물회"
+    },
+    {
+      "id": 116,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "INCOME",
+      "timestamp": "2026-03-21T17:10:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "잔돈정산"
+    },
+    {
+      "id": 117,
+      "type": "TRANSFER",
+      "amount": 25000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-22T10:40:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "후드티"
+    },
+    {
+      "id": 118,
+      "type": "TRANSFER",
+      "amount": 6700,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-22T21:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "편의점털기"
+    },
+    {
+      "id": 119,
+      "type": "PAYMENT",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-03-23T09:35:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "스벅정산"
+    },
+    {
+      "id": 120,
+      "type": "TRANSFER",
+      "amount": 3800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-23T16:50:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "콜라"
+    },
+    {
+      "id": 121,
+      "type": "TRANSFER",
+      "amount": 13000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-24T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "곰탕"
+    },
+    {
+      "id": 122,
+      "type": "PAYMENT",
+      "amount": 3200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-24T15:30:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "밴드"
+    },
+    {
+      "id": 123,
+      "type": "TRANSFER",
+      "amount": 5500,
+      "category": "INCOME",
+      "timestamp": "2026-03-25T11:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "아메리카노"
+    },
+    {
+      "id": 124,
+      "type": "TRANSFER",
+      "amount": 9200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-25T18:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "과일"
+    },
+    {
+      "id": 125,
+      "type": "PAYMENT",
+      "amount": 15000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-26T12:45:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "탄탄면"
+    },
+    {
+      "id": 126,
+      "type": "TRANSFER",
+      "amount": 4200,
+      "category": "INCOME",
+      "timestamp": "2026-03-26T17:10:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "코인정산"
+    },
+    {
+      "id": 127,
+      "type": "TRANSFER",
+      "amount": 23000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-27T10:15:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "충전기"
+    },
+    {
+      "id": 128,
+      "type": "PAYMENT",
+      "amount": 6700,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-27T20:40:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "팝콘"
+    },
+    {
+      "id": 129,
+      "type": "TRANSFER",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-03-28T09:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "밥값"
+    },
+    {
+      "id": 130,
+      "type": "TRANSFER",
+      "amount": 3800,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-28T16:55:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "핫바"
+    },
+    {
+      "id": 131,
+      "type": "PAYMENT",
+      "amount": 45000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-29T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "아쿠아리움"
+    },
+    {
+      "id": 132,
+      "type": "TRANSFER",
+      "amount": 8900,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-29T19:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "핫도그"
+    },
+    {
+      "id": 133,
+      "type": "TRANSFER",
+      "amount": 15000,
+      "category": "INCOME",
+      "timestamp": "2026-03-30T11:45:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "송금완료"
+    },
+    {
+      "id": 134,
+      "type": "PAYMENT",
+      "amount": 12000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-30T14:30:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "샐러드박스"
+    },
+    {
+      "id": 135,
+      "type": "TRANSFER",
+      "amount": 5500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-31T08:10:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "삼김&음료"
+    },
+    {
+      "id": 136,
+      "type": "TRANSFER",
+      "amount": 2500,
+      "category": "INCOME",
+      "timestamp": "2026-03-31T13:40:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "차비"
+    },
+    {
+      "id": 137,
+      "type": "PAYMENT",
+      "amount": 33000,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-01T10:20:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "영양제"
+    },
+    {
+      "id": 138,
+      "type": "TRANSFER",
+      "amount": 6200,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-01T18:15:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "컵라면"
+    },
+    {
+      "id": 139,
+      "type": "TRANSFER",
+      "amount": 19000,
+      "category": "INCOME",
+      "timestamp": "2026-04-02T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "책판매"
+    },
+    {
+      "id": 140,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-02T16:50:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "두유"
+    },
+    {
+      "id": 141,
+      "type": "TRANSFER",
+      "amount": 14500,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-03T12:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "뚝배기불고기"
+    },
+    {
+      "id": 142,
+      "type": "TRANSFER",
+      "amount": 3300,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-03T15:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "포스트잇"
+    },
+    {
+      "id": 143,
+      "type": "PAYMENT",
+      "amount": 5600,
+      "category": "INCOME",
+      "timestamp": "2026-04-04T11:15:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피"
+    },
+    {
+      "id": 144,
+      "type": "TRANSFER",
+      "amount": 8800,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-04T18:45:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "베이글"
+    },
+    {
+      "id": 145,
+      "type": "TRANSFER",
+      "amount": 21000,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-05T12:55:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "낙지볶음"
+    },
+    {
+      "id": 146,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "INCOME",
+      "timestamp": "2026-04-05T17:10:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "정산금"
+    },
+    {
+      "id": 147,
+      "type": "TRANSFER",
+      "amount": 25000,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-06T10:40:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "모자"
+    },
+    {
+      "id": 148,
+      "type": "TRANSFER",
+      "amount": 6700,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-06T21:20:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "소시지"
+    },
+    {
+      "id": 149,
+      "type": "PAYMENT",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-04-07T09:35:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "음료정산"
+    },
+    {
+      "id": 150,
+      "type": "TRANSFER",
+      "amount": 3800,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-07T16:50:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "초코우유"
+    },
+    {
+      "id": 151,
+      "type": "TRANSFER",
+      "amount": 42000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-01T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "고기뷔페"
+    },
+    {
+      "id": 152,
+      "type": "PAYMENT",
+      "amount": 1500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-02T08:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "생수"
+    },
+    {
+      "id": 153,
+      "type": "TRANSFER",
+      "amount": 9000,
+      "category": "INCOME",
+      "timestamp": "2026-03-03T11:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "정산"
+    },
+    {
+      "id": 154,
+      "type": "TRANSFER",
+      "amount": 22000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-04T19:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "치킨"
+    },
+    {
+      "id": 155,
+      "type": "PAYMENT",
+      "amount": 5500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-05T08:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "카페"
+    },
+    {
+      "id": 156,
+      "type": "TRANSFER",
+      "amount": 12000,
+      "category": "INCOME",
+      "timestamp": "2026-03-06T13:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "밥값"
+    },
+    {
+      "id": 157,
+      "type": "TRANSFER",
+      "amount": 8500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-07T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "국밥"
+    },
+    {
+      "id": 158,
+      "type": "PAYMENT",
+      "amount": 3200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-08T15:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "편의점"
+    },
+    {
+      "id": 159,
+      "type": "TRANSFER",
+      "amount": 50000,
+      "category": "INCOME",
+      "timestamp": "2026-03-09T10:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "중고판매"
+    },
+    {
+      "id": 160,
+      "type": "TRANSFER",
+      "amount": 15000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-10T18:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "분식"
+    },
+    {
+      "id": 161,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-11T09:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피"
+    },
+    {
+      "id": 162,
+      "type": "TRANSFER",
+      "amount": 7700,
+      "category": "INCOME",
+      "timestamp": "2026-03-12T14:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "심부름"
+    },
+    {
+      "id": 163,
+      "type": "TRANSFER",
+      "amount": 29000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-13T12:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "스테이크"
+    },
+    {
+      "id": 164,
+      "type": "PAYMENT",
+      "amount": 1100,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-14T10:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "비닐봉지"
+    },
+    {
+      "id": 165,
+      "type": "TRANSFER",
+      "amount": 14000,
+      "category": "INCOME",
+      "timestamp": "2026-03-15T16:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "환불금"
+    },
+    {
+      "id": 166,
+      "type": "TRANSFER",
+      "amount": 3500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-16T08:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "삼각김밥"
+    },
+    {
+      "id": 167,
+      "type": "PAYMENT",
+      "amount": 67000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-17T19:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "술자리"
+    },
+    {
+      "id": 168,
+      "type": "TRANSFER",
+      "amount": 1200,
+      "category": "INCOME",
+      "timestamp": "2026-03-18T11:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "짤짤이"
+    },
+    {
+      "id": 169,
+      "type": "TRANSFER",
+      "amount": 18000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-19T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "파스타"
+    },
+    {
+      "id": 170,
+      "type": "PAYMENT",
+      "amount": 4500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-20T15:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "지하철"
+    },
+    {
+      "id": 171,
+      "type": "TRANSFER",
+      "amount": 9900,
+      "category": "INCOME",
+      "timestamp": "2026-03-21T10:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피값"
+    },
+    {
+      "id": 172,
+      "type": "TRANSFER",
+      "amount": 31000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-22T20:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "배달"
+    },
+    {
+      "id": 173,
+      "type": "PAYMENT",
+      "amount": 2500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-23T08:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "초코바"
+    },
+    {
+      "id": 174,
+      "type": "TRANSFER",
+      "amount": 15000,
+      "category": "INCOME",
+      "timestamp": "2026-03-24T13:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "축의금"
+    },
+    {
+      "id": 175,
+      "type": "TRANSFER",
+      "amount": 7500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-25T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "토스트세트"
+    },
+    {
+      "id": 176,
+      "type": "PAYMENT",
+      "amount": 3400,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-26T14:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "커피"
+    },
+    {
+      "id": 177,
+      "type": "TRANSFER",
+      "amount": 12000,
+      "category": "INCOME",
+      "timestamp": "2026-03-27T09:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "어제정산"
+    },
+    {
+      "id": 178,
+      "type": "TRANSFER",
+      "amount": 21000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-28T18:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "피자"
+    },
+    {
+      "id": 179,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-29T10:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "편의점"
+    },
+    {
+      "id": 180,
+      "type": "TRANSFER",
+      "amount": 6500,
+      "category": "INCOME",
+      "timestamp": "2026-03-30T15:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "심부름비"
+    },
+    {
+      "id": 181,
+      "type": "TRANSFER",
+      "amount": 13000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-31T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "부대찌개"
+    },
+    {
+      "id": 182,
+      "type": "PAYMENT",
+      "amount": 1200,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-01T08:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "물"
+    },
+    {
+      "id": 183,
+      "type": "TRANSFER",
+      "amount": 45000,
+      "category": "INCOME",
+      "timestamp": "2026-04-02T10:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "판매수익"
+    },
+    {
+      "id": 184,
+      "type": "TRANSFER",
+      "amount": 19000,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-03T19:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "치킨"
+    },
+    {
+      "id": 185,
+      "type": "PAYMENT",
+      "amount": 3300,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-04T09:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "빵"
+    },
+    {
+      "id": 186,
+      "type": "TRANSFER",
+      "amount": 11000,
+      "category": "INCOME",
+      "timestamp": "2026-04-05T13:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "돈갚기"
+    },
+    {
+      "id": 187,
+      "type": "TRANSFER",
+      "amount": 7700,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-06T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "라멘"
+    },
+    {
+      "id": 188,
+      "type": "PAYMENT",
+      "amount": 1500,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-07T14:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "비닐봉지"
+    },
+    {
+      "id": 189,
+      "type": "TRANSFER",
+      "amount": 25000,
+      "category": "INCOME",
+      "timestamp": "2026-03-01T10:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "계좌이체"
+    },
+    {
+      "id": 190,
+      "type": "TRANSFER",
+      "amount": 3500,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-02T18:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "과자"
+    },
+    {
+      "id": 191,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-03T09:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "우유"
+    },
+    {
+      "id": 192,
+      "type": "TRANSFER",
+      "amount": 14000,
+      "category": "INCOME",
+      "timestamp": "2026-03-04T14:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "정산금"
+    },
+    {
+      "id": 193,
+      "type": "TRANSFER",
+      "amount": 8000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-05T12:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "카페"
+    },
+    {
+      "id": 194,
+      "type": "PAYMENT",
+      "amount": 3200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-06T15:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "껌"
+    },
+    {
+      "id": 195,
+      "type": "TRANSFER",
+      "amount": 50000,
+      "category": "INCOME",
+      "timestamp": "2026-03-07T10:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "중고장터"
+    },
+    {
+      "id": 196,
+      "type": "TRANSFER",
+      "amount": 15000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-08T18:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "떡볶이"
+    },
+    {
+      "id": 197,
+      "type": "PAYMENT",
+      "amount": 4200,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-09T09:00:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "커피"
+    },
+    {
+      "id": 198,
+      "type": "TRANSFER",
+      "amount": 7700,
+      "category": "INCOME",
+      "timestamp": "2026-03-10T14:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "잔돈"
+    },
+    {
+      "id": 199,
+      "type": "TRANSFER",
+      "amount": 29000,
+      "category": "EXPENSE",
+      "timestamp": "2026-03-11T12:30:00Z",
+      "senderId": 1,
+      "receiverId": 2,
+      "memo": "회"
+    },
+    {
+      "id": 200,
+      "type": "PAYMENT",
+      "amount": 3200,
+      "category": "EXPENSE",
+      "timestamp": "2026-04-07T15:00:00Z",
+      "senderId": 2,
+      "receiverId": 1,
+      "memo": "마지막 편의점"
+    }
+  ]
+}
