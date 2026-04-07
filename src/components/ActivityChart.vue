@@ -38,10 +38,11 @@ const getBarClass = (type) => {
     </div>
 
     <!-- labels -->
-    <div
-      class="flex justify-between mt-4 text-xs text-[#a39b8f] px-1 font-medium tracking-wide"
-    >
-      <span v-for="(item, index) in data" :key="item.day || index">
+    <div class="flex justify-between mt-4 text-xs text-[#a39b8f] px-1 font-medium tracking-wide">
+      <span
+        v-for="(item, index) in data"
+        :key="item.day || index"
+      >
         {{ item.day }}
       </span>
     </div>

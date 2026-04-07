@@ -1,8 +1,8 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { ChevronRight } from "lucide-vue-next";
-import { CalendarNext, useForwardProps } from "reka-ui";
-import { cn } from "@/lib/utils";
+import { reactiveOmit } from '@vueuse/core';
+import { ChevronRight } from 'lucide-vue-next';
+import { CalendarNext, useForwardProps } from 'reka-ui';
+import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 
 const props = defineProps({
@@ -16,7 +16,7 @@ const props = defineProps({
   },
 });
 
-const delegatedProps = reactiveOmit(props, "class");
+const delegatedProps = reactiveOmit(props, 'class');
 
 const forwardedProps = useForwardProps(delegatedProps);
 </script>
@@ -28,7 +28,7 @@ const forwardedProps = useForwardProps(delegatedProps);
       cn(
         buttonVariants({ variant: 'outline' }),
         'size-7 bg-transparent p-0 opacity-50 hover:opacity-100',
-        props.class,
+        props.class
       )
     "
     v-bind="forwardedProps"

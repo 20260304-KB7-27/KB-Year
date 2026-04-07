@@ -34,9 +34,7 @@ const weeklyData = ref([
           <h2 class="text-[#645b4c] font-bold text-base leading-tight">
             {{ user.name }}
           </h2>
-          <p
-            class="text-[#a39b8f] text-[10px] uppercase tracking-widest font-bold"
-          >
+          <p class="text-[#a39b8f] text-[10px] uppercase tracking-widest font-bold">
             {{ user.role }}
           </p>
         </div>
@@ -44,9 +42,7 @@ const weeklyData = ref([
 
       <div class="neo-inset p-6 rounded-[30px] min-w-[280px]">
         <h3 class="text-[#645b4c] font-bold mb-2 text-sm">Daily Activity</h3>
-        <div class="text-[#a39b8f] text-sm italic">
-          차트 내용이 들어갈 자리입니다.
-        </div>
+        <div class="text-[#a39b8f] text-sm italic">차트 내용이 들어갈 자리입니다.</div>
       </div>
 
       <div class="neo-inset p-6 rounded-[30px]">

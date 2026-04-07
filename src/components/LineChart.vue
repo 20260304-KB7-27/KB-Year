@@ -22,8 +22,7 @@ const points = computed(() => {
 
   return props.data.map((d, i) => {
     const x = padding + (i / (props.data.length - 1)) * usableWidth;
-    const y =
-      viewboxHeight - padding - (d.value / effectiveMaxY) * usableHeight;
+    const y = viewboxHeight - padding - (d.value / effectiveMaxY) * usableHeight;
 
     return { x, y, value: d.value, label: d.label };
   });
@@ -47,9 +46,21 @@ const polylinePoints = computed(() => {
         preserveAspectRatio="none"
       >
         <defs>
-          <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#fcaf17" />
-            <stop offset="100%" stop-color="#fdb913" />
+          <linearGradient
+            id="lineGrad"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+          >
+            <stop
+              offset="0%"
+              stop-color="#fcaf17"
+            />
+            <stop
+              offset="100%"
+              stop-color="#fdb913"
+            />
           </linearGradient>
         </defs>
 
@@ -64,7 +75,10 @@ const polylinePoints = computed(() => {
         />
 
         <!-- 점 -->
-        <g v-for="(point, i) in points" :key="i">
+        <g
+          v-for="(point, i) in points"
+          :key="i"
+        >
           <circle
             :cx="point.x"
             :cy="point.y"
@@ -79,7 +93,11 @@ const polylinePoints = computed(() => {
     <div
       class="flex justify-between text-xs text-[#a39b8f] font-medium tracking-wider uppercase px-2 mt-2"
     >
-      <span v-for="d in data" :key="d.label">{{ d.label }}</span>
+      <span
+        v-for="d in data"
+        :key="d.label"
+        >{{ d.label }}</span
+      >
     </div>
   </div>
 </template>
