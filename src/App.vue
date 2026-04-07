@@ -52,12 +52,12 @@ const resetLayout = () => {
   <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center p-10">
     <div class="w-full lg:max-w-5xl md:max-w-2xl">
       <!-- 초기화 버튼 -->
-      <div class="flex justify-end mb-4">
+      <div class="fixed right-5 bottom-1 flex justify-end mb-4">
         <button
+          class="px-4 py-2 bg-gray-800 text-white rounded-lg transition-all duration-200 hover:bg-gray-700 hover:scale-105 active:scale-95 cursor-pointer"
           @click="resetLayout"
-          class="px-4 py-2 bg-gray-800 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
         >
-          초기화
+          Reset
         </button>
       </div>
 

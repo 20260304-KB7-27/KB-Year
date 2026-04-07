@@ -10,7 +10,12 @@ export default [
       prettier,
     },
     rules: {
-      'prettier/prettier': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
       'vue/multi-word-component-names': 'off',
       'no-unused-vars': 'warn',
       'vue/no-unused-vars': 'error',
