@@ -21,7 +21,10 @@ const BtnYellowClass = computed(() => [
 </script>
 
 <template>
-  <button @click="toggle" :class="BtnYellowClass">
+  <button
+    :class="BtnYellowClass"
+    @click="toggle"
+  >
     {{ props.modelValue ? 'Following' : 'Follow' }}
   </button>
 </template>

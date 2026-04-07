@@ -48,9 +48,21 @@ const strokeDashoffset = computed(() => {
         class="w-full h-full -rotate-90 transform relative z-10"
       >
         <defs>
-          <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#fcaf17" />
-            <stop offset="100%" stop-color="#fdb913" />
+          <linearGradient
+            id="yellowGrad"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+          >
+            <stop
+              offset="0%"
+              stop-color="#fcaf17"
+            />
+            <stop
+              offset="100%"
+              stop-color="#fdb913"
+            />
           </linearGradient>
         </defs>
 
