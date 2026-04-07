@@ -95,6 +95,13 @@
   html {
     @apply font-sans;
   }
+  /* 안으로 파인 뉴모피즘 효과 */
+  .neo-inset {
+    background: #f4f2ee;
+    box-shadow:
+      inset 8px 8px 16px #d9d5ce,
+      inset -8px -8px 16px #ffffff;
+  }
 }
 
 @layer base {
