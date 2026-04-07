@@ -1,6 +1,6 @@
 # KB-Year
 
-This template should help get you started developing with Vue 3 in Vite.
+1년 365일 함께하는 가계부 플랫폼 캐비어
 
 ## Recommended IDE Setup
 
