@@ -29,8 +29,12 @@ const avatarClass = computed(() => [
       <span class="text-3xl opacity-70">{{ user.icon }}</span>
     </div>
 
-    <h2 class="text-[#645b4c] font-bold text-xl">{{ user.name }}</h2>
-    <p class="text-[#a39b8f] text-sm mb-6">{{ user.role }}</p>
+    <h2 class="text-[#645b4c] font-bold text-xl">
+      {{ user.name }}
+    </h2>
+    <p class="text-[#a39b8f] text-sm mb-6">
+      {{ user.role }}
+    </p>
 
     <ButtonYellow v-model="isFollowed" />
   </div>

@@ -1,69 +1,133 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useTransactionStore } from '@/stores/transaction';
 
-// 1. 유저 데이터
-const user = {
-  name: 'NaHyun Kim',
-  role: 'UI/UX Designer',
-  icon: '👤',
+const store = useTransactionStore();
+
+onMounted(() => {
+  store.fetchTransactions();
+});
+
+const currentMonthDisplay = computed(() => {
+  const date = store.selectedDate;
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
+});
+
+const changeMonth = (offset) => {
+  const date = new Date(store.selectedDate);
+  date.setMonth(date.getMonth() + offset);
+  store.setMonth(date);
 };
 
-// 2. 원형 차트 데이터 (Pie)
-const dailyProgress = ref(75);
-
-// 3. 선 그래프 데이터 (Line)
-const weeklyData = ref([
-  { label: 'M', value: 30 },
-  { label: 'T', value: 55 },
-  { label: 'W', value: 40 },
-  { label: 'T', value: 85 },
-  { label: 'F', value: 50 },
+const cards = computed(() => [
+  { id: 1, title: '수입', value: store.totalIncome, color: '#4ade80' },
+  { id: 2, title: '지출', value: store.totalExpense, color: '#f87171' },
+  { id: 3, title: '순수익', value: store.netProfit, color: '#60a5fa' },
 ]);
+
+const formatNumber = (num) => {
+  return (num || 0).toLocaleString();
+};
 </script>
-
 <template>
-  <div class="bg-[#f4f2ee] flex items-center justify-center p-6">
-    <div class="flex flex-col gap-6">
-      <div class="neo-inset p-5 rounded-[30px] flex items-center gap-5 pr-10">
+  <div class="flex items-center gap-6 justify-center">
+    <div class="flex items-center gap-6">
+      <button
+        @click="changeMonth(-1)"
+        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
+      >
+        <span class="text-sm">＜</span>
+      </button>
+
+      <span class="text-lg font-black text-gray-500 min-w-[120px] text-center tracking-tight">
+        {{ currentMonthDisplay }}
+      </span>
+
+      <button
+        @click="changeMonth(1)"
+        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
+      >
+        <span class="text-sm">＞</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans">
+    <div
+      v-if="store.isLoading"
+      class="text-gray-400 font-bold animate-pulse absolute top-10"
+    >
+      업데이트 중...
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <div
+        v-for="card in cards"
+        :key="card.id"
+        class="neo-inset p-8 rounded-[40px] min-w-[290px] flex items-center gap-6 transition-all duration-300"
+      >
         <div
-          class="w-14 h-14 rounded-full bg-[#f4f2ee] shadow-[5px_5px_10px_#d9d5ce,-5px_-5px_10px_#ffffff] flex items-center justify-center text-xl"
+          class="w-12 h-12 rounded-2xl neo-outset flex items-center justify-center shrink-0"
+          :style="{ color: card.color }"
         >
-          {{ user.icon }}
+          <span class="text-xl font-bold">●</span>
         </div>
-        <div class="whitespace-nowrap">
-          <h2 class="text-[#645b4c] font-bold text-base leading-tight">
-            {{ user.name }}
-          </h2>
-          <p class="text-[#a39b8f] text-[10px] uppercase tracking-widest font-bold">
-            {{ user.role }}
-          </p>
+
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm font-medium mb-1">{{ card.title }}</span>
+          <div class="flex items-baseline gap-1">
+            <span class="text-2xl font-black text-gray-800 tracking-tight">
+              {{ formatNumber(card.value) }}
+            </span>
+            <span class="text-gray-400 font-bold text-sm">KRW</span>
+          </div>
         </div>
-      </div>
-
-      <div class="neo-inset p-6 rounded-[30px] min-w-[280px]">
-        <h3 class="text-[#645b4c] font-bold mb-2 text-sm">Daily Activity</h3>
-        <div class="text-[#a39b8f] text-sm italic">차트 내용이 들어갈 자리입니다.</div>
-      </div>
-
-      <div class="neo-inset p-6 rounded-[30px]">
-        <h3 class="text-[#645b4c] font-bold mb-2 text-sm">Weekly Trend</h3>
-        <div class="text-[#a39b8f] text-sm">그래프 데이터 시각화 영역</div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* 안으로 파인 뉴모피즘 효과 */
 .neo-inset {
   background: #f4f2ee;
   box-shadow:
-    inset 8px 8px 16px #d9d5ce,
-    inset -8px -8px 16px #ffffff;
+    inset 6px 6px 12px #dbd9d4,
+    inset -6px -6px 12px #ffffff;
 }
 
-/* 텍스트가 줄바꿈되지 않도록 설정 (너비 유지용) */
-.whitespace-nowrap {
-  white-space: nowrap;
+.neo-outset {
+  background: #f4f2ee;
+  box-shadow:
+    6px 6px 12px #dbd9d4,
+    -6px -6px 12px #ffffff;
+}
+
+.neo-inset:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    6px 6px 16px #dbd9d4,
+    -6px -6px 16px #ffffff;
+}
+
+.neo-interactive {
+  background: #f4f2ee;
+  border: none;
+  box-shadow:
+    2px 2px 5px #e8e6e0,
+    -2px -2px 5px #ffffff;
+}
+
+.neo-interactive:hover {
+  box-shadow:
+    5px 5px 10px #dbd9d4,
+    -5px -5px 10px #ffffff;
+  transform: translateY(-1px);
+}
+
+.neo-interactive:active {
+  box-shadow:
+    inset 4px 4px 8px #dbd9d4,
+    inset -4px -4px 8px #ffffff;
+  transform: translateY(0);
 }
 </style>
