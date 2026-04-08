@@ -16,6 +16,7 @@
 
     <div class="space-y-5 mb-6">
       <input
+        v-model="loginData.userid"
         type="text"
         placeholder="아이디를 입력해 주세요."
         class="w-full px-5 py-4 bg-[#f4f2ee] rounded-xl text-[#645b4c] outline-none shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] focus:shadow-[inset_6px_6px_12px_#d9d5ce,inset_-6px_-6px_12px_#ffffff] transition-all"
@@ -23,6 +24,7 @@
 
       <div class="relative">
         <input
+          v-model="loginData.password"
           :type="showPassword ? 'text' : 'password'"
           placeholder="비밀번호를 입력해 주세요."
           class="w-full px-5 py-4 bg-[#f4f2ee] rounded-xl text-[#645b4c] outline-none shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] focus:shadow-[inset_6px_6px_12px_#d9d5ce,inset_-6px_-6px_12px_#ffffff] transition-all"
@@ -44,6 +46,7 @@
 
     <button
       class="w-full py-4 bg-[#f4f2ee] text-[#fcaf17] font-bold rounded-xl opacity-60 hover:opacity-100 shadow-[6px_6px_12px_#d9d5ce,-6px_-6px_12px_#ffffff] active:shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] transition-all mb-5"
+      @click="handleLogin"
     >
       LOGIN
     </button>
@@ -78,14 +81,46 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
+<script setup>
+import { ref, reactive, onMounted } from 'vue';
 import { Eye, EyeOff, Check } from 'lucide-vue-next';
+import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 
-const showPassword = ref<boolean>(false);
-const rememberMe = ref<boolean>(false);
+const showPassword = ref(false);
+const rememberMe = ref(false);
 
-defineEmits<{
-  (e: 'open-signup'): void;
-}>();
+const userStore = useUserStore();
+const router = useRouter();
+const loginData = reactive({
+  userid: '',
+  password: '',
+});
+
+// 페이지가 열릴 때: 로컬 스토리지에 저장된 아이디가 있는지 확인
+onMounted(() => {
+  const savedId = localStorage.getItem('savedUserId');
+  if (savedId) {
+    loginData.userid = savedId;
+    rememberMe.value = true;
+  }
+});
+
+const handleLogin = async () => {
+  if (!loginData.userid || !loginData.password) {
+    alert('아이디와 비밀번호를 모두 입력해주세요.');
+    return;
+  }
+
+  const success = await userStore.signIn(loginData, rememberMe.value);
+
+  if (success) {
+    alert(`반갑습니다, ${userStore.user.name}님!`);
+    router.push('/'); // 메인 페이지로 이동
+  } else {
+    alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+  }
+};
+
+defineEmits('open-signup');
 </script>

@@ -42,35 +42,34 @@ export const useTransactionStore = defineStore('transaction', () => {
     const month = selectedDate.value.getMonth();
 
     return monthlyTrans.value.filter((t) => {
-      const tDate = new Date(t.timestamp);
+      const tDate = new Date(t.date);
       return tDate.getFullYear() === year && tDate.getMonth() === month;
     });
   });
 
   const totalIncome = computed(() => {
-    return filteredTransactions.value
-      .filter((t) => t.category === 'INCOME')
-      .reduce((acc, cur) => acc + cur.amount, 0);
+    const test = monthlyTrans.value
+      .filter((t) => t.type?.toUpperCase() === 'INCOME')
+      .reduce((acc, cur) => acc + Number(cur.amount), 0);
+    console.log(test);
+    return test;
   });
 
   const totalExpense = computed(() => {
-    return filteredTransactions.value
-      .filter((t) => t.category === 'EXPENSE')
-      .reduce((acc, cur) => acc + cur.amount, 0);
+    return monthlyTrans.value
+      .filter((t) => t.type?.toUpperCase() === 'EXPENSE')
+      .reduce((acc, cur) => acc + Number(cur.amount), 0);
   });
 
   const netProfit = computed(() => totalIncome.value - totalExpense.value);
 
-  const getUserTransaction = async (id, type, from, to) => {
+  const getUserTransaction = async (id, from, to) => {
+    if (!id) return;
+    isLoading.value = true;
     try {
       const uri = 'http://localhost:3000/transactions';
-      const response = await axios.get(
-        `${uri}?userid=${id}&type=${type}&date_gte=${from}&date_lte=${to}`
-      );
-      if (response.status === 200) {
-        monthlyTrans.value = response.data;
-        console.log('데이터 로드 성공:', monthlyTrans.value);
-      }
+      const response = await axios.get(`${uri}?userid=${id}&date_gte=${from}&date_lte=${to}`);
+      monthlyTrans.value = response.data;
     } catch (err) {
       console.error('데이터 로드 실패:', err);
     } finally {
@@ -82,24 +81,12 @@ export const useTransactionStore = defineStore('transaction', () => {
     selectedDate.value = date;
   }
 
-  async function addTransaction(payload) {
-    try {
-      const response = await axios.post('http://localhost:3000/transactions', payload);
-      if (response.status === 201) {
-        await getUserTransaction(payload.userid || payload.senderId);
-      }
-    } catch (err) {
-      console.error('Add Error:', err);
-    }
-  }
-
   return {
     monthlyTrans,
     durationTrans,
     durationTransactions,
     transactions,
     selectedDate,
-    filteredTransactions,
     totalIncome,
     totalExpense,
     netProfit,
@@ -107,6 +94,5 @@ export const useTransactionStore = defineStore('transaction', () => {
     getUserTransaction,
     getDurationTransaction,
     setMonth,
-    addTransaction,
   };
 });
