@@ -102,6 +102,11 @@
       inset 8px 8px 16px #d9d5ce,
       inset -8px -8px 16px #ffffff;
   }
+
+  .card-effect:hover {
+    scale: 1.03;
+    transition: scale 0.1s ease-out;
+  }
 }
 
 @layer base {
