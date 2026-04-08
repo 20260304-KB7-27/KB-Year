@@ -26,23 +26,36 @@ const totalAmount = computed(() => {
   return monthlyTrans.value.reduce((sum, t) => sum + t.amount, 0);
 });
 
-// PieChart 데이터 계산
 const pieData = computed(() => {
-  const transferSum = monthlyTrans.value
-    .filter((t) => t.type === 'TRANSFER')
-    .reduce((sum, t) => sum + t.amount, 0);
-  const paymentSum = monthlyTrans.value
-    .filter((t) => t.type === 'PAYMENT')
-    .reduce((sum, t) => sum + t.amount, 0);
-  return [
-    { type: 'TRANSFER', value: transferSum, color: '#ffcf69' }, // 밝은 노란색
-    { type: 'PAYMENT', value: paymentSum, color: '#fcaf17' }, // 어두운 노란색
+  // 1. 카테고리별로 금액 합산 (객체 형태로 그룹화)
+  const sumByCategory = monthlyTrans.value.reduce((acc, t) => {
+    const category = t.category || '미분류';
+    acc[category] = (acc[category] || 0) + t.amount;
+    return acc;
+  }, {});
+
+  const palette = [
+    '#F59E0B', // 짙은 황금색/호박색 (가장 큰 금액)
+    '#FBBF24', // 진한 노란색
+    '#FCD34D', // 기본 노란색
+    '#FDE047', // 밝은 노란색
+    '#FEF08A', // 연한 노란색
+    '#FEF9C3', // 아주 연한 파스텔 노란색
   ];
+
+  // 3. 배열 변환 -> 내림차순 정렬 -> 차트용 데이터 매핑
+  return Object.entries(sumByCategory)
+    .sort((a, b) => b[1] - a[1]) // b[1](뒤의 금액)에서 a[1](앞의 금액)을 빼서 내림차순 정렬
+    .map(([category, sum], index) => ({
+      type: category,
+      value: sum,
+      color: palette[index % palette.length], // 큰 금액부터 순서대로 색상 할당
+    }));
 });
 
 //
 onMounted(() => {
-  transaction.getUserTransaction(1);
+  transaction.getUserTransaction('user1');
 });
 
 const user = {
@@ -124,7 +137,7 @@ const resetLayout = () => {
 
             <PieChart
               v-else-if="element.type === 'pie'"
-              title="Transaction Types"
+              title="소비 유형"
               :value="100"
               :data="pieData"
               :total="100"

@@ -8,7 +8,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   const getUserTransaction = async (id) => {
     try {
       const uri = 'http://localhost:3000/transactions';
-      const response = await axios.get(`${uri}?senderId=${id}`);
+      const response = await axios.get(`${uri}?userid=${id}`);
 
       if (response.status === 200) {
         // response.data를 배열 상태에 직접 할당합니다.
