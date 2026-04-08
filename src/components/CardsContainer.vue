@@ -1,38 +1,82 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useTransactionStore } from '@/stores/transaction';
 
-const cards = ref([
-  { id: 1, title: '수입', value: 500000, color: '#4ade80', unit: '₩' },
-  { id: 2, title: '지출', value: 300000, color: '#f87171', unit: '₩' },
-  { id: 3, title: '순수익', value: 200000, color: '#60a5fa', unit: '₩' },
+const store = useTransactionStore();
+
+onMounted(() => {
+  store.fetchTransactions();
+});
+
+const currentMonthDisplay = computed(() => {
+  const date = store.selectedDate;
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
+});
+
+const changeMonth = (offset) => {
+  const date = new Date(store.selectedDate);
+  date.setMonth(date.getMonth() + offset);
+  store.setMonth(date);
+};
+
+const cards = computed(() => [
+  { id: 1, title: '수입', value: store.totalIncome, color: '#4ade80' },
+  { id: 2, title: '지출', value: store.totalExpense, color: '#f87171' },
+  { id: 3, title: '순수익', value: store.netProfit, color: '#60a5fa' },
 ]);
 
 const formatNumber = (num) => {
-  return num.toLocaleString();
+  return (num || 0).toLocaleString();
 };
 </script>
-
 <template>
-  <div class="min-h bg-[#f4f2ee] flex items-center justify-center p-2 font-sans">
-    <div class="flex flex-col gap-6">
+  <div class="flex items-center gap-6 justify-center">
+    <div class="flex items-center gap-6">
+      <button
+        @click="changeMonth(-1)"
+        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
+      >
+        <span class="text-sm">＜</span>
+      </button>
+
+      <span class="text-lg font-black text-gray-500 min-w-[120px] text-center tracking-tight">
+        {{ currentMonthDisplay }}
+      </span>
+
+      <button
+        @click="changeMonth(1)"
+        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
+      >
+        <span class="text-sm">＞</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans">
+    <div
+      v-if="store.isLoading"
+      class="text-gray-400 font-bold animate-pulse absolute top-10"
+    >
+      업데이트 중...
+    </div>
+
+    <div class="flex flex-col gap-4">
       <div
         v-for="card in cards"
         :key="card.id"
-        class="neo-inset p-8 rounded-[40px] min-w-[290px] flex items-center gap-6"
+        class="neo-inset p-8 rounded-[40px] min-w-[290px] flex items-center gap-6 transition-all duration-300"
       >
-        <!-- 아이콘 -->
         <div
-          class="w-12 h-12 rounded-2xl neo-outset flex items-center justify-center"
+          class="w-12 h-12 rounded-2xl neo-outset flex items-center justify-center shrink-0"
           :style="{ color: card.color }"
         >
           <span class="text-xl font-bold">●</span>
         </div>
 
-        <!-- 금액 -->
         <div class="flex flex-col">
           <span class="text-gray-500 text-sm font-medium mb-1">{{ card.title }}</span>
           <div class="flex items-baseline gap-1">
-            <span class="text-2xl font-black text-gray-800">
+            <span class="text-2xl font-black text-gray-800 tracking-tight">
               {{ formatNumber(card.value) }}
             </span>
             <span class="text-gray-400 font-bold text-sm">KRW</span>
@@ -59,9 +103,31 @@ const formatNumber = (num) => {
 }
 
 .neo-inset:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow:
     6px 6px 16px #dbd9d4,
     -6px -6px 16px #ffffff;
+}
+
+.neo-interactive {
+  background: #f4f2ee;
+  border: none;
+  box-shadow:
+    2px 2px 5px #e8e6e0,
+    -2px -2px 5px #ffffff;
+}
+
+.neo-interactive:hover {
+  box-shadow:
+    5px 5px 10px #dbd9d4,
+    -5px -5px 10px #ffffff;
+  transform: translateY(-1px);
+}
+
+.neo-interactive:active {
+  box-shadow:
+    inset 4px 4px 8px #dbd9d4,
+    inset -4px -4px 8px #ffffff;
+  transform: translateY(0);
 }
 </style>
