@@ -15,7 +15,7 @@ import DashboardContainer from '@/components/CardsContainer.vue';
 import { useTransactionStore } from '@/stores/transaction.js';
 import ToggleButton from '@/components/ToggleButton.vue';
 import BarChart from '@/components/BarChart.vue';
-
+import TimeLine from '@/components/tradeList/TimeLine.vue';
 const transaction = useTransactionStore();
 // 상태 관리
 const date = ref(today(getLocalTimeZone()));
@@ -207,10 +207,7 @@ const resetLayout = () => {
               :user="user"
             />
 
-            <ActivityChart
-              v-else-if="element.type === 'activity'"
-              :data="weeklyActivity"
-            />
+            <TimeLine v-else-if="element.type === 'activity'" />
 
             <DashboardContainer v-else-if="element.type === 'dashboard'" />
 
