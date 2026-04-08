@@ -5,7 +5,7 @@ import { useTransactionStore } from '@/stores/transaction';
 const store = useTransactionStore();
 
 onMounted(() => {
-  store.fetchTransactions();
+  // store.getUserTransaction();
 });
 
 const currentMonthDisplay = computed(() => {
