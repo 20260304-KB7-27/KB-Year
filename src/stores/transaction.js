@@ -63,13 +63,27 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   const netProfit = computed(() => totalIncome.value - totalExpense.value);
 
-  const getUserTransaction = async (id, from, to) => {
-    if (!id) return;
-    isLoading.value = true;
+  const getUserTransaction = async (id, type, from, to) => {
     try {
       const uri = 'http://localhost:3000/transactions';
       const response = await axios.get(`${uri}?userid=${id}&date_gte=${from}&date_lte=${to}`);
       monthlyTrans.value = response.data;
+    } catch (err) {
+      console.error('데이터 로드 실패:', err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const getUserAllTransaction = async (id, from, to) => {
+    try {
+      const uri = 'http://localhost:3000/transactions';
+      const response = await axios.get(
+        `${uri}?userid=${id}&date_gte=${from}&date_lte=${to}&_sort=-date`
+      );
+      if (response.status === 200) {
+        monthlyTrans.value = response.data;
+      }
     } catch (err) {
       console.error('데이터 로드 실패:', err);
     } finally {
@@ -92,6 +106,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     netProfit,
     isLoading,
     getUserTransaction,
+    getUserAllTransaction,
     getDurationTransaction,
     setMonth,
   };
