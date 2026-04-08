@@ -1,7 +1,7 @@
 <script setup>
 import draggable from 'vuedraggable';
 
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { today, getLocalTimeZone } from '@internationalized/date';
 
 import { Calendar } from '@/components/ui/calendar';
@@ -14,6 +14,7 @@ import LineChart from '@/components/LineChart.vue';
 import DashboardContainer from '@/components/CardsContainer.vue';
 import { useTransactionStore } from '@/stores/transaction.js';
 import ToggleButton from '@/components/ToggleButton.vue';
+import BarChart from '@/components/BarChart.vue';
 
 const transaction = useTransactionStore();
 // 상태 관리
@@ -22,6 +23,7 @@ const duration = ref('month'); // 'month', 'week', 'day'
 
 // 전체 송금 데이터 (반응형 상태)
 const monthlyTrans = computed(() => transaction.monthlyTrans);
+const durationTrans = computed(() => transaction.durationTransactions);
 
 // 총 금액 계산
 const totalAmount = computed(() => {
@@ -29,14 +31,53 @@ const totalAmount = computed(() => {
   return monthlyTrans.value.reduce((sum, t) => sum + t.amount, 0);
 });
 
-const pieData = computed(() => {
-  const sumByCategory = monthlyTrans.value.reduce((acc, t) => {
+// 토글
+const pieType = ref('ex');
+
+const togglePieType = (e) => {
+  pieType.value = pieType.value === 'ex' ? 'in' : 'ex';
+};
+
+const barExpense = computed(() => {
+  const sumByCategory = durationTrans.value?.expense.reduce((acc, t) => {
     const category = t.category || '미분류';
     acc[category] = (acc[category] || 0) + t.amount;
     return acc;
   }, {});
 
-  const palette = ['#F59E0B', '#FBBF24', '#FCD34D', '#FDE047', '#FEF08A', '#FEF9C3'];
+  const palette = [
+    '#EF4444', // 짙은 빨간색 (가장 큰 금액)
+    '#F87171', // 진한 레드
+    '#FCA5A5', // 부드러운 코랄 레드
+    '#FECACA', // 밝은 핑크 레드
+    '#FEE2E2', // 연한 파스텔 레드
+    '#FEF2F2', // 아주 연하고 투명한 레드
+  ];
+
+  return Object.entries(sumByCategory)
+    .sort((a, b) => b[1] - a[1])
+    .map(([category, sum], index) => ({
+      type: category,
+      value: sum,
+      color: palette[index % palette.length],
+    }));
+});
+
+const barIncome = computed(() => {
+  const sumByCategory = durationTrans.value?.income.reduce((acc, t) => {
+    const category = t.category || '미분류';
+    acc[category] = (acc[category] || 0) + t.amount;
+    return acc;
+  }, {});
+
+  const palette = [
+    '#10B981', // 짙은 에메랄드 그린 (가장 큰 금액)
+    '#34D399', // 진한 민트 그린
+    '#6EE7B7', // 부드러운 녹색
+    '#A7F3D0', // 밝은 파스텔 그린
+    '#D1FAE5', // 연한 민트
+    '#ECFDF5', // 아주 연한 화이트 그린
+  ];
 
   return Object.entries(sumByCategory)
     .sort((a, b) => b[1] - a[1])
@@ -90,7 +131,8 @@ watch(
   () => dateRange.value,
   (newRange) => {
     console.log(newRange);
-    transaction.getUserTransaction('user1', 'expense', newRange.startDate, newRange.endDate);
+    // transaction.getUserTransaction('user1', 'expense', newRange.startDate, newRange.endDate);
+    transaction.getDurationTransaction('user1', newRange.startDate, newRange.endDate);
   },
   { immediate: true } // 컴포넌트 마운트 시 즉시 실행 (onMounted 역할 대체)
 );
@@ -122,7 +164,8 @@ const initialCards = [
   { id: 2, type: 'activity' },
   { id: 3, type: 'dashboard' },
   { id: 4, type: 'calendar' },
-  { id: 5, type: 'pie' },
+  // { id: 5, type: 'pie' },
+  { id: 5, type: 'bar' },
   { id: 6, type: 'line' },
 ];
 
@@ -182,13 +225,32 @@ const resetLayout = () => {
             </div>
 
             <PieChart
-              v-else-if="element.type === 'pie'"
+              v-else-if="element.type === 'pie' && pieType === 'ex'"
               title="소비 유형"
               :value="100"
-              :data="pieData"
+              :data="pieExpense"
               :total="100"
               unit="%"
+              @click="togglePieType"
             />
+
+            <BarChart
+              v-else-if="element.type === 'bar'"
+              title="이번 달 핵심 요약"
+              :income-data="barIncome"
+              :expense-data="barExpense"
+            />
+
+            <!-- <PieChart
+              v-else-if="element.type === 'pie' && pieType === 'in'"
+              title="수입 유형"
+              :value="100"
+              :incomeData="pieIncome"
+              :expenseData="pieExpense"
+              :total="100"
+              unit="%"
+              @click="togglePieType"
+            /> -->
 
             <LineChart
               v-else-if="element.type === 'line'"

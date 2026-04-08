@@ -8,6 +8,32 @@ export const useTransactionStore = defineStore('transaction', () => {
   const error = ref(null);
   const selectedDate = ref(new Date());
 
+  /* 캘린더 + piechart용 */
+  const durationTrans = ref({
+    expense: [],
+    income: [],
+  });
+
+  const getDurationTransaction = async (id, from, to) => {
+    try {
+      const uri = 'http://localhost:3000/transactions';
+      const response = await axios.get(`${uri}?userid=${id}&date_gte=${from}&date_lte=${to}`);
+      if (response.status === 200) {
+        console.log(response.data);
+        // console.log(response.data.filter((t) => t.type === 'income'));
+        durationTrans.value.income = response.data.filter((t) => t.type === 'income');
+        durationTrans.value.expense = response.data.filter((t) => t.type === 'expense');
+        console.log(durationTrans.value);
+      }
+    } catch (err) {
+      console.error('데이터 로드 실패:', err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const durationTransactions = computed(() => durationTrans.value);
+
   // 'transactions'를 'monthlyTrans'의 Alias로 설정
   const transactions = computed(() => monthlyTrans.value);
 
@@ -57,12 +83,16 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   return {
     monthlyTrans,
+    durationTrans,
+    durationTransactions,
+    transactions,
     selectedDate,
     totalIncome,
     totalExpense,
     netProfit,
     isLoading,
     getUserTransaction,
+    getDurationTransaction,
     setMonth,
   };
 });
