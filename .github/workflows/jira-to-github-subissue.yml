@@ -10,13 +10,17 @@ jobs:
     steps:
       - name: Create Sub-issue using GitHub CLI
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }} # 이슈 생성 권한이 있는 PAT
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          # 1. 지라에서 보낸 페이로드 데이터 매핑 확인 (번호와 제목이 바뀌지 않게 주의)
           PARENT_ISSUE: ${{ github.event.client_payload.parent_issue_number }}
           ISSUE_TITLE: ${{ github.event.client_payload.title }}
           ISSUE_BODY: ${{ github.event.client_payload.body }}
         run: |
-          # gh issue create 명령어를 사용해 서브 이슈 생성
-          gh issue create \
+          # 2. --parent 플래그를 인식시키기 위해 기능을 강제로 활성화 (GH_FORCE_PROJECT_V2_EXT)
+          # 3. 데이터가 비어있을 경우를 대비해 간단한 디버깅 출력 추가
+          echo "Creating sub-issue for parent: $PARENT_ISSUE with title: $ISSUE_TITLE"
+
+          GH_FORCE_PROJECT_V2_EXT=true gh issue create \
             --title "$ISSUE_TITLE" \
             --body "$ISSUE_BODY" \
             --parent "$PARENT_ISSUE"
