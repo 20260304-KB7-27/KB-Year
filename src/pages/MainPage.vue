@@ -7,16 +7,16 @@ import { today, getLocalTimeZone } from '@internationalized/date';
 import { Calendar } from '@/components/ui/calendar';
 import Card from '@/components/Card.vue';
 import UserCard from '@/components/UserCard.vue';
-import ActivityChart from '@/components/ActivityChart.vue';
-import { weeklyActivity } from '@/data/activity';
 import PieChart from '@/components/PieChart.vue';
 import LineChart from '@/components/LineChart.vue';
 import DashboardContainer from '@/components/CardsContainer.vue';
 import { useTransactionStore } from '@/stores/transaction.js';
+import { useUserStore } from '@/stores/user.js';
 import ToggleButton from '@/components/ToggleButton.vue';
 import BarChart from '@/components/BarChart.vue';
 import TimeLine from '@/components/tradeList/TimeLine.vue';
 const transaction = useTransactionStore();
+const userStore = useUserStore();
 // 상태 관리
 const date = ref(today(getLocalTimeZone()));
 const duration = ref('month'); // 'month', 'week', 'day'
@@ -24,6 +24,9 @@ const duration = ref('month'); // 'month', 'week', 'day'
 // 전체 송금 데이터 (반응형 상태)
 const monthlyTrans = computed(() => transaction.monthlyTrans);
 const durationTrans = computed(() => transaction.durationTransactions);
+
+// 사용자 정보
+const user = computed(() => userStore.user);
 
 // 총 금액 계산
 const totalAmount = computed(() => {
@@ -130,9 +133,10 @@ const dateRange = computed(() => {
 watch(
   () => dateRange.value,
   (newRange) => {
-    console.log(newRange);
+    // console.log(newRange);
+    // console.log(user.value);
     // transaction.getUserTransaction('user1', 'expense', newRange.startDate, newRange.endDate);
-    transaction.getDurationTransaction('user1', newRange.startDate, newRange.endDate);
+    transaction.getDurationTransaction(user.value?.userid, newRange.startDate, newRange.endDate);
   },
   { immediate: true } // 컴포넌트 마운트 시 즉시 실행 (onMounted 역할 대체)
 );
@@ -140,12 +144,6 @@ watch(
 const handleDurationChange = (selectedValue) => {
   // console.log('선택된 기간:', selectedValue); // 'month', 'week', 'day'
   duration.value = selectedValue;
-};
-
-const user = {
-  name: 'User Name',
-  role: 'UI/UX Designer',
-  icon: '👤',
 };
 
 const myValue = ref(75);
