@@ -94,7 +94,10 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 
 <template>
-  <DefineMonthTemplate v-slot="{ date }">
+  <DefineMonthTemplate
+    v-slot="{ date }"
+    class="h-full"
+  >
     <div class="**:data-[slot=native-select-icon]:right-1">
       <div class="relative">
         <div class="absolute inset-0 flex h-full items-center text-sm pl-2 pointer-events-none">
@@ -238,3 +241,5 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     </div>
   </CalendarRoot>
 </template>
+
+<style scope></style>

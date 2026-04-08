@@ -82,14 +82,14 @@ const resetLayout = () => {
 
             <DashboardContainer v-else-if="element.type === 'dashboard'" />
 
-            <div v-else-if="element.type === 'calendar'">
+            <div
+              v-else-if="element.type === 'calendar'"
+              class="h-full"
+            >
               <Calendar
                 v-model="date"
-                class="rounded-lg border p-4"
+                class="rounded-2xl p-5 h-full neo-inset content-center"
               />
-              <p class="mt-2 text-sm text-gray-500 text-center">
-                Selected Date: {{ date.toString() }}
-              </p>
             </div>
 
             <PieChart
@@ -109,3 +109,5 @@ const resetLayout = () => {
     </div>
   </div>
 </template>
+
+<style scope></style>
