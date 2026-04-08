@@ -1,5 +1,8 @@
 <template>
-  <div v-if="transactions.length > 0">
+  <div
+    v-if="transactions.length > 0"
+    class="mb-10"
+  >
     <h1 class="font-bold text-xl text-yellow-600">
       {{ formatDate(transactions[0].date) }}
     </h1>
