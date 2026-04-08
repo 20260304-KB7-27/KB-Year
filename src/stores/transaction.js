@@ -8,6 +8,37 @@ export const useTransactionStore = defineStore('transaction', () => {
   const error = ref(null);
   const selectedDate = ref(new Date());
 
+  const getMonthRange = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const from = new Date(year, month, 1, 0, 0, 0).toISOString();
+    const to = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
+    return { from, to };
+  };
+
+  const fetchMonthlyData = async (userId = 'user1') => {
+    isLoading.value = true;
+    try {
+      const { from, to } = getMonthRange(selectedDate.value);
+      const uri = 'http://localhost:3000/transactions';
+      const response = await axios.get(uri, {
+        params: { userid: userId, date_gte: from, date_lte: to },
+      });
+      monthlyTrans.value = response.data;
+    } catch (err) {
+      console.error('Data Load Failed:', err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const changeMonth = async (offset) => {
+    const newDate = new Date(selectedDate.value);
+    newDate.setMonth(newDate.getMonth() + offset);
+    selectedDate.value = newDate;
+    await fetchMonthlyData();
+  };
+
   // 'transactions'를 'monthlyTrans'의 Alias로 설정
   const transactions = computed(() => monthlyTrans.value);
 
@@ -64,5 +95,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     isLoading,
     getUserTransaction,
     setMonth,
+    fetchMonthlyData,
+    changeMonth,
   };
 });

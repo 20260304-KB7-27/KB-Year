@@ -4,21 +4,8 @@ import { useTransactionStore } from '@/stores/transaction';
 
 const store = useTransactionStore();
 
-const getMonthRange = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const from = new Date(year, month, 1, 0, 0, 0).toISOString();
-  const to = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
-  return { from, to };
-};
-
-const fetchData = async () => {
-  const { from, to } = getMonthRange(store.selectedDate);
-  await store.getUserTransaction('user1', from, to);
-};
-
 onMounted(() => {
-  fetchData();
+  store.fetchMonthlyData('user1');
 });
 
 const currentMonthDisplay = computed(() => {
@@ -26,11 +13,8 @@ const currentMonthDisplay = computed(() => {
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 });
 
-const changeMonth = async (offset) => {
-  const newDate = new Date(store.selectedDate);
-  newDate.setMonth(newDate.getMonth() + offset);
-  store.setMonth(newDate);
-  await fetchData();
+const handleMonthChange = (offset) => {
+  store.changeMonth(offset);
 };
 
 const cards = computed(() => [
@@ -39,16 +23,15 @@ const cards = computed(() => [
   { id: 3, title: '순수익', value: store.netProfit, color: '#60a5fa' },
 ]);
 
-const formatNumber = (num) => {
-  return (num || 0).toLocaleString();
-};
+const formatNumber = (num) => (num || 0).toLocaleString();
 </script>
+
 <template>
   <div class="flex items-center gap-6 justify-center">
     <div class="flex items-center gap-6">
       <button
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
-        @click="changeMonth(-1)"
+        @click="handleMonthChange(-1)"
       >
         <span class="text-sm">＜</span>
       </button>
@@ -59,7 +42,7 @@ const formatNumber = (num) => {
 
       <button
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
-        @click="changeMonth(1)"
+        @click="handleMonthChange(1)"
       >
         <span class="text-sm">＞</span>
       </button>
