@@ -4,22 +4,24 @@ import { useTransactionStore } from '@/stores/transaction';
 
 const store = useTransactionStore();
 
-const loadMonthlyData = async (date) => {
+const getMonthRange = (date) => {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const month = date.getMonth();
+  const from = new Date(year, month, 1, 0, 0, 0).toISOString();
+  const to = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
+  return { from, to };
+};
 
-  const from = `${year}-${month}-01T00:00:00`;
-  const to = `${year}-${month}-31T23:59:59`;
-
-  await store.getUserTransaction('user1', 'ALL', from, to);
-  // 나중에 여기 user1 위치에 유저ID 연결 시켜줘야 함
+const fetchData = async () => {
+  const { from, to } = getMonthRange(store.selectedDate);
+  await store.getUserTransaction('user1', from, to);
 };
 
 onMounted(() => {
-  loadMonthlyData(store.selectedDate);
+  fetchData();
 });
 
-const currentDateDisplay = computed(() => {
+const currentMonthDisplay = computed(() => {
   const date = store.selectedDate;
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 });
@@ -27,10 +29,8 @@ const currentDateDisplay = computed(() => {
 const changeMonth = async (offset) => {
   const newDate = new Date(store.selectedDate);
   newDate.setMonth(newDate.getMonth() + offset);
-
   store.setMonth(newDate);
-
-  await loadMonthlyData(newDate);
+  await fetchData();
 };
 
 const cards = computed(() => [
@@ -40,28 +40,25 @@ const cards = computed(() => [
 ]);
 
 const formatNumber = (num) => {
-  return Math.floor(num || 0).toLocaleString();
+  return (num || 0).toLocaleString();
 };
 </script>
-
 <template>
-  <div class="flex items-center gap-6 justify-center mb-4">
+  <div class="flex items-center gap-6 justify-center">
     <div class="flex items-center gap-6">
       <button
-        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 disabled:opacity-50"
-        :disabled="store.isLoading"
+        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
         @click="changeMonth(-1)"
       >
         <span class="text-sm">＜</span>
       </button>
 
       <span class="text-lg font-black text-gray-500 min-w-[120px] text-center tracking-tight">
-        {{ currentDateDisplay }}
+        {{ currentMonthDisplay }}
       </span>
 
       <button
-        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 disabled:opacity-50"
-        :disabled="store.isLoading"
+        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
         @click="changeMonth(1)"
       >
         <span class="text-sm">＞</span>
@@ -69,12 +66,12 @@ const formatNumber = (num) => {
     </div>
   </div>
 
-  <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans relative">
+  <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans">
     <div
       v-if="store.isLoading"
-      class="text-blue-400 font-bold animate-pulse absolute -top-4"
+      class="text-gray-400 font-bold animate-pulse absolute top-10"
     >
-      데이터 동기화 중...
+      업데이트 중...
     </div>
 
     <div class="flex flex-col gap-4">
