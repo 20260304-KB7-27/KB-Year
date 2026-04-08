@@ -13,6 +13,7 @@ import PieChart from '@/components/PieChart.vue';
 import LineChart from '@/components/LineChart.vue';
 import DashboardContainer from '@/components/CardsContainer.vue';
 import { useTransactionStore } from '@/stores/transaction.js';
+import ToggleButton from '@/components/ToggleButton.vue';
 
 const transaction = useTransactionStore();
 // 상태 관리
@@ -94,6 +95,11 @@ watch(
   { immediate: true } // 컴포넌트 마운트 시 즉시 실행 (onMounted 역할 대체)
 );
 
+const handleDurationChange = (selectedValue) => {
+  // console.log('선택된 기간:', selectedValue); // 'month', 'week', 'day'
+  duration.value = selectedValue;
+};
+
 const user = {
   name: 'User Name',
   role: 'UI/UX Designer',
@@ -131,14 +137,18 @@ const resetLayout = () => {
   <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center p-10">
     <div class="w-full lg:max-w-5xl md:max-w-2xl">
       <!-- 초기화 버튼 -->
-      <div class="fixed right-5 bottom-1 flex justify-end mb-4 z-50">
+      <!-- <div class="fixed right-5 bottom-1 flex justify-end mb-4 z-50">
         <button
           class="px-4 py-2 bg-gray-800 text-white rounded-lg transition-all duration-200 hover:bg-gray-700 hover:scale-105 active:scale-95 cursor-pointer"
           @click="resetLayout"
         >
           Reset
         </button>
-      </div>
+      </div> -->
+      <ToggleButton
+        @reset="resetLayout"
+        @duration="handleDurationChange"
+      ></ToggleButton>
 
       <!-- 드래그 영역 -->
       <draggable
