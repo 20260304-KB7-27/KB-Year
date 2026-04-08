@@ -8,8 +8,8 @@ const date = ref(new Date());
   <Calendar
     mode="single"
     :selected="date"
-    @update:selected="(val) => (date = val)"
     class="rounded-lg border"
+    @update:selected="(val) => (date = val)"
   />
 </template>
 
