@@ -1,63 +1,61 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 
 const props = defineProps({
-  title: {
-    type: String,
-    default: 'Progress',
-  },
-  value: {
-    type: Number,
-    required: true,
-  },
-  total: {
-    type: Number,
-    default: 100,
-  },
-  data: {
-    type: Array,
-    required: true,
-  },
-  unit: {
-    type: String,
-    default: '%',
-  },
+  title: { type: String, default: 'Progress' },
+  value: { type: Number, required: true },
+  total: { type: Number, default: 100 },
+  data: { type: Array, required: true },
+  unit: { type: String, default: '%' },
 });
 
 const hoveredItem = ref(null);
 const isMounted = ref(false);
+const chartKey = ref(0); // 💡 SVG를 완전히 새로고침하기 위한 키 값
 
-onMounted(() => {
+// 애니메이션을 강제로 재시작하는 함수
+const triggerAnimation = () => {
+  isMounted.value = false; // 일단 애니메이션 상태를 끔
+  chartKey.value += 1; // key 값을 변경하여 SVG DOM 자체를 파괴하고 새로 생성
+
+  // DOM이 완전히 새로 그려진 직후(50ms 후) 다시 애니메이션 시작
   setTimeout(() => {
     isMounted.value = true;
   }, 50);
+};
+
+// 화면에 처음 나타날 때
+onMounted(() => {
+  triggerAnimation();
 });
+
+// 부모 컴포넌트에서 넘어오는 data(pieData)가 변경될 때마다 감지
+watch(
+  () => props.data,
+  () => {
+    triggerAnimation();
+  },
+  { deep: true } // 배열 내부의 값이 변하는 것까지 감지
+);
 
 const radius = 50;
 const circumference = 2 * Math.PI * radius;
 
 const chartSegments = computed(() => {
   const total = props.data.reduce((sum, item) => sum + item.value, 0);
-
-  // 전체 차트가 그려지는 총 시간 (예: 1200ms = 1.2초)
-  const totalDuration = 1200;
-
+  const totalDuration = 500;
   let currentOffset = 0;
-  let cumulativeDelay = 0; // 누적 딜레이 시간
+  let cumulativeDelay = 0;
 
   return props.data.map((item) => {
-    const proportion = item.value / total; // 전체 중 차지하는 비율 (0 ~ 1)
+    const proportion = item.value / total;
     const segmentLength = proportion * circumference;
-
-    // 비율에 맞춰 이 조각이 그려질 시간(duration) 계산
     const duration = proportion * totalDuration;
-    // 이 조각이 시작될 딜레이(이전 조각들의 duration 합)
     const delay = cumulativeDelay;
 
     const strokeArray = `${segmentLength} ${circumference - segmentLength}`;
     const strokeDashoffset = circumference - currentOffset;
 
-    // 다음 조각을 위해 오프셋과 누적 딜레이 업데이트
     currentOffset += segmentLength;
     cumulativeDelay += duration;
 
@@ -84,6 +82,7 @@ const chartSegments = computed(() => {
       ></div>
 
       <svg
+        :key="chartKey"
         viewBox="0 0 120 120"
         class="w-full h-full -rotate-90 transform relative z-10"
       >
@@ -101,8 +100,6 @@ const chartSegments = computed(() => {
             strokeDasharray: isMounted ? segment.strokeArray : `0 ${circumference}`,
             strokeDashoffset: segment.strokeDashoffset,
             opacity: isMounted ? 1 : 0,
-            /* 핵심: stroke-dasharray는 duration동안 linear하게 그려지고, 
-               opacity는 delay가 끝나는 순간 0ms만에 즉시(1로) 나타나도록 설정 */
             transition: `stroke-dasharray ${segment.duration}ms linear ${segment.delay}ms, opacity 0ms linear ${segment.delay}ms`,
           }"
           @mouseover="hoveredItem = segment"
@@ -128,7 +125,3 @@ const chartSegments = computed(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-/* 커스텀 스타일 영역 */
-</style>
