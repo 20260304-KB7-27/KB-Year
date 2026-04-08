@@ -1,24 +1,23 @@
 import js from '@eslint/js';
 import vue from 'eslint-plugin-vue';
 import prettier from 'eslint-plugin-prettier';
-import tseslint from 'typescript-eslint';
 
 export default [
+  // 1. 기본 JS 추천 설정 적용
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  // 2. Vue 추천 설정 적용 (Flat Config 방식)
   ...vue.configs['flat/recommended'],
   {
     languageOptions: {
-      parserOptions: {
-        parser: tseslint.parser,
-        extraFileExtensions: ['.vue'],
-      },
+      // TS 파서를 제거하고 기본 ECMA 파서를 사용하도록 설정
+      ecmaVersion: 'latest',
+      sourceType: 'module',
     },
     plugins: {
       prettier,
     },
     rules: {
-      // 1. Prettier 설정: 여기서 모든 레이아웃(줄바꿈, 세미콜론 등)을 결정합니다.
+      // --- 1. Prettier 설정 ---
       'prettier/prettier': [
         'error',
         {
@@ -28,19 +27,17 @@ export default [
         },
       ],
 
-      // 2. ESLint 논리 규칙
+      // --- 2. ESLint 논리 규칙 ---
       'vue/multi-word-component-names': 'off',
-      'no-undef': 'off', // TypeScript가 대신 검사하므로 'boolean' 에러 해결을 위해 끔
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn'],
+      'no-unused-vars': 'warn', // 기본 JS 미사용 변수 경고
       'vue/no-unused-vars': 'error',
 
-      // 3. 충돌 방지: Prettier와 부딪히는 ESLint의 레이아웃 규칙들을 끕니다.
-      // Prettier가 대신 관리하므로 'off'로 설정하는 것이 가장 깔끔합니다.
+      // --- 3. Prettier 충돌 방지 ---
+      // 레이아웃과 서식은 Prettier가 담당하므로 ESLint 규칙은 비활성화합니다.
       'vue/html-indent': 'off',
       'vue/html-closing-bracket-newline': 'off',
       'vue/first-attribute-linebreak': 'off',
-      'vue/singleline-html-element-content-newline': 'off', // 텍스트 한 줄 정렬 방해 금지
+      'vue/singleline-html-element-content-newline': 'off',
       'vue/multiline-html-element-content-newline': 'off',
       'vue/html-self-closing': 'off',
     },
