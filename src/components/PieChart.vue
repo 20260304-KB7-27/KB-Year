@@ -1,53 +1,57 @@
 <script setup>
 import { computed, ref, onMounted, watch } from 'vue';
 
+// 💡 data 프롭을 incomeData와 expenseData로 분리했습니다.
 const props = defineProps({
-  title: { type: String, default: 'Progress' },
-  value: { type: Number, required: true },
-  total: { type: Number, default: 100 },
-  data: { type: Array, required: true },
-  unit: { type: String, default: '%' },
+  title: { type: String, default: '수입 및 지출 분석' },
+  incomeData: { type: Array, required: true },
+  expenseData: { type: Array, required: true },
 });
 
 const hoveredItem = ref(null);
 const isMounted = ref(false);
-const chartKey = ref(0); // 💡 SVG를 완전히 새로고침하기 위한 키 값
+const chartKey = ref(0);
 
-// 애니메이션을 강제로 재시작하는 함수
+// 애니메이션 강제 재시작
 const triggerAnimation = () => {
-  isMounted.value = false; // 일단 애니메이션 상태를 끔
-  chartKey.value += 1; // key 값을 변경하여 SVG DOM 자체를 파괴하고 새로 생성
+  isMounted.value = false;
+  chartKey.value += 1;
 
-  // DOM이 완전히 새로 그려진 직후(50ms 후) 다시 애니메이션 시작
   setTimeout(() => {
     isMounted.value = true;
   }, 50);
 };
 
-// 화면에 처음 나타날 때
 onMounted(() => {
   triggerAnimation();
 });
 
-// 부모 컴포넌트에서 넘어오는 data(pieData)가 변경될 때마다 감지
+// 💡 두 데이터 중 하나라도 변경되면 애니메이션 재시작
 watch(
-  () => props.data,
+  () => [props.incomeData, props.expenseData],
   () => {
     triggerAnimation();
   },
-  { deep: true } // 배열 내부의 값이 변하는 것까지 감지
+  { deep: true }
 );
 
-const radius = 50;
-const circumference = 2 * Math.PI * radius;
+// 💡 두 개의 고리를 그리기 위해 반지름(radius)을 2개로 나눕니다.
+const radiusOuter = 50; // 바깥쪽 (지출)
+const circumferenceOuter = 2 * Math.PI * radiusOuter;
 
-const chartSegments = computed(() => {
-  const total = props.data.reduce((sum, item) => sum + item.value, 0);
+const radiusInner = 40; // 안쪽 (수입)
+const circumferenceInner = 2 * Math.PI * radiusInner;
+
+// 💡 파라미터에 radius를 추가로 받습니다.
+const calculateSegments = (data, circumference, radius) => {
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  if (total === 0) return [];
+
   const totalDuration = 500;
   let currentOffset = 0;
   let cumulativeDelay = 0;
 
-  return props.data.map((item) => {
+  return data.map((item) => {
     const proportion = item.value / total;
     const segmentLength = proportion * circumference;
     const duration = proportion * totalDuration;
@@ -65,9 +69,24 @@ const chartSegments = computed(() => {
       strokeDashoffset,
       duration,
       delay,
+      circumference,
+      radius, // 💡 추가: 템플릿의 호버 오버레이에서 사용하기 위함
     };
   });
-});
+};
+
+// 지출 조각 (바깥) - 세 번째 인자로 radiusOuter 추가
+const expenseSegments = computed(() =>
+  calculateSegments(props.expenseData, circumferenceOuter, radiusOuter)
+);
+// 수입 조각 (안쪽) - 세 번째 인자로 radiusInner 추가
+const incomeSegments = computed(() =>
+  calculateSegments(props.incomeData, circumferenceInner, radiusInner)
+);
+
+// 기본 화면에 띄워줄 총합 계산
+const totalExpense = computed(() => props.expenseData.reduce((sum, item) => sum + item.value, 0));
+const totalIncome = computed(() => props.incomeData.reduce((sum, item) => sum + item.value, 0));
 </script>
 
 <template>
@@ -87,39 +106,84 @@ const chartSegments = computed(() => {
         class="w-full h-full -rotate-90 transform relative z-10"
       >
         <circle
-          v-for="(segment, index) in chartSegments"
-          :key="index"
+          v-for="(segment, index) in expenseSegments"
+          :key="'exp-' + index"
           cx="60"
           cy="60"
-          :r="radius"
+          :r="radiusOuter"
           fill="none"
           :stroke="segment.color"
-          stroke-width="12"
+          stroke-width="10"
           stroke-linecap="round"
+          class="cursor-pointer"
           :style="{
-            strokeDasharray: isMounted ? segment.strokeArray : `0 ${circumference}`,
+            strokeDasharray: isMounted ? segment.strokeArray : `0 ${segment.circumference}`,
             strokeDashoffset: segment.strokeDashoffset,
             opacity: isMounted ? 1 : 0,
             transition: `stroke-dasharray ${segment.duration}ms linear ${segment.delay}ms, opacity 0ms linear ${segment.delay}ms`,
           }"
           @mouseover="hoveredItem = segment"
+        />
+
+        <circle
+          v-for="(segment, index) in incomeSegments"
+          :key="'inc-' + index"
+          cx="60"
+          cy="60"
+          :r="radiusInner"
+          fill="none"
+          :stroke="segment.color"
+          stroke-width="10"
+          stroke-linecap="round"
+          class="cursor-pointer"
+          :style="{
+            strokeDasharray: isMounted ? segment.strokeArray : `0 ${segment.circumference}`,
+            strokeDashoffset: segment.strokeDashoffset,
+            opacity: isMounted ? 1 : 0,
+            transition: `stroke-dasharray ${segment.duration}ms linear ${segment.delay}ms, opacity 0ms linear ${segment.delay}ms`,
+          }"
+          @mouseover="hoveredItem = segment"
+        />
+
+        <circle
+          v-if="hoveredItem"
+          cx="60"
+          cy="60"
+          :r="hoveredItem.radius"
+          fill="none"
+          :stroke="hoveredItem.color"
+          stroke-width="14"
+          stroke-linecap="round"
+          class="cursor-pointer transition-all duration-200 ease-out"
+          :style="{
+            strokeDasharray: hoveredItem.strokeArray,
+            strokeDashoffset: hoveredItem.strokeDashoffset,
+          }"
           @mouseleave="hoveredItem = null"
         />
       </svg>
 
-      <div class="absolute flex flex-col items-center z-20">
+      <div
+        class="absolute flex flex-col items-center justify-center z-20 w-32 h-32 rounded-full pointer-events-none"
+      >
         <template v-if="hoveredItem">
-          <p class="text-xl font-bold text-[#645b4c]">{{ hoveredItem.type }}</p>
-          <p class="text-2xl font-extrabold text-[#645b4c] tabular-nums">
-            {{ hoveredItem.value.toLocaleString() }}<span class="text-lg">원</span>
+          <p class="text-sm font-bold text-[#645b4c] text-center whitespace-normal">
+            {{ hoveredItem.type }}
+          </p>
+          <p class="text-lg font-extrabold text-[#645b4c] tabular-nums leading-tight">
+            {{ hoveredItem.t }} {{ hoveredItem.value.toLocaleString()
+            }}<span class="text-sm">원</span>
           </p>
         </template>
         <template v-else>
-          <p class="text-xl font-bold text-[#645b4c]">Total</p>
-          <p class="text-2xl font-extrabold text-[#645b4c] tabular-nums">
-            {{ chartSegments.reduce((sum, s) => sum + s.value, 0).toLocaleString()
-            }}<span class="text-lg">원</span>
-          </p>
+          <div class="flex flex-col items-center gap-1">
+            <p class="text-xs font-bold text-[#10B981]">
+              수입: +{{ totalIncome.toLocaleString() }}
+            </p>
+            <p class="text-xs font-bold text-[#EF4444]">
+              지출: -{{ totalExpense.toLocaleString() }}
+            </p>
+          </div>
         </template>
       </div>
     </div>
