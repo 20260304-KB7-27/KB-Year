@@ -33,8 +33,8 @@ const formatNumber = (num) => {
   <div class="flex items-center gap-6 justify-center">
     <div class="flex items-center gap-6">
       <button
-        @click="changeMonth(-1)"
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
+        @click="changeMonth(-1)"
       >
         <span class="text-sm">＜</span>
       </button>
@@ -44,8 +44,8 @@ const formatNumber = (num) => {
       </span>
 
       <button
-        @click="changeMonth(1)"
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
+        @click="changeMonth(1)"
       >
         <span class="text-sm">＞</span>
       </button>

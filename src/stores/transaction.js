@@ -34,12 +34,13 @@ export const useTransactionStore = defineStore('transaction', () => {
   });
 
   const netProfit = computed(() => totalIncome.value - totalExpense.value);
-  
-  const getUserTransaction = async (id) => {
-    isLoading.value = true;
+
+  const getUserTransaction = async (id, type, from, to) => {
     try {
       const uri = 'http://localhost:3000/transactions';
-      const response = await axios.get(`${uri}?userid=${id}`);
+      const response = await axios.get(
+        `${uri}?userid=${id}&type=${type}&date_gte=${from}&date_lte=${to}`
+      );
       if (response.status === 200) {
         monthlyTrans.value = response.data;
         console.log('데이터 로드 성공:', monthlyTrans.value);
