@@ -12,7 +12,7 @@ const loadMonthlyData = async (date) => {
   const to = `${year}-${month}-31T23:59:59`;
 
   await store.getUserTransaction('user1', 'ALL', from, to);
-  // 여기 user1이라는 ID 나중에 연동 시켜줘야 함
+  // 나중에 여기 user1 위치에 유저ID 연결 시켜줘야 함
 };
 
 onMounted(() => {

@@ -14,7 +14,7 @@ export const useTransactionStore = defineStore('transaction', () => {
 
     // 선택한 월 데이터 로딩
     return monthlyTrans.value.filter((t) => {
-      const tDate = new Date(t.timestamp);
+      const tDate = new Date(t.date || t.timestamp);
       return tDate.getFullYear() === year && tDate.getMonth() === month;
     });
   });
@@ -29,7 +29,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   // 총 지출
   const totalExpense = computed(() => {
     return filteredTransactions.value
-      .filter((t) => t.category === 'expense')
+      .filter((t) => t.type === 'expense')
       .reduce((acc, cur) => acc + cur.amount, 0);
   });
 
@@ -38,14 +38,19 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   // transactions 데이터 불러오기
   const getUserTransaction = async (id, type, from, to) => {
+    isLoading.value = true;
     try {
       const uri = 'http://localhost:3000/transactions';
-      const response = await axios.get(
-        `${uri}?userid=${id}&type=${type}&date_gte=${from}&date_lte=${to}`
-      );
+      const response = await axios.get(uri, {
+        params: {
+          userid: id,
+          type: type === 'ALL' ? undefined : type,
+          date_gte: from || undefined,
+          date_lte: to || undefined,
+        },
+      });
       if (response.status === 200) {
         monthlyTrans.value = response.data;
-        console.log('데이터 로드 성공:', monthlyTrans.value);
       }
     } catch (err) {
       console.error('데이터 로드 실패:', err);
