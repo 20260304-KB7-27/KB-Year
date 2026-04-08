@@ -4,8 +4,21 @@ import { useTransactionStore } from '@/stores/transaction';
 
 const store = useTransactionStore();
 
+const getMonthRange = (date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const from = new Date(year, month, 1, 0, 0, 0).toISOString();
+  const to = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
+  return { from, to };
+};
+
+const fetchData = async () => {
+  const { from, to } = getMonthRange(store.selectedDate);
+  await store.getUserTransaction('user1', from, to);
+};
+
 onMounted(() => {
-  store.fetchTransactions();
+  fetchData();
 });
 
 const currentMonthDisplay = computed(() => {
@@ -13,10 +26,11 @@ const currentMonthDisplay = computed(() => {
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 });
 
-const changeMonth = (offset) => {
-  const date = new Date(store.selectedDate);
-  date.setMonth(date.getMonth() + offset);
-  store.setMonth(date);
+const changeMonth = async (offset) => {
+  const newDate = new Date(store.selectedDate);
+  newDate.setMonth(newDate.getMonth() + offset);
+  store.setMonth(newDate);
+  await fetchData();
 };
 
 const cards = computed(() => [
