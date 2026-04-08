@@ -5,10 +5,12 @@ import axios from 'axios';
 export const useTransactionStore = defineStore('transaction', () => {
   const monthlyTrans = ref([]);
 
-  const getUserTransaction = async (id) => {
+  const getUserTransaction = async (id, type, from, to) => {
     try {
       const uri = 'http://localhost:3000/transactions';
-      const response = await axios.get(`${uri}?userid=${id}`);
+      const response = await axios.get(
+        `${uri}?userid=${id}&type=${type}&date_gte=${from}&date_lte=${to}`
+      );
 
       if (response.status === 200) {
         // response.data를 배열 상태에 직접 할당합니다.
