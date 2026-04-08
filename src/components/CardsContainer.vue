@@ -4,19 +4,33 @@ import { useTransactionStore } from '@/stores/transaction';
 
 const store = useTransactionStore();
 
+const loadMonthlyData = async (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+
+  const from = `${year}-${month}-01T00:00:00`;
+  const to = `${year}-${month}-31T23:59:59`;
+
+  await store.getUserTransaction('user1', 'ALL', from, to);
+  // 나중에 여기 user1 위치에 유저ID 연결 시켜줘야 함
+};
+
 onMounted(() => {
-  // store.getUserTransaction();
+  loadMonthlyData(store.selectedDate);
 });
 
-const currentMonthDisplay = computed(() => {
+const currentDateDisplay = computed(() => {
   const date = store.selectedDate;
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 });
 
-const changeMonth = (offset) => {
-  const date = new Date(store.selectedDate);
-  date.setMonth(date.getMonth() + offset);
-  store.setMonth(date);
+const changeMonth = async (offset) => {
+  const newDate = new Date(store.selectedDate);
+  newDate.setMonth(newDate.getMonth() + offset);
+
+  store.setMonth(newDate);
+
+  await loadMonthlyData(newDate);
 };
 
 const cards = computed(() => [
@@ -26,25 +40,28 @@ const cards = computed(() => [
 ]);
 
 const formatNumber = (num) => {
-  return (num || 0).toLocaleString();
+  return Math.floor(num || 0).toLocaleString();
 };
 </script>
+
 <template>
-  <div class="flex items-center gap-6 justify-center">
+  <div class="flex items-center gap-6 justify-center mb-4">
     <div class="flex items-center gap-6">
       <button
-        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
+        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 disabled:opacity-50"
+        :disabled="store.isLoading"
         @click="changeMonth(-1)"
       >
         <span class="text-sm">＜</span>
       </button>
 
       <span class="text-lg font-black text-gray-500 min-w-[120px] text-center tracking-tight">
-        {{ currentMonthDisplay }}
+        {{ currentDateDisplay }}
       </span>
 
       <button
-        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
+        class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 disabled:opacity-50"
+        :disabled="store.isLoading"
         @click="changeMonth(1)"
       >
         <span class="text-sm">＞</span>
@@ -52,12 +69,12 @@ const formatNumber = (num) => {
     </div>
   </div>
 
-  <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans">
+  <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans relative">
     <div
       v-if="store.isLoading"
-      class="text-gray-400 font-bold animate-pulse absolute top-10"
+      class="text-blue-400 font-bold animate-pulse absolute -top-4"
     >
-      업데이트 중...
+      데이터 동기화 중...
     </div>
 
     <div class="flex flex-col gap-4">
