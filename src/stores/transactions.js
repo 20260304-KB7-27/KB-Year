@@ -49,7 +49,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
   // 전체 거래 내역에서 해당 연도, 달 필터 적용 데이터
   const getTransactionsByMonth = (year, month) => {
-    if (!transactions.value) {
+    if (!Array.isArray(transactions.value)) {
       return [];
     }
     return transactions.value.filter((t) => {
@@ -62,7 +62,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
   const getTransactionsByDuration = () => {
     const { from, to } = lastQuery.value;
 
-    if (!transactions.value) {
+    if (!Array.isArray(transactions.value)) {
       return [];
     }
 
