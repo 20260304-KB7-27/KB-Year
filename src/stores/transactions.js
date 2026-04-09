@@ -55,6 +55,24 @@ export const useTransactionsStore = defineStore('transactions', () => {
     });
   };
 
+  // 전체 거래 내역에서 설정된 기간(lastQuery의 from ~ to)에 해당되는 데이터 가져오기
+  const getTransactionsByDuration = () => {
+    const { from, to } = lastQuery.value;
+
+    if (!from && !to) {
+      return transactions.value;
+    }
+
+    const fromTime = from ? new Date(from).getTime() : 0;
+    const toTime = to ? new Date(to).getTime() : Infinity;
+
+    return transactions.value.filter((t) => {
+      const txTime = new Date(t.date).getTime();
+
+      return txTime >= fromTime && txTime <= toTime;
+    });
+  };
+
   // 거래 등록 및 삭제 시 refetch
   const refetchTransactions = async () => {
     if (!currentUserId.value) return;
@@ -133,6 +151,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
     hasTransactions,
     fetchTransactions,
     getTransactionsByMonth,
+    getTransactionsByDuration,
     refetchTransactions,
     addTransaction,
     updateTransaction,
