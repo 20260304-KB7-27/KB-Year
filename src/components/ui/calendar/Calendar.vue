@@ -247,6 +247,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
               <CalendarCellTrigger
                 :day="weekDate"
                 :month="month.value"
+                class="cursor-pointer"
               />
 
               <div
@@ -260,7 +261,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
                 <span
                   v-if="getTransactionData(weekDate)?.[1] > 0"
-                  class="w-1.5 h-1.5 rounded-full bg-[#EF4444] shadow-sm"
+                  class="w-1.5 h-1.5 rounded-full bg-[#ec3737] shadow-sm"
                 ></span>
               </div>
             </CalendarCell>
