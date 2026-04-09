@@ -49,6 +49,9 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
   // 전체 거래 내역에서 해당 연도, 달 필터 적용 데이터
   const getTransactionsByMonth = (year, month) => {
+    if (!Array.isArray(transactions.value)) {
+      return [];
+    }
     return transactions.value.filter((t) => {
       const date = new Date(t.date);
       return date.getFullYear() === year && date.getMonth() === month;
@@ -58,6 +61,10 @@ export const useTransactionsStore = defineStore('transactions', () => {
   // 전체 거래 내역에서 설정된 기간(lastQuery의 from ~ to)에 해당되는 데이터 가져오기
   const getTransactionsByDuration = () => {
     const { from, to } = lastQuery.value;
+
+    if (!Array.isArray(transactions.value)) {
+      return [];
+    }
 
     if (!from && !to) {
       return transactions.value;

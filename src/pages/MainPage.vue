@@ -32,16 +32,6 @@ const dateTransactionNumber = computed(() => durationStore.dateTransactionNumber
 const barIncome = computed(() => barChartStore.barIncome);
 const barExpense = computed(() => barChartStore.barExpense);
 
-const myWeeklyData = ref([
-  { label: 'Mon', value: 30 },
-  { label: 'Tue', value: 50 },
-  { label: 'Wed', value: 45 },
-  { label: 'Thu', value: 80 },
-  { label: 'Fri', value: 60 },
-  { label: 'Sat', value: 90 },
-  { label: 'Sun', value: 70 },
-]);
-
 const initialCards = [
   { id: 1, type: 'user' },
   { id: 2, type: 'activity' },

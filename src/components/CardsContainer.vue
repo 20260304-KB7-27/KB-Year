@@ -1,9 +1,11 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useTransactionStore } from '@/stores/transaction';
+import { useDurationStore } from '@/stores/duration';
 import { useUserStore } from '@/stores/user';
 
 const transactionStore = useTransactionStore();
+const durationStore = useDurationStore();
 const userStore = useUserStore();
 
 const userId = computed(() => userStore.user?.userid);
@@ -24,10 +26,14 @@ const handleMonthChange = (offset) => {
   transactionStore.changeMonth(offset, userId.value);
 };
 
+const totalIncome = computed(() => durationStore.totalIncome);
+const netProfit = computed(() => durationStore.netProfit);
+const totalExpense = computed(() => durationStore.totalExpense);
+
 const cards = computed(() => [
-  { id: 1, title: '수입', value: transactionStore.totalIncome, color: '#4ade80' },
-  { id: 2, title: '지출', value: transactionStore.totalExpense, color: '#f87171' },
-  { id: 3, title: '순수익', value: transactionStore.netProfit, color: '#60a5fa' },
+  { id: 1, title: '수입', value: totalIncome.value, color: '#4ade80' },
+  { id: 2, title: '지출', value: totalExpense.value, color: '#f87171' },
+  { id: 3, title: '순수익', value: netProfit.value, color: '#60a5fa' },
 ]);
 
 const formatNumber = (num) => (num || 0).toLocaleString();

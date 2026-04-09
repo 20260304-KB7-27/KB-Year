@@ -7,7 +7,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   const isLoading = ref(false);
   // const error = ref(null);
   const selectedDate = ref(new Date());
-  const url = 'http://localhost:3000/transactions';
+  const url = 'https://kb-db-production.up.railway.app';
 
   /* 캘린더 + barChart용 */
   const durationTrans = ref({
