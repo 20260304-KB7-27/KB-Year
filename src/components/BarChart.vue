@@ -60,6 +60,16 @@ const chartGroups = computed(() => {
           </div>
 
           <div class="flex flex-col gap-3 w-full">
+            <p
+              v-if="group.items.length === 0"
+              class="text-center"
+            >
+              {{
+                group.type === 'income'
+                  ? '해당 기간 수입이 없습니다!'
+                  : '해당 기간 지출이 없습니다!'
+              }}
+            </p>
             <div
               v-for="(item, index) in group.items"
               :key="item.type || index"
