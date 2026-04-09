@@ -124,9 +124,9 @@ onMounted(async () => {
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg no-drag">
           <button
-            @click="changeZoom(-25)"
             class="w-7 h-7 flex items-center justify-center rounded-lg neo-interactive text-[#718096] font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             :disabled="zoomLevel <= 50"
+            @click="changeZoom(-25)"
           >
             <span class="mb-0.5">−</span>
           </button>
@@ -136,9 +136,9 @@ onMounted(async () => {
             </span>
           </div>
           <button
-            @click="changeZoom(25)"
             class="w-7 h-7 flex items-center justify-center rounded-lg neo-interactive text-[#718096] font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             :disabled="zoomLevel >= 150"
+            @click="changeZoom(25)"
           >
             <span class="mb-0.5">+</span>
           </button>
