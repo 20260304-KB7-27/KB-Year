@@ -112,33 +112,22 @@
 </template>
 
 <script setup>
-import { useTransactionStore } from '@/stores/transaction';
+import { useTransactionsStore } from '@/stores/transactions';
 import { onMounted, ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
-import { formatQueryDate } from '@/utils/date.js';
 import TradeCard from '@/components/tradeList/TradeCard.vue';
 import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
 const route = useRouter();
-const store = useTransactionStore();
-const { transactions } = storeToRefs(store);
 
-const selectedDate = ref(store.selectedDate ? new Date(store.selectedDate) : new Date());
+const store = useTransactionsStore();
+const { transactions, isLoading } = storeToRefs(store);
 
+const selectedDate = ref(new Date());
 const selectedType = ref('all');
 
-const loadTransactions = async (baseDate) => {
-  const year = baseDate.getFullYear();
-  const month = baseDate.getMonth();
-
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-
-  await store.getUserAllTransaction('user1', formatQueryDate(firstDay), formatQueryDate(lastDay));
-};
-
-const moveMonth = async (diff) => {
+const moveMonth = (diff) => {
   const newDate = new Date(selectedDate.value);
   newDate.setMonth(newDate.getMonth() + diff);
 
@@ -149,19 +138,26 @@ const moveMonth = async (diff) => {
   if (targetMonthStart > currentMonthStart) return;
 
   selectedDate.value = newDate;
-  await loadTransactions(newDate);
 };
 
+// 월 필터
+const monthTransactions = computed(() => {
+  return store.getTransactionsByMonth(
+    selectedDate.value.getFullYear(),
+    selectedDate.value.getMonth()
+  );
+});
+
 onMounted(async () => {
-  await loadTransactions(selectedDate.value);
+  if (!transactions.value.length) {
+    await store.fetchTransactions();
+  }
 });
 
 const filteredTransactions = computed(() => {
-  if (selectedType.value === 'all') {
-    return transactions.value;
-  }
+  if (selectedType.value === 'all') return monthTransactions.value;
 
-  return transactions.value.filter((t) => t.type === selectedType.value);
+  return monthTransactions.value.filter((t) => t.type?.toLowerCase() === selectedType.value);
 });
 
 const groupedTransactions = computed(() => {
