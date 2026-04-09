@@ -1,7 +1,7 @@
 <script setup>
 import draggable from 'vuedraggable';
 
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { today, getLocalTimeZone } from '@internationalized/date';
 
 import { Calendar } from '@/components/ui/calendar';
@@ -34,12 +34,8 @@ const totalAmount = computed(() => {
   return monthlyTrans.value.reduce((sum, t) => sum + t.amount, 0);
 });
 
-// 토글
-const pieType = ref('ex');
-
-const togglePieType = (e) => {
-  pieType.value = pieType.value === 'ex' ? 'in' : 'ex';
-};
+// 날짜별 수입/지출 횟수
+const dateTransactionNumber = computed(() => transaction.dateTransactionNumber);
 
 const barExpense = computed(() => {
   const sumByCategory = durationTrans.value?.expense.reduce((acc, t) => {
@@ -131,14 +127,16 @@ const dateRange = computed(() => {
 
 // dateRange 값이 바뀔 때마다(또는 처음 렌더링될 때) API 호출
 watch(
-  () => dateRange.value,
-  (newRange) => {
-    // console.log(newRange);
-    // console.log(user.value);
-    // transaction.getUserTransaction('user1', 'expense', newRange.startDate, newRange.endDate);
-    transaction.getDurationTransaction(user.value?.userid, newRange.startDate, newRange.endDate);
+  () => [dateRange.value, user.value?.userid],
+  ([newRange, userId]) => {
+    // 💡 유저 정보가 아직 로딩 전이라면 API를 호출하지 않고 기다립니다.
+    if (!userId) return;
+
+    // 유저 아이디가 확인되면 그제서야 안전하게 API를 호출합니다.
+    transaction.getUserAllTransaction(userId, newRange.startDate, newRange.endDate);
+    transaction.getDurationTransaction(userId, newRange.startDate, newRange.endDate);
   },
-  { immediate: true } // 컴포넌트 마운트 시 즉시 실행 (onMounted 역할 대체)
+  { immediate: true, deep: true }
 );
 
 const handleDurationChange = (selectedValue) => {
@@ -147,15 +145,6 @@ const handleDurationChange = (selectedValue) => {
 };
 
 const myValue = ref(75);
-const myWeeklyData = ref([
-  { label: 'Mon', value: 30 },
-  { label: 'Tue', value: 50 },
-  { label: 'Wed', value: 45 },
-  { label: 'Thu', value: 80 },
-  { label: 'Fri', value: 60 },
-  { label: 'Sat', value: 90 },
-  { label: 'Sun', value: 70 },
-]);
 
 const initialCards = [
   { id: 1, type: 'user' },
@@ -209,24 +198,11 @@ const resetLayout = () => {
 
             <DashboardContainer v-else-if="element.type === 'dashboard'" />
 
-            <div
+            <Calendar
               v-else-if="element.type === 'calendar'"
-              class="h-full"
-            >
-              <Calendar
-                v-model="date"
-                class="rounded-2xl p-5 h-full neo-inset content-center"
-              />
-            </div>
-
-            <PieChart
-              v-else-if="element.type === 'pie' && pieType === 'ex'"
-              title="소비 유형"
-              :value="100"
-              :data="pieExpense"
-              :total="100"
-              unit="%"
-              @click="togglePieType"
+              v-model="date"
+              :data="dateTransactionNumber"
+              class="rounded-2xl p-5 h-full neo-inset content-center"
             />
 
             <BarChart
@@ -247,10 +223,7 @@ const resetLayout = () => {
               @click="togglePieType"
             /> -->
 
-            <LineChart
-              v-else-if="element.type === 'line'"
-              :data="myWeeklyData"
-            />
+            <LineChart v-else-if="element.type === 'line'" />
           </Card>
         </template>
       </draggable>
