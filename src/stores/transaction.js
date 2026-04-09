@@ -147,9 +147,10 @@ export const useTransactionStore = defineStore('transaction', () => {
 
     isLoading.value = true;
     const { from, to } = dateRange.value;
-
+    const url = 'https://kb-db-production.up.railway.app';
+    const uri = `${url}/transactions`;
     try {
-      const response = await axios.get(url, {
+      const response = await axios.get(uri, {
         params: {
           userid: userId,
           date_gte: from,
