@@ -5,9 +5,27 @@ import { storeToRefs } from 'pinia';
 import { useDurationStore } from '@/stores/duration';
 import { LogOut, Settings, Award, Shield, Crown, Zap, User } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 // 1. 기본 유저 정보 (추후 DB 연동 가능)
-const { user } = storeToRefs(useUserStore());
-const { netProfit } = useDurationStore();
+const userStore = useUserStore();
+
+const { user } = storeToRefs(userStore);
+const { signOut } = userStore;
+const durationStore = useDurationStore();
+const netProfit = computed(() => (durationStore.netProfit < 0 ? 0 : durationStore.netProfit));
+
+const handleLogout = async () => {
+  if (confirm('로그아웃 하시겠습니까?')) {
+    try {
+      await signOut(); // 여기서 실제 로그아웃 함수 호출
+      console.log('로그아웃 성공');
+      useRouter().push('/login');
+      // 필요하다면 여기서 router.push('/login') 등을 추가하세요.
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  }
+};
 
 // 3. 절대평가 등급 기준 정의 (금액 단위: KRW)
 const tiers = {
@@ -17,6 +35,7 @@ const tiers = {
     desc: '이제 시작해요! 저축 습관 만들기 🌱',
     icon: Zap,
     bg: 'bg-[#cd7f32]',
+    img: new URL('@/assets/image/bronze.png', import.meta.url).href,
     color: 'text-white', // 브론즈는 진해서 흰색이 잘 보여요
   },
   SILVER: {
@@ -25,6 +44,7 @@ const tiers = {
     desc: '차곡차곡 쌓여가는 기쁨! 실버 🥈',
     icon: Shield,
     bg: 'bg-[#b0b0b0]', // 실버를 약간 더 진하게 조정
+    img: new URL('@/assets/image/silver.png', import.meta.url).href,
     color: 'text-[#4a4a4a]', // 실버 배경엔 진한 회색 텍스트
   },
   GOLD: {
@@ -33,6 +53,7 @@ const tiers = {
     desc: '현명한 소비의 달인! 골드 🥇',
     icon: Award,
     bg: 'bg-[#ffd700]',
+    img: new URL('@/assets/image/gold.png', import.meta.url).href,
     color: 'text-[#645b4c]', // 골드엔 갈색톤 텍스트가 고급스럽습니다
   },
   PLATINUM: {
@@ -41,6 +62,7 @@ const tiers = {
     desc: '자산 관리의 신! 플래티넘 🏆',
     icon: Crown,
     bg: 'bg-[#10b981]', // 초록색 계열로 변경
+    img: new URL('@/assets/image/platinum.png', import.meta.url).href,
     color: 'text-white', // 초록 배경에 잘 보이도록 흰색 글자
   },
 };
@@ -78,38 +100,39 @@ const tierProgress = computed(() => {
   return Math.min(100, Math.max(0, (current / range) * 100));
 });
 
-// 6. 액션 핸들러
-const handleLogout = () => {
-  if (confirm('로그아웃 하시겠습니까?')) {
-    console.log('Logout logic here');
-    // 예: authStore.logout(); router.push('/login');
-  }
-};
-
 const openEditProfile = () => {
   console.log('Navigate to edit profile page or open drawer');
   // 예: router.push('/profile/edit');
 };
+
+const avatarClass = computed(
+  () =>
+    'w-24 h-24 rounded-full flex items-center justify-center mb-4 transition-all duration-200 bg-[#f4f2ee]'
+);
 </script>
 
 <template>
   <div class="flex flex-col items-center">
-    <div class="mb-5">
+    <div class="mb-5 mt-10">
       <div class="flex justify-center items-center gap-3 mb-3">
-        <h2 class="text-[#645b4c] font-bold text-2xl">{{ user.name }}</h2>
+        <div class="flex flex-col justify-center">
+          <h2 class="text-[#645b4c] font-bold text-2xl">{{ user.name }}</h2>
+          <button
+            class="flex items-center gap-1.5 mt-1 px-1 py-1 rounded-full text-[#a39b8f] hover:text-red-500 hover:bg-red-50 transition-all text-[10px] font-bold cursor-pointer group"
+            @click="handleLogout"
+          >
+            <LogOut class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            <span>Logout</span>
+          </button>
+        </div>
 
-        <!-- <button
-          @click="handleLogout"
-          class="flex items-center gap-1 px-2 py-1 rounded-lg text-[#a39b8f] hover:text-red-400 hover:bg-red-50/50 transition-all text-[10px] font-bold cursor-pointer"
-          title="로그아웃"
-        >
-          <LogOut class="w-3 h-3" />
-          <span>LOGOUT</span>
-        </button> -->
+        <!--  -->
+        <div :class="avatarClass">
+          <img :src="tiers[currentTier].img" />
+        </div>
       </div>
-      <!-- <h2 class="text-3xl font-bold text-[#645b4c] mb-1">{{ user.name }}</h2> -->
       <p
-        class="text-xs font-semibold px-2.5 py-1 rounded-full inline-block mb-5"
+        class="text-xs font-semibold h-7 w-48 flex items-center justify-center rounded-full mb-5 shadow-sm"
         :class="[tiers[currentTier].bg, tiers[currentTier].color]"
       >
         {{ tiers[currentTier].desc }}
@@ -124,7 +147,8 @@ const openEditProfile = () => {
         </div>
         <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
-            class="h-full bg-[#fcaf17] transition-all duration-700 ease-out"
+            class="h-full transition-all duration-700 ease-out"
+            :class="tiers[currentTier].bg"
             :style="{ width: tierProgress + '%' }"
           ></div>
         </div>
