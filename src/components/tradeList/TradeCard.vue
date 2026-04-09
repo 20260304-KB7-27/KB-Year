@@ -37,8 +37,15 @@
       <div class="mx-auto my-auto flex flex-col items-center justify-center gap-3">
         <Dialog v-model:open="editOpen">
           <DialogTrigger as-child>
-            <button>
-              <PencilIcon class="w-5 text-red-700" />
+            <button
+              class="group flex relative justify-center items-center rounded-md w-8 h-8 bg-[var(--card)] shadow-[4px_4px_8px_#c9c5bd,-4px_-4px_8px_#f5f1e9] transition-all duration-200 active:shadow-[inset_2px_2px_4px_#c9c5bd,inset_-2px_-2px_4px_#f5f1e9]"
+            >
+              <PencilIcon class="w-5 text-green-700 hover:text-green-900" />
+              <span
+                class="absolute bottom-10 scale-0 transition-all rounded bg-green-700/30 p-2 text-xs text-white group-hover:scale-100 w-10"
+              >
+                수정
+              </span>
             </button>
           </DialogTrigger>
 
@@ -65,8 +72,16 @@
           </DialogContent>
         </Dialog>
 
-        <button @click="handleDelete">
-          <TrashIcon class="w-5 text-green-700" />
+        <button
+          class="group flex relative justify-center items-center rounded-sm w-8 h-8 bg-[var(--card)] shadow-[4px_4px_8px_#c9c5bd,-4px_-4px_8px_#f5f1e9] transition-all duration-200 active:shadow-[inset_2px_2px_4px_#c9c5bd,inset_-2px_-2px_4px_#f5f1e9]"
+          @click="handleDelete"
+        >
+          <TrashIcon class="w-5 text-red-700 hover:text-red-900" />
+          <span
+            class="absolute top-10 scale-0 transition-all rounded bg-red-700/30 p-2 text-xs text-white group-hover:scale-100 w-10"
+          >
+            삭제
+          </span>
         </button>
       </div>
     </div>
@@ -115,7 +130,11 @@ const handleEditSubmit = async (payload) => {
 };
 
 const handleDelete = async () => {
-  await store.deleteTransaction(props.transaction.id);
+  if (confirm('정말 삭제하시겠습니까?')) {
+    await store.deleteTransaction(props.transaction.id);
+  } else {
+    return;
+  }
 };
 </script>
 
