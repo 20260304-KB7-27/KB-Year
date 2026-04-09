@@ -9,7 +9,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   const selectedDate = ref(new Date());
   const url = 'http://localhost:3000/transactions';
 
-  /* 캘린더 + piechart용 */
+  /* 캘린더 + barChart용 */
   const durationTrans = ref({
     expense: [],
     income: [],
@@ -52,6 +52,28 @@ export const useTransactionStore = defineStore('transaction', () => {
       const tDate = new Date(t.date);
       return tDate.getFullYear() === year && tDate.getMonth() === month;
     });
+  });
+
+  const dateTransactionNumber = computed(() => {
+    const data = {};
+    const allTransactions = monthlyTrans.value;
+
+    allTransactions.forEach((t) => {
+      if (!t.date) return; // 날짜가 없는 데이터는 무시 (안전장치)
+      const dateStr =
+        typeof t.date === 'string'
+          ? t.date.split('T')[0]
+          : `${t.date.getFullYear()}-${String(t.date.getMonth() + 1).padStart(2, '0')}-${String(t.date.getDate()).padStart(2, '0')}`;
+      if (!data[dateStr]) {
+        data[dateStr] = [0, 0];
+      }
+      if (t.type === 'income') {
+        data[dateStr][0]++;
+      } else if (t.type === 'expense') {
+        data[dateStr][1]++;
+      }
+    });
+    return data;
   });
 
   const dateRange = computed(() => {
@@ -102,7 +124,7 @@ export const useTransactionStore = defineStore('transaction', () => {
           ? import.meta.env.VITE_API_URL_LOCAL
           : import.meta.env.VITE_API_URL;
       const uri = `${url}/transactions`;
-      console.log(uri, id, from, to);
+      // console.log(uri, id, from, to);
       const response = await axios.get(uri, {
         params: { userid: id, date_gte: from, date_lte: to, _sort: '-date' },
       });
@@ -162,6 +184,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     totalExpense,
     netProfit,
     isLoading,
+    dateTransactionNumber,
     getUserTransaction,
     getUserAllTransaction,
     getDurationTransaction,
