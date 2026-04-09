@@ -1,12 +1,14 @@
 import LandingPage from '@/pages/LandingPage.vue';
 import MainPage from '@/pages/MainPage.vue';
+import MainPage2 from '@/pages/MainPage2.vue';
 import { useUserStore } from '@/stores/user';
 import { createRouter, createWebHistory } from 'vue-router';
 import TradeList from '@/pages/TradeList.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', name: 'main', component: MainPage, meta: { requiresAuth: true } },
+    // { path: '/', name: 'main', component: MainPage, meta: { requiresAuth: true } },
+    { path: '/', name: 'main', component: MainPage2, meta: { requiresAuth: true } },
     { path: '/login', name: 'login', component: LandingPage },
     {
       path: '/tradeList',
