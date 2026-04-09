@@ -1,54 +1,44 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useTransactionStore } from '@/stores/transaction';
+import { useUserStore } from '@/stores/user';
 
-const store = useTransactionStore();
+const transactionStore = useTransactionStore();
+const userStore = useUserStore();
 
-const getMonthRange = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const from = new Date(year, month, 1, 0, 0, 0).toISOString();
-  const to = new Date(year, month + 1, 0, 23, 59, 59).toISOString();
-  return { from, to };
-};
-
-const fetchData = async () => {
-  const { from, to } = getMonthRange(store.selectedDate);
-  await store.getUserTransaction('user1', from, to);
-};
+const userId = computed(() => userStore.user?.userid);
 
 onMounted(() => {
-  fetchData();
+  if (userId.value) {
+    transactionStore.fetchTransactions(userId.value);
+  }
 });
 
 const currentMonthDisplay = computed(() => {
-  const date = store.selectedDate;
+  const date = transactionStore.selectedDate;
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 });
 
-const changeMonth = async (offset) => {
-  const newDate = new Date(store.selectedDate);
-  newDate.setMonth(newDate.getMonth() + offset);
-  store.setMonth(newDate);
-  await fetchData();
+// 스토어의 액션을 직접 호출
+const handleMonthChange = (offset) => {
+  transactionStore.changeMonth(offset, userId.value);
 };
 
 const cards = computed(() => [
-  { id: 1, title: '수입', value: store.totalIncome, color: '#4ade80' },
-  { id: 2, title: '지출', value: store.totalExpense, color: '#f87171' },
-  { id: 3, title: '순수익', value: store.netProfit, color: '#60a5fa' },
+  { id: 1, title: '수입', value: transactionStore.totalIncome, color: '#4ade80' },
+  { id: 2, title: '지출', value: transactionStore.totalExpense, color: '#f87171' },
+  { id: 3, title: '순수익', value: transactionStore.netProfit, color: '#60a5fa' },
 ]);
 
-const formatNumber = (num) => {
-  return (num || 0).toLocaleString();
-};
+const formatNumber = (num) => (num || 0).toLocaleString();
 </script>
+
 <template>
   <div class="flex items-center gap-6 justify-center">
     <div class="flex items-center gap-6">
       <button
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
-        @click="changeMonth(-1)"
+        @click="handleMonthChange(-1)"
       >
         <span class="text-sm">＜</span>
       </button>
@@ -59,7 +49,7 @@ const formatNumber = (num) => {
 
       <button
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
-        @click="changeMonth(1)"
+        @click="handleMonthChange(1)"
       >
         <span class="text-sm">＞</span>
       </button>
@@ -68,7 +58,7 @@ const formatNumber = (num) => {
 
   <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans">
     <div
-      v-if="store.isLoading"
+      v-if="transactionStore.isLoading"
       class="text-gray-400 font-bold animate-pulse absolute top-10"
     >
       업데이트 중...
