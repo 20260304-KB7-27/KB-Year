@@ -5,7 +5,7 @@ import axios from 'axios';
 export const useTransactionStore = defineStore('transaction', () => {
   const monthlyTrans = ref([]);
   const isLoading = ref(false);
-  const error = ref(null);
+  // const error = ref(null);
   const selectedDate = ref(new Date());
   const url = 'http://localhost:3000/transactions';
 
@@ -17,14 +17,20 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   const getDurationTransaction = async (id, from, to) => {
     try {
-      const uri = 'http://localhost:3000/transactions';
-      const response = await axios.get(`${uri}?userid=${id}&date_gte=${from}&date_lte=${to}`);
+      const url =
+        import.meta.env.VITE_LIVE === '0'
+          ? import.meta.env.VITE_API_URL_LOCAL
+          : import.meta.env.VITE_API_URL;
+      const uri = `${url}/transactions`;
+      const response = await axios.get(uri, {
+        params: { userid: id, date_gte: from, date_lte: to },
+      });
       if (response.status === 200) {
-        console.log(response.data);
+        // console.log(response.data);
         // console.log(response.data.filter((t) => t.type === 'income'));
         durationTrans.value.income = response.data.filter((t) => t.type === 'income');
         durationTrans.value.expense = response.data.filter((t) => t.type === 'expense');
-        console.log(durationTrans.value);
+        // console.log(durationTrans.value);
       }
     } catch (err) {
       console.error('데이터 로드 실패:', err);
@@ -73,8 +79,14 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   const getUserTransaction = async (id, type, from, to) => {
     try {
-      const uri = 'http://localhost:3000/transactions';
-      const response = await axios.get(`${uri}?userid=${id}&date_gte=${from}&date_lte=${to}`);
+      const url =
+        import.meta.env.VITE_LIVE === '0'
+          ? import.meta.env.VITE_API_URL_LOCAL
+          : import.meta.env.VITE_API_URL;
+      const uri = `${url}/transactions`;
+      const response = await axios.get(uri, {
+        params: { userid: id, type: type, date_gte: from, date_lte: to },
+      });
       monthlyTrans.value = response.data;
     } catch (err) {
       console.error('데이터 로드 실패:', err);
@@ -85,10 +97,15 @@ export const useTransactionStore = defineStore('transaction', () => {
 
   const getUserAllTransaction = async (id, from, to) => {
     try {
-      const uri = 'http://localhost:3000/transactions';
-      const response = await axios.get(
-        `${uri}?userid=${id}&date_gte=${from}&date_lte=${to}&_sort=-date`
-      );
+      const url =
+        import.meta.env.VITE_LIVE === '0'
+          ? import.meta.env.VITE_API_URL_LOCAL
+          : import.meta.env.VITE_API_URL;
+      const uri = `${url}/transactions`;
+      console.log(uri, id, from, to);
+      const response = await axios.get(uri, {
+        params: { userid: id, date_gte: from, date_lte: to, _sort: '-date' },
+      });
       if (response.status === 200) {
         monthlyTrans.value = response.data;
       }
