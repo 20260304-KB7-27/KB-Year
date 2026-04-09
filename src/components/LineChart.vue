@@ -50,28 +50,42 @@ const scrollToRight = async () => {
 watch(() => store.transactions.length, scrollToRight);
 watch(zoomLevel, scrollToRight);
 
-// 데이터 가공
 const trendData = computed(() => {
   const now = new Date();
   const months = [];
-  for (let i = 5; i >= 0; i--) {
+
+  for (let i = 11; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    months.push({ year: d.getFullYear(), month: d.getMonth(), label: `${d.getMonth() + 1}월` });
+    months.push({
+      year: d.getFullYear(),
+      month: d.getMonth(),
+      label: `${d.getMonth() + 1}월`,
+    });
   }
-  if (!store.transactions.length) return months.map((m) => ({ ...m, income: 0, expense: 0 }));
+
+  if (!store.transactions || store.transactions.length === 0) {
+    return months.map((m) => ({ ...m, income: 0, expense: 0 }));
+  }
 
   return months.map((m) => {
     const monthly = store.transactions.filter((t) => {
       const tDate = new Date(t.date);
       return tDate.getFullYear() === m.year && tDate.getMonth() === m.month;
     });
+
     const income = monthly
       .filter((t) => Number(t.amount) > 0)
       .reduce((a, c) => a + Number(c.amount), 0);
+
     const expense = monthly
       .filter((t) => Number(t.amount) < 0)
       .reduce((a, c) => a + Math.abs(Number(c.amount)), 0);
-    return { label: m.label, income, expense };
+
+    return {
+      label: m.label,
+      income: income,
+      expense: expense,
+    };
   });
 });
 

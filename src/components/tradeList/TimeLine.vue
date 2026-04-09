@@ -58,15 +58,16 @@
 </template>
 
 <script setup>
-import axios from '@/utils/axios';
 import { formatTime, formatDate } from '@/utils/date.js';
 import { useTimelineTransactions } from '@/composables/useTimelineTransactions.js';
 import { ref, onMounted, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
+import { useTransactionsStore } from '@/stores/transactions';
+import { storeToRefs } from 'pinia';
 
 const route = useRouter();
-
-const data = ref([]);
+const tradeStore = useTransactionsStore();
+const { transactions: data } = storeToRefs(tradeStore);
 const scrollContainer = ref(null);
 const itemRefs = ref([]);
 const focusedIndex = ref(null);
@@ -77,13 +78,6 @@ const setItemRef = (el, index) => {
 
 const handleTradeList = () => {
   route.push('/tradeList');
-};
-
-const getTradeList = async () => {
-  const response = await axios.get('/transactions');
-  if (response.status === 200) {
-    data.value = response.data;
-  }
 };
 
 const { transactions } = useTimelineTransactions(data);
@@ -184,7 +178,6 @@ const getItemStyle = (index) => {
 };
 
 onMounted(async () => {
-  await getTradeList();
   await setScrollPadding();
 
   if (transactions.value.length >= 8) {

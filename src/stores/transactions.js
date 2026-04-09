@@ -15,6 +15,10 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
   const user = JSON.parse(localStorage.getItem('user') || 'null');
   const currentUserId = ref(user?.userid ?? null);
+  const url =
+    import.meta.env.VITE_LIVE === '0'
+      ? import.meta.env.VITE_API_URL_LOCAL
+      : import.meta.env.VITE_API_URL;
 
   const lastQuery = ref({
     from: null,
@@ -35,8 +39,9 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
       const params = new URLSearchParams();
       params.append('userid', userId);
-
-      const response = await axios.get(`/transactions?${params.toString()}`);
+      console.log(params.toString());
+      const response = await axios.get(`${url}/transactions?${params.toString()}`);
+      console.log(response);
       transactions.value = response.data;
     } catch (err) {
       error.value = err;
@@ -49,9 +54,34 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
   // 전체 거래 내역에서 해당 연도, 달 필터 적용 데이터
   const getTransactionsByMonth = (year, month) => {
+    if (!Array.isArray(transactions.value)) {
+      return [];
+    }
     return transactions.value.filter((t) => {
       const date = new Date(t.date);
       return date.getFullYear() === year && date.getMonth() === month;
+    });
+  };
+
+  // 전체 거래 내역에서 설정된 기간(lastQuery의 from ~ to)에 해당되는 데이터 가져오기
+  const getTransactionsByDuration = () => {
+    const { from, to } = lastQuery.value;
+
+    if (!Array.isArray(transactions.value)) {
+      return [];
+    }
+
+    if (!from && !to) {
+      return transactions.value;
+    }
+
+    const fromTime = from ? new Date(from).getTime() : 0;
+    const toTime = to ? new Date(to).getTime() : Infinity;
+
+    return transactions.value.filter((t) => {
+      const txTime = new Date(t.date).getTime();
+
+      return txTime >= fromTime && txTime <= toTime;
     });
   };
 
@@ -68,7 +98,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
     error.value = null;
 
     try {
-      await axios.post('/transactions', payload);
+      await axios.post(`${url}/transactions`, payload);
       await refetchTransactions();
     } catch (err) {
       error.value = err;
@@ -85,7 +115,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
     error.value = null;
 
     try {
-      await axios.patch(`/transactions/${id}`, payload);
+      await axios.patch(`${url}/transactions/${id}`, payload);
       await refetchTransactions();
     } catch (err) {
       error.value = err;
@@ -102,7 +132,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
     error.value = null;
 
     try {
-      await axios.delete(`/transactions/${id}`);
+      await axios.delete(`${url}/transactions/${id}`);
       await refetchTransactions();
     } catch (err) {
       error.value = err;
@@ -133,6 +163,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
     hasTransactions,
     fetchTransactions,
     getTransactionsByMonth,
+    getTransactionsByDuration,
     refetchTransactions,
     addTransaction,
     updateTransaction,
