@@ -119,10 +119,7 @@ const resetLayout = () => {
               @click="togglePieType"
             /> -->
 
-            <LineChart
-              v-else-if="element.type === 'line'"
-              :data="myWeeklyData"
-            />
+            <LineChart v-else-if="element.type === 'line'" />
           </Card>
         </template>
       </draggable>
