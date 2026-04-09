@@ -1,9 +1,11 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useTransactionStore } from '@/stores/transaction';
+import { useDurationStore } from '@/stores/duration';
 import { useUserStore } from '@/stores/user';
 
 const transactionStore = useTransactionStore();
+const durationStore = useDurationStore();
 const userStore = useUserStore();
 
 const userId = computed(() => userStore.user?.userid);
@@ -24,16 +26,21 @@ const handleMonthChange = (offset) => {
   transactionStore.changeMonth(offset, userId.value);
 };
 
+const totalIncome = computed(() => durationStore.totalIncome);
+const netProfit = computed(() => durationStore.netProfit);
+const totalExpense = computed(() => durationStore.totalExpense);
+
 const cards = computed(() => [
-  { id: 1, title: '수입', value: transactionStore.totalIncome, color: '#4ade80' },
-  { id: 2, title: '지출', value: transactionStore.totalExpense, color: '#f87171' },
-  { id: 3, title: '순수익', value: transactionStore.netProfit, color: '#60a5fa' },
+  { id: 1, title: '수입', value: totalIncome.value, color: '#4ade80' },
+  { id: 2, title: '지출', value: totalExpense.value, color: '#f87171' },
+  { id: 3, title: '순수익', value: netProfit.value, color: '#60a5fa' },
 ]);
 
 const formatNumber = (num) => (num || 0).toLocaleString();
 </script>
 
 <template>
+  <!-- 날짜 파트 -->
   <div class="flex items-center gap-6 justify-center">
     <div class="flex items-center gap-6">
       <button
@@ -55,7 +62,7 @@ const formatNumber = (num) => (num || 0).toLocaleString();
       </button>
     </div>
   </div>
-
+  <!-- 요약 카드 파트 -->
   <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans">
     <div
       v-if="transactionStore.isLoading"
@@ -64,11 +71,11 @@ const formatNumber = (num) => (num || 0).toLocaleString();
       업데이트 중...
     </div>
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-3">
       <div
         v-for="card in cards"
         :key="card.id"
-        class="neo-inset p-8 rounded-[40px] min-w-[290px] flex items-center gap-6 transition-all duration-300"
+        class="neo-inset py-4 px-6 rounded-[40px] min-w-[290px] flex items-center gap-6 transition-all duration-300"
       >
         <div
           class="w-12 h-12 rounded-2xl neo-outset flex items-center justify-center shrink-0"

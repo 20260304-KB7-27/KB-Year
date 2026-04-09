@@ -10,7 +10,6 @@ export default [
   ...vue.configs['flat/recommended'],
   {
     languageOptions: {
-      // TS 파서를 제거하고 기본 ECMA 파서를 사용하도록 설정
       ecmaVersion: 'latest',
       sourceType: 'module',
       // 💡 2. 브라우저 및 Node.js 전역 변수(console, localStorage 등) 인식 추가

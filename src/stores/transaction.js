@@ -7,9 +7,9 @@ export const useTransactionStore = defineStore('transaction', () => {
   const isLoading = ref(false);
   // const error = ref(null);
   const selectedDate = ref(new Date());
-  const url = 'http://localhost:3000/transactions';
+  const url = 'https://kb-db-production.up.railway.app';
 
-  /* 캘린더 + piechart용 */
+  /* 캘린더 + barChart용 */
   const durationTrans = ref({
     expense: [],
     income: [],
@@ -26,7 +26,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         params: { userid: id, date_gte: from, date_lte: to },
       });
       if (response.status === 200) {
-        // console.log(response.data);
+        console.log(response.data, '호출됨!');
         // console.log(response.data.filter((t) => t.type === 'income'));
         durationTrans.value.income = response.data.filter((t) => t.type === 'income');
         durationTrans.value.expense = response.data.filter((t) => t.type === 'expense');
@@ -40,7 +40,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   };
 
   const durationTransactions = computed(() => durationTrans.value);
-
+  const dateTransactionNumber = ref({});
   // 'transactions'를 'monthlyTrans'의 Alias로 설정
   const transactions = computed(() => monthlyTrans.value);
 
@@ -53,6 +53,26 @@ export const useTransactionStore = defineStore('transaction', () => {
       return tDate.getFullYear() === year && tDate.getMonth() === month;
     });
   });
+
+  const getTransactionNumber = () => {
+    dateTransactionNumber.value = {};
+    // const allTransactions = transactions.value;
+    transactions.value.forEach((t) => {
+      if (!t.date) return; // 날짜가 없는 데이터는 무시 (안전장치)
+      const dateStr =
+        typeof t.date === 'string'
+          ? t.date.split('T')[0]
+          : `${t.date.getFullYear()}-${String(t.date.getMonth() + 1).padStart(2, '0')}-${String(t.date.getDate()).padStart(2, '0')}`;
+      if (!dateTransactionNumber.value[dateStr]) {
+        dateTransactionNumber.value[dateStr] = [0, 0];
+      }
+      if (t.type === 'income') {
+        dateTransactionNumber.value[dateStr][0]++;
+      } else if (t.type === 'expense') {
+        dateTransactionNumber.value[dateStr][1]++;
+      }
+    });
+  };
 
   const dateRange = computed(() => {
     const date = selectedDate.value;
@@ -102,12 +122,14 @@ export const useTransactionStore = defineStore('transaction', () => {
           ? import.meta.env.VITE_API_URL_LOCAL
           : import.meta.env.VITE_API_URL;
       const uri = `${url}/transactions`;
-      console.log(uri, id, from, to);
+      // console.log(uri, id, from, to);
       const response = await axios.get(uri, {
         params: { userid: id, date_gte: from, date_lte: to, _sort: '-date' },
       });
+      console.log(response.data);
       if (response.status === 200) {
         monthlyTrans.value = response.data;
+        getTransactionNumber();
       }
     } catch (err) {
       console.error('데이터 로드 실패:', err);
@@ -125,9 +147,10 @@ export const useTransactionStore = defineStore('transaction', () => {
 
     isLoading.value = true;
     const { from, to } = dateRange.value;
-
+    const url = 'https://kb-db-production.up.railway.app';
+    const uri = `${url}/transactions`;
     try {
-      const response = await axios.get(url, {
+      const response = await axios.get(uri, {
         params: {
           userid: userId,
           date_gte: from,
@@ -162,6 +185,7 @@ export const useTransactionStore = defineStore('transaction', () => {
     totalExpense,
     netProfit,
     isLoading,
+    dateTransactionNumber,
     getUserTransaction,
     getUserAllTransaction,
     getDurationTransaction,
