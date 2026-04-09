@@ -82,54 +82,52 @@
       </div>
 
       <!-- 날짜 헤더 -->
-      <div class="mb-4 flex items-center gap-3">
-        <span class="h-3 w-3 rounded-full bg-[#E4A13A]"></span>
-        <span class="text-[15px] font-bold text-[#8d8d8d]">
-          {{ selectedDate.getMonth() + 1 }}월 {{ selectedDate.getDate() }}일
-        </span>
-        <div class="h-px flex-1 bg-[#d8d3cb]"></div>
-      </div>
+      <div class="flex flex-col gap-6">
+        <div
+          v-for="group in groupedTransactions"
+          :key="group.dateKey"
+          class="flex flex-col gap-4"
+        >
+          <!-- 날짜 헤더 -->
+          <div class="mb-1 flex items-center gap-3">
+            <span class="h-3 w-3 rounded-full bg-[#E4A13A]"></span>
+            <span class="text-[15px] font-bold text-[#8d8d8d]">
+              {{ group.month }}월 {{ group.day }}일
+            </span>
+            <div class="h-px flex-1 bg-[#d8d3cb]"></div>
+          </div>
 
-      <!-- 리스트 -->
-      <div class="flex flex-col gap-4">
-        <TradeCard
-          v-for="trade in filteredTransactions"
-          :key="trade.id"
-          :transaction="trade"
-        />
+          <!-- 해당 날짜의 거래 리스트 -->
+          <div class="flex flex-col gap-4">
+            <TradeCard
+              v-for="trade in group.items"
+              :key="trade.id"
+              :transaction="trade"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useTransactionStore } from '@/stores/transaction';
+import { useTransactionsStore } from '@/stores/transactions';
 import { onMounted, ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
-import { formatQueryDate } from '@/utils/date.js';
 import TradeCard from '@/components/tradeList/TradeCard.vue';
 import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
 const route = useRouter();
-const store = useTransactionStore();
-const { transactions } = storeToRefs(store);
 
-const selectedDate = ref(store.selectedDate ? new Date(store.selectedDate) : new Date());
+const store = useTransactionsStore();
+const { transactions, isLoading } = storeToRefs(store);
 
+const selectedDate = ref(new Date());
 const selectedType = ref('all');
 
-const loadTransactions = async (baseDate) => {
-  const year = baseDate.getFullYear();
-  const month = baseDate.getMonth();
-
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-
-  await store.getUserAllTransaction('user1', formatQueryDate(firstDay), formatQueryDate(lastDay));
-};
-
-const moveMonth = async (diff) => {
+const moveMonth = (diff) => {
   const newDate = new Date(selectedDate.value);
   newDate.setMonth(newDate.getMonth() + diff);
 
@@ -140,19 +138,57 @@ const moveMonth = async (diff) => {
   if (targetMonthStart > currentMonthStart) return;
 
   selectedDate.value = newDate;
-  await loadTransactions(newDate);
 };
 
+// 월 필터
+const monthTransactions = computed(() => {
+  return store.getTransactionsByMonth(
+    selectedDate.value.getFullYear(),
+    selectedDate.value.getMonth()
+  );
+});
+
 onMounted(async () => {
-  await loadTransactions(selectedDate.value);
+  if (!transactions.value.length) {
+    await store.fetchTransactions();
+  }
 });
 
 const filteredTransactions = computed(() => {
-  if (selectedType.value === 'all') {
-    return transactions.value;
-  }
+  if (selectedType.value === 'all') return monthTransactions.value;
 
-  return transactions.value.filter((t) => t.type === selectedType.value);
+  return monthTransactions.value.filter((t) => t.type?.toLowerCase() === selectedType.value);
+});
+
+const groupedTransactions = computed(() => {
+  const sorted = [...filteredTransactions.value].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+
+  const groups = {};
+
+  sorted.forEach((trade) => {
+    const date = new Date(trade.date);
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    const key = `${year}-${month}-${day}`;
+
+    if (!groups[key]) {
+      groups[key] = {
+        dateKey: key,
+        month,
+        day,
+        items: [],
+      };
+    }
+
+    groups[key].items.push(trade);
+  });
+
+  return Object.values(groups);
 });
 </script>
 

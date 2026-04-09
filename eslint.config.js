@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import vue from 'eslint-plugin-vue';
 import prettier from 'eslint-plugin-prettier';
+import globals from 'globals'; // 💡 1. globals 패키지 임포트 추가
 
 export default [
   // 1. 기본 JS 추천 설정 적용
@@ -9,9 +10,13 @@ export default [
   ...vue.configs['flat/recommended'],
   {
     languageOptions: {
-      // TS 파서를 제거하고 기본 ECMA 파서를 사용하도록 설정
       ecmaVersion: 'latest',
       sourceType: 'module',
+      // 💡 2. 브라우저 및 Node.js 전역 변수(console, localStorage 등) 인식 추가
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
     },
     plugins: {
       prettier,
@@ -29,7 +34,7 @@ export default [
 
       // --- 2. ESLint 논리 규칙 ---
       'vue/multi-word-component-names': 'off',
-      'no-unused-vars': 'warn', // 기본 JS 미사용 변수 경고
+      'no-unused-vars': 'warn', // 기본 JS 미사용 변수 경고 (error에서 warn으로 표시됨)
       'vue/no-unused-vars': 'error',
 
       // --- 3. Prettier 충돌 방지 ---
