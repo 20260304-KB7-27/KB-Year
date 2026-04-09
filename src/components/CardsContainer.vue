@@ -34,6 +34,7 @@ const formatNumber = (num) => (num || 0).toLocaleString();
 </script>
 
 <template>
+  <!-- 날짜 파트 -->
   <div class="flex items-center gap-6 justify-center">
     <div class="flex items-center gap-6">
       <button
@@ -55,7 +56,7 @@ const formatNumber = (num) => (num || 0).toLocaleString();
       </button>
     </div>
   </div>
-
+  <!-- 요약 카드 파트 -->
   <div class="bg-[#f4f2ee] flex items-center justify-center p-4 font-sans">
     <div
       v-if="transactionStore.isLoading"
@@ -64,11 +65,11 @@ const formatNumber = (num) => (num || 0).toLocaleString();
       업데이트 중...
     </div>
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-3">
       <div
         v-for="card in cards"
         :key="card.id"
-        class="neo-inset p-8 rounded-[40px] min-w-[290px] flex items-center gap-6 transition-all duration-300"
+        class="neo-inset py-4 px-6 rounded-[40px] min-w-[290px] flex items-center gap-6 transition-all duration-300"
       >
         <div
           class="w-12 h-12 rounded-2xl neo-outset flex items-center justify-center shrink-0"
