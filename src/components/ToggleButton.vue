@@ -3,9 +3,11 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   />
-
+  <div class="fixed right-4 bottom-4 z-50">
+    <TradePostBtn />
+  </div>
   <div
-    class="group fixed right-4 bottom-4 z-50 flex items-center justify-center h-12 w-12 hover:h-40 hover:w-40 bg-gradient-to-r from-[#fcaf17] to-[#fdb913] text-white rounded-2xl transition-all duration-300 ease-in-out shadow-lg overflow-hidden"
+    class="group fixed right-4 bottom-20 z-50 flex items-center justify-center h-12 w-12 hover:h-40 hover:w-40 bg-gradient-to-r from-[#fcaf17] to-[#fdb913] text-white rounded-2xl transition-all duration-300 ease-in-out shadow-lg overflow-hidden"
   >
     <div
       class="absolute transition-opacity duration-300 opacity-100 group-hover:opacity-0 flex items-center justify-center pointer-events-none"
@@ -37,6 +39,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import TradePostBtn from '@/components/tradeList/TradePostBtn.vue';
 
 // 💡 'duration' 이벤트를 추가로 선언해 줍니다.
 const emits = defineEmits(['reset', 'duration']);
