@@ -1,7 +1,7 @@
 <script setup>
 import draggable from 'vuedraggable';
 
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { today, getLocalTimeZone } from '@internationalized/date';
 
 import { Calendar } from '@/components/ui/calendar';
@@ -36,13 +36,6 @@ const totalAmount = computed(() => {
 
 // 날짜별 수입/지출 횟수
 const dateTransactionNumber = computed(() => transaction.dateTransactionNumber);
-
-// 토글
-const pieType = ref('ex');
-
-const togglePieType = (e) => {
-  pieType.value = pieType.value === 'ex' ? 'in' : 'ex';
-};
 
 const barExpense = computed(() => {
   const sumByCategory = durationTrans.value?.expense.reduce((acc, t) => {
@@ -214,25 +207,11 @@ const resetLayout = () => {
 
             <DashboardContainer v-else-if="element.type === 'dashboard'" />
 
-            <div
+            <Calendar
               v-else-if="element.type === 'calendar'"
-              class="h-full"
-            >
-              <Calendar
-                v-model="date"
-                :data="dateTransactionNumber"
-                class="rounded-2xl p-5 h-full neo-inset content-center"
-              />
-            </div>
-
-            <PieChart
-              v-else-if="element.type === 'pie' && pieType === 'ex'"
-              title="소비 유형"
-              :value="100"
-              :data="pieExpense"
-              :total="100"
-              unit="%"
-              @click="togglePieType"
+              v-model="date"
+              :data="dateTransactionNumber"
+              class="rounded-2xl p-5 h-full neo-inset content-center"
             />
 
             <BarChart

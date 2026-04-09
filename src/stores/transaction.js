@@ -40,7 +40,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   };
 
   const durationTransactions = computed(() => durationTrans.value);
-
+  const dateTransactionNumber = ref({});
   // 'transactions'를 'monthlyTrans'의 Alias로 설정
   const transactions = computed(() => monthlyTrans.value);
 
@@ -54,27 +54,25 @@ export const useTransactionStore = defineStore('transaction', () => {
     });
   });
 
-  const dateTransactionNumber = computed(() => {
-    const data = {};
-    const allTransactions = monthlyTrans.value;
-
-    allTransactions.forEach((t) => {
+  const getTransactionNumber = () => {
+    dateTransactionNumber.value = {};
+    // const allTransactions = transactions.value;
+    transactions.value.forEach((t) => {
       if (!t.date) return; // 날짜가 없는 데이터는 무시 (안전장치)
       const dateStr =
         typeof t.date === 'string'
           ? t.date.split('T')[0]
           : `${t.date.getFullYear()}-${String(t.date.getMonth() + 1).padStart(2, '0')}-${String(t.date.getDate()).padStart(2, '0')}`;
-      if (!data[dateStr]) {
-        data[dateStr] = [0, 0];
+      if (!dateTransactionNumber.value[dateStr]) {
+        dateTransactionNumber.value[dateStr] = [0, 0];
       }
       if (t.type === 'income') {
-        data[dateStr][0]++;
+        dateTransactionNumber.value[dateStr][0]++;
       } else if (t.type === 'expense') {
-        data[dateStr][1]++;
+        dateTransactionNumber.value[dateStr][1]++;
       }
     });
-    return data;
-  });
+  };
 
   const dateRange = computed(() => {
     const date = selectedDate.value;
@@ -128,8 +126,10 @@ export const useTransactionStore = defineStore('transaction', () => {
       const response = await axios.get(uri, {
         params: { userid: id, date_gte: from, date_lte: to, _sort: '-date' },
       });
+      console.log(response.data);
       if (response.status === 200) {
         monthlyTrans.value = response.data;
+        getTransactionNumber();
       }
     } catch (err) {
       console.error('데이터 로드 실패:', err);

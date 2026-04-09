@@ -54,7 +54,7 @@ const props = defineProps({
   },
   layout: { type: null, required: false, default: undefined },
   yearRange: { type: Array, required: false },
-  data: { type: Object, required: false },
+  data: { type: Object, required: true },
 });
 const emits = defineEmits(['update:modelValue', 'update:placeholder']);
 
@@ -251,7 +251,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
               <div
                 v-if="props.data"
-                class="absolute bottom-1 left-0 right-0 flex justify-center gap-1 pointer-events-none"
+                class="absolute bottom-0.5 left-0 right-0 flex justify-center gap-1 pointer-events-none"
               >
                 <span
                   v-if="getTransactionData(weekDate)?.[0] > 0"
