@@ -125,6 +125,8 @@ export const useDurationStore = defineStore('duration', () => {
     { immediate: true, deep: true }
   );
 
+  const isLoading = computed(() => transactionsStore.isLoading);
+
   return {
     date,
     duration,
@@ -136,6 +138,8 @@ export const useDurationStore = defineStore('duration', () => {
     netProfit,
     dateTransactionNumber,
     dateRange,
-    handleDurationChange, // 💡 컴포넌트에서 쓸 수 있도록 내보내기 추가
+    handleDurationChange,
+    transactionsStore,
+    isLoading,
   };
 });
