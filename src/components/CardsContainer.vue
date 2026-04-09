@@ -14,7 +14,7 @@ const handleMonthChange = (offset) => {
   durationStore.date = durationStore.date.add({ months: offset });
 };
 
-const isLoading = computed(() => durationStore.transactionsStore.isLoading);
+const isLoading = computed(() => durationStore.isLoading);
 const totalIncome = computed(() => durationStore.totalIncome);
 const netProfit = computed(() => durationStore.netProfit);
 const totalExpense = computed(() => durationStore.totalExpense);
