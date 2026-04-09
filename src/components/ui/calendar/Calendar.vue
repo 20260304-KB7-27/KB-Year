@@ -54,6 +54,7 @@ const props = defineProps({
   },
   layout: { type: null, required: false, default: undefined },
   yearRange: { type: Array, required: false },
+  data: { type: Object, required: true },
 });
 const emits = defineEmits(['update:modelValue', 'update:placeholder']);
 
@@ -86,6 +87,18 @@ const yearRange = computed(() => {
     })
   );
 });
+
+const getTransactionData = (dateObj) => {
+  if (!props.data) return null;
+
+  // dateObj.year, dateObj.month, dateObj.day를 'YYYY-MM-DD' 형식으로 변환
+  const year = dateObj.year;
+  const month = String(dateObj.month).padStart(2, '0');
+  const day = String(dateObj.day).padStart(2, '0');
+  const key = `${year}-${month}-${day}`;
+
+  return props.data[key]; // [수입 횟수, 지출 횟수] 또는 undefined
+};
 
 const [DefineMonthTemplate, ReuseMonthTemplate] = createReusableTemplate();
 const [DefineYearTemplate, ReuseYearTemplate] = createReusableTemplate();
@@ -229,11 +242,28 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
               v-for="weekDate in weekDates"
               :key="weekDate.toString()"
               :date="weekDate"
+              class="relative"
             >
               <CalendarCellTrigger
                 :day="weekDate"
                 :month="month.value"
+                class="cursor-pointer"
               />
+
+              <div
+                v-if="props.data"
+                class="absolute bottom-0.5 left-0 right-0 flex justify-center gap-1 pointer-events-none"
+              >
+                <span
+                  v-if="getTransactionData(weekDate)?.[0] > 0"
+                  class="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-sm"
+                ></span>
+
+                <span
+                  v-if="getTransactionData(weekDate)?.[1] > 0"
+                  class="w-1.5 h-1.5 rounded-full bg-[#ec3737] shadow-sm"
+                ></span>
+              </div>
             </CalendarCell>
           </CalendarGridRow>
         </CalendarGridBody>
