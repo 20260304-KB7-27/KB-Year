@@ -1,12 +1,14 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useDurationStore } from '@/stores/duration';
+import { Vue3Lottie } from 'vue3-lottie';
+import LoadAnimation from '../assets/lottie/LoadingDots.json';
 
 const durationStore = useDurationStore();
 
 const currentMonthDisplay = computed(() => {
   const d = durationStore.date;
-  if (!d) return '로딩 중...';
+  if (!d) return '...';
   return `${d.year}년 ${d.month}월`;
 });
 
@@ -55,7 +57,11 @@ const formatNumber = (num) => (num || 0).toLocaleString();
       v-if="isLoading"
       class="text-gray-400 font-bold animate-pulse absolute top-10"
     >
-      업데이트 중...
+      <Vue3Lottie
+        :animation-data="LoadAnimation"
+        :height="150"
+        :width="150"
+      />
     </div>
 
     <div class="flex flex-col gap-3">
