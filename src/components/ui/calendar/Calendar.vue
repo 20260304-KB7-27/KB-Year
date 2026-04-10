@@ -252,7 +252,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
               <div
                 v-if="props.data"
-                class="absolute bottom-0.5 left-0 right-0 flex justify-center gap-1 pointer-events-none"
+                class="absolute bottom-0.4 left-0 right-0 flex justify-center gap-1 pointer-events-none"
               >
                 <span
                   v-if="getTransactionData(weekDate)?.[0] > 0"
