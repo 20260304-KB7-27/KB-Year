@@ -53,7 +53,7 @@ const resetLayout = () => {
 </script>
 
 <template>
-  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center px-16 py-10 md:p-10">
+  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center px-16 py-10">
     <div class="w-full lg:max-w-5xl md:max-w-2xl">
       <!-- 초기화 버튼 -->
       <!-- <div class="fixed right-5 bottom-1 flex justify-end mb-4 z-50">
