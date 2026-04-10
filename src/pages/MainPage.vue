@@ -56,6 +56,11 @@ const cards = ref([...initialCards]);
 const resetLayout = () => {
   cards.value = [...initialCards];
 };
+
+const onDateClick = (selectedDate) => {
+  durationStore.handleDateChange(selectedDate);
+  durationStore.handleDurationChange('day');
+};
 </script>
 
 <template>
@@ -98,6 +103,7 @@ const resetLayout = () => {
               v-model="date"
               :data="dateTransactionNumber"
               class="rounded-2xl p-5 h-full neo-inset content-center"
+              @update:model-value="onDateClick"
             />
 
             <BarChart
