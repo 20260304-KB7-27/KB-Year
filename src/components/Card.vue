@@ -2,7 +2,7 @@
 
 <template>
   <div
-    class="w-full max-w-[300px] md:max-w-[400px] p-8 rounded-[40px] bg-[#f4f2ee] shadow-[15px_15px_30px_#d9d5ce,-15px_-15px_30px_#ffffff] content-center card-effect"
+    class="w-full max-w-[300px] p-8 rounded-[40px] bg-[#f4f2ee] shadow-[15px_15px_30px_#d9d5ce,-15px_-15px_30px_#ffffff] content-center card-effect"
   >
     <slot />
   </div>
