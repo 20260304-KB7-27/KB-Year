@@ -1,6 +1,6 @@
 <template>
   <form
-    class="flex flex-col gap-4"
+    class="mx-auto flex flex-col gap-4"
     @submit.prevent="handleSubmit"
   >
     <div class="flex flex-col gap-2">
