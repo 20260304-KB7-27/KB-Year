@@ -7,7 +7,7 @@
           class="flex h-12 w-12 items-center justify-center rounded-2xl neo-interactive"
           @click="route.push('/')"
         >
-          <ChevronLeft class="h-5 w-5 text-muted-foreground" />
+          <ArrowLeft class="h-5 w-5 text-muted-foreground" />
         </button>
 
         <h1 class="text-[18px] font-extrabold tracking-[-0.02em]">거래 내역</h1>
@@ -114,7 +114,7 @@ import { useTransactionsStore } from '@/stores/transactions';
 import { onMounted, ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import TradeCard from '@/components/tradeList/TradeCard.vue';
-import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-vue-next';
+import { ChevronLeft, ChevronRight, CalendarDays, ArrowLeft } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
 const route = useRouter();

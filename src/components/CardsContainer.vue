@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useDurationStore } from '@/stores/duration';
 import { Vue3Lottie } from 'vue3-lottie';
 import LoadAnimation from '../assets/lottie/LoadingDots.json';
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 const durationStore = useDurationStore();
 
@@ -36,7 +37,9 @@ const formatNumber = (num) => (num || 0).toLocaleString();
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
         @click="handleMonthChange(-1)"
       >
-        <span class="text-sm font-bold text-gray-400">＜</span>
+        <span class="text-sm font-bold text-gray-400"
+          ><ChevronLeft class="h-4 w-4 text-[#8d8d8d]"
+        /></span>
       </button>
 
       <span class="text-lg font-black text-gray-500 min-w-[120px] text-center tracking-tight">
@@ -47,7 +50,9 @@ const formatNumber = (num) => (num || 0).toLocaleString();
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
         @click="handleMonthChange(1)"
       >
-        <span class="text-sm font-bold text-gray-400">＞</span>
+        <span class="text-sm font-bold text-gray-400"
+          ><ChevronRight class="h-4 w-4 text-[#8d8d8d]"
+        /></span>
       </button>
     </div>
   </div>
