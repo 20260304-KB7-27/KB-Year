@@ -82,41 +82,43 @@ const chartGroups = computed(() => {
               <div
                 v-for="(item, index) in group.items"
                 :key="item.type || index"
-                class="flex items-center w-full"
+                class="flex items-center w-full transition-transform duration-300 ease-out hover:scale-110"
               >
-                <span class="w-12 truncate text-[11px] text-[#a39b8f] font-bold mr-2 text-start">
-                  {{ item.type }}
-                </span>
+                <div class="flex w-full">
+                  <span class="w-12 truncate text-[11px] text-[#a39b8f] font-bold mr-2 text-start">
+                    {{ item.type }}
+                  </span>
 
-                <div
-                  class="hover:opacity-75 cursor-pointer flex-1 h-5 rounded-full bg-[#f4f2ee] shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] relative overflow-hidden"
-                  @click="selectedDetail = item"
-                >
                   <div
-                    class="text-sm text-left absolute left-0 top-0 h-full rounded-full shadow-[2px_2px_4px_#d9d5ce,-2px_-2px_4px_#ffffff] transition-all duration-700 ease-out"
-                    :style="{
-                      width: item.percent + '%',
-                      backgroundColor: item.color,
-                    }"
+                    class="hover:opacity-75 cursor-pointer flex-1 h-5 rounded-full bg-[#f4f2ee] shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] relative overflow-hidden"
+                    @click="selectedDetail = item"
                   >
-                    <p
-                      class="ms-3 font-extrabold"
+                    <div
+                      class="text-sm text-left absolute left-0 top-0 h-full rounded-full shadow-[2px_2px_4px_#d9d5ce,-2px_-2px_4px_#ffffff] transition-all duration-700 ease-out"
                       :style="{
-                        color: item.percent > 30 ? 'white' : 'black',
+                        width: item.percent + '%',
+                        backgroundColor: item.color,
                       }"
                     >
-                      {{ item.value.toLocaleString() }}
-                    </p>
+                      <p
+                        class="ms-3 font-extrabold"
+                        :style="{
+                          color: item.percent > 30 ? 'white' : 'black',
+                        }"
+                      >
+                        {{ item.value.toLocaleString() }}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div
-                  class="absolute left-50 px-2.5 py-1 bg-[#645b4c] text-white text-[11px] font-bold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-20 whitespace-nowrap shadow-md"
-                >
-                  총 {{ item.total.toLocaleString() }}건 발생
-
                   <div
-                    class="absolute -bottom-1 left-4 border-4 border-transparent border-t-[#645b4c]"
-                  ></div>
+                    class="absolute left-50 px-2.5 py-1 bg-[#645b4c] text-white text-[11px] font-bold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-20 whitespace-nowrap shadow-md"
+                  >
+                    총 {{ item.total.toLocaleString() }}건 발생
+
+                    <div
+                      class="absolute -bottom-1 left-4 border-4 border-transparent border-t-[#645b4c]"
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
