@@ -1,15 +1,17 @@
 <script setup>
 import { ref, computed, onMounted, nextTick, watch } from 'vue';
 import { useTransactionsStore } from '@/stores/transactions';
+import { useDurationStore } from '@/stores/duration'; // durationStore 추가
 
-const store = useTransactionsStore();
+const transactionsStore = useTransactionsStore();
+const durationStore = useDurationStore(); // 날짜 변화를 감지하기 위해 추가
+
 const scrollContainer = ref(null);
 let scrollInterval = null;
 
 const zoomLevel = ref(100);
 const baseWidth = 450;
 
-// 줌 값 변경
 const changeZoom = (delta) => {
   const newZoom = zoomLevel.value + delta;
   if (newZoom >= 50 && newZoom <= 150) {
@@ -17,12 +19,10 @@ const changeZoom = (delta) => {
   }
 };
 
-// 줌 레벨에 따른 실제 SVG 가로 너비
 const dynamicViewboxWidth = computed(() => (baseWidth * zoomLevel.value) / 100);
-
 const COLORS = { income: '#4ade80', expense: '#f87171' };
 
-// 호버 자동 스크롤
+// --- 자동 스크롤 로직 ---
 const startAutoScroll = (direction) => {
   stopAutoScroll();
   scrollInterval = setInterval(() => {
@@ -47,15 +47,21 @@ const scrollToRight = async () => {
   }
 };
 
-watch(() => store.transactions.length, scrollToRight);
-watch(zoomLevel, scrollToRight);
+// --- 데이터 연동 로직 ---
 
+// 1. transactionsStore의 전체 데이터를 감시하여 차트 갱신
 const trendData = computed(() => {
   const now = new Date();
+  // 기준점을 durationStore.date(현재 선택된 달)로 잡으면 더 정확한 연동이 가능합니다.
+  const referenceDate = durationStore.date
+    ? new Date(durationStore.date.year, durationStore.date.month - 1)
+    : new Date();
+
   const months = [];
 
+  // 최근 12개월 월별 라벨 생성
   for (let i = 11; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const d = new Date(referenceDate.getFullYear(), referenceDate.getMonth() - i, 1);
     months.push({
       year: d.getFullYear(),
       month: d.getMonth(),
@@ -63,23 +69,24 @@ const trendData = computed(() => {
     });
   }
 
-  if (!store.transactions || store.transactions.length === 0) {
+  // 데이터가 없을 때 기본값
+  if (!transactionsStore.transactions || transactionsStore.transactions.length === 0) {
     return months.map((m) => ({ ...m, income: 0, expense: 0 }));
   }
 
   return months.map((m) => {
-    const monthly = store.transactions.filter((t) => {
+    const monthly = transactionsStore.transactions.filter((t) => {
       const tDate = new Date(t.date);
       return tDate.getFullYear() === m.year && tDate.getMonth() === m.month;
     });
 
     const income = monthly
-      .filter((t) => Number(t.amount) > 0)
+      .filter((t) => t.type?.toLowerCase() === 'income')
       .reduce((a, c) => a + Number(c.amount), 0);
 
     const expense = monthly
-      .filter((t) => Number(t.amount) < 0)
-      .reduce((a, c) => a + Math.abs(Number(c.amount)), 0);
+      .filter((t) => t.type?.toLowerCase() === 'expense')
+      .reduce((a, c) => a + Number(c.amount), 0);
 
     return {
       label: m.label,
@@ -89,6 +96,7 @@ const trendData = computed(() => {
   });
 });
 
+// 차트 좌표 계산
 const viewboxHeight = 200;
 const padding = { x: 40, y: 25 };
 
@@ -108,14 +116,14 @@ const chartData = computed(() => {
     }));
 
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((ratio) => ({
-    value: Math.round((effectiveMaxY * ratio) / 100) * 100, // 표시될 금액
-    y: viewboxHeight - padding.y - ratio * usableH, // 선이 그려질 Y 좌표
+    value: Math.round((effectiveMaxY * ratio) / 100) * 100,
+    y: viewboxHeight - padding.y - ratio * usableH,
   }));
 
   return {
     incomePoints: getPoints('income'),
     expensePoints: getPoints('expense'),
-    yTicks, // 이 값이 리턴되어야 위 template에서 사용 가능합니다.
+    yTicks,
   };
 });
 
@@ -124,8 +132,11 @@ const getPath = (points) => {
   return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
 };
 
-onMounted(async () => {
-  if (!store.transactions.length) await store.fetchTransactions();
+watch(() => transactionsStore.transactions.length, scrollToRight);
+watch(zoomLevel, scrollToRight);
+watch(() => durationStore.date, scrollToRight);
+
+onMounted(() => {
   scrollToRight();
 });
 </script>
@@ -138,9 +149,9 @@ onMounted(async () => {
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg no-drag">
           <button
-            @click="changeZoom(-25)"
             class="w-7 h-7 flex items-center justify-center rounded-lg neo-interactive text-[#718096] font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             :disabled="zoomLevel <= 50"
+            @click="changeZoom(-25)"
           >
             <span class="mb-0.5">−</span>
           </button>
@@ -150,9 +161,9 @@ onMounted(async () => {
             </span>
           </div>
           <button
-            @click="changeZoom(25)"
             class="w-7 h-7 flex items-center justify-center rounded-lg neo-interactive text-[#718096] font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             :disabled="zoomLevel >= 150"
+            @click="changeZoom(25)"
           >
             <span class="mb-0.5">+</span>
           </button>
