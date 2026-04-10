@@ -325,7 +325,6 @@ watch(
 
     // 에러 초기화
     errors.value = {};
-    console.log(errors);
 
     if (!result.success) {
       result.error.issues.forEach((issue) => {
