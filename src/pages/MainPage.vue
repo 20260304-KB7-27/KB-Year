@@ -30,6 +30,12 @@ const date = computed({
   },
 });
 
+const duration = computed(() => {
+  if (durationStore.duration == 'month') return '이번 달 핵심 요약';
+  else if (durationStore.duration == 'day') return '오늘의 핵심 요약';
+  else return '최근 1주 핵심 요약';
+});
+
 // 날짜별 수입/지출 횟수
 const dateTransactionNumber = computed(() => durationStore.dateTransactionNumber);
 const barIncome = computed(() => barChartStore.barIncome);
@@ -96,7 +102,7 @@ const resetLayout = () => {
 
             <BarChart
               v-else-if="element.type === 'bar'"
-              title="이번 달 핵심 요약"
+              :title-data="duration"
               :income-data="barIncome"
               :expense-data="barExpense"
             />
