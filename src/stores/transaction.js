@@ -7,7 +7,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   const isLoading = ref(false);
   // const error = ref(null);
   const selectedDate = ref(new Date());
-  const url = 'http://localhost:3000/transactions';
+  const url = 'https://kb-db-production.up.railway.app';
 
   /* 캘린더 + barChart용 */
   const durationTrans = ref({
@@ -26,7 +26,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         params: { userid: id, date_gte: from, date_lte: to },
       });
       if (response.status === 200) {
-        // console.log(response.data);
+        console.log(response.data, '호출됨!');
         // console.log(response.data.filter((t) => t.type === 'income'));
         durationTrans.value.income = response.data.filter((t) => t.type === 'income');
         durationTrans.value.expense = response.data.filter((t) => t.type === 'expense');
@@ -147,9 +147,10 @@ export const useTransactionStore = defineStore('transaction', () => {
 
     isLoading.value = true;
     const { from, to } = dateRange.value;
-
+    const url = 'https://kb-db-production.up.railway.app';
+    const uri = `${url}/transactions`;
     try {
-      const response = await axios.get(url, {
+      const response = await axios.get(uri, {
         params: {
           userid: userId,
           date_gte: from,

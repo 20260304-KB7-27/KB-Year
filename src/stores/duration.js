@@ -88,6 +88,20 @@ export const useDurationStore = defineStore('duration', () => {
     };
   });
 
+  const totalIncome = computed(() => {
+    return monthlyTrans.value
+      .filter((t) => t.type?.toUpperCase() === 'INCOME')
+      .reduce((acc, cur) => acc + Number(cur.amount), 0);
+  });
+
+  const totalExpense = computed(() => {
+    return monthlyTrans.value
+      .filter((t) => t.type?.toUpperCase() === 'EXPENSE')
+      .reduce((acc, cur) => acc + Number(cur.amount), 0);
+  });
+
+  const netProfit = computed(() => totalIncome.value - totalExpense.value);
+
   const handleDurationChange = (selectedValue) => {
     duration.value = selectedValue;
   };
@@ -111,14 +125,21 @@ export const useDurationStore = defineStore('duration', () => {
     { immediate: true, deep: true }
   );
 
+  const isLoading = computed(() => transactionsStore.isLoading);
+
   return {
     date,
     duration,
     filteredTrans,
     monthlyTrans,
     durationTrans,
+    totalExpense,
+    totalIncome,
+    netProfit,
     dateTransactionNumber,
     dateRange,
-    handleDurationChange, // 💡 컴포넌트에서 쓸 수 있도록 내보내기 추가
+    handleDurationChange,
+    transactionsStore,
+    isLoading,
   };
 });
