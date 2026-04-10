@@ -158,3 +158,95 @@
     font-weight: 700;
     font-display: swap;
 }
+
+.neo-inset {
+  background: #f4f2ee;
+  box-shadow:
+    inset 6px 6px 12px #dbd9d4,
+    inset -6px -6px 12px #ffffff;
+}
+
+.neo-inset:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    6px 6px 16px #dbd9d4,
+    -6px -6px 16px #ffffff;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+path,
+circle {
+  transition:
+    d 0.3s ease-in-out,
+    cx 0.3s ease-in-out,
+    cy 0.3s ease-in-out;
+}
+
+.no-drag {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.neo-outset {
+  background: #f4f2ee;
+  box-shadow:
+    6px 6px 12px #dbd9d4,
+    -6px -6px 12px #ffffff;
+}
+
+.neo-interactive {
+  background: #f4f2ee;
+  border: none;
+  box-shadow:
+    2px 2px 5px #e8e6e0,
+    -2px -2px 5px #ffffff;
+  cursor: pointer;
+  outline: none;
+}
+
+.neo-interactive:hover {
+  box-shadow:
+    5px 5px 10px #dbd9d4,
+    -5px -5px 10px #ffffff;
+  transform: translateY(-1px);
+}
+
+.neo-interactive:hover:not(:disabled) {
+  box-shadow:
+    5px 5px 10px #dbd9d4,
+    -5px -5px 10px #ffffff;
+  transform: translateY(-0.1px);
+  color: #4a5568;
+}
+
+.neo-interactive:active {
+  box-shadow:
+    inset 4px 4px 8px #dbd9d4,
+    inset -4px -4px 8px #ffffff;
+  transform: translateY(0);
+}
+
+.neo-interactive:active:not(:disabled) {
+  box-shadow:
+    inset 4px 4px 8px #dbd9d4,
+    inset -4px -4px 8px #ffffff;
+  transform: translateY(0);
+}
+
+.neo-tab-active {
+  box-shadow:
+    inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.2);
+}
+
+.clickable {
+  cursor: pointer;
+  outline: none;
+}
