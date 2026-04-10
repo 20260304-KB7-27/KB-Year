@@ -64,7 +64,7 @@ const onDateClick = (selectedDate) => {
 </script>
 
 <template>
-  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center px-16 py-10">
+  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center px-8 py-10">
     <div class="w-full lg:max-w-5xl md:max-w-2xl">
       <!-- 초기화 버튼 -->
       <!-- <div class="fixed right-5 bottom-1 flex justify-end mb-4 z-50">
@@ -85,6 +85,8 @@ const onDateClick = (selectedDate) => {
         v-model="cards"
         item-key="id"
         animation="250"
+        :delay="200"
+        :delay-on-touch-only="true"
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
       >
         <template #item="{ element }">
