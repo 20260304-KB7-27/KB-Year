@@ -9,7 +9,7 @@ export const useDurationStore = defineStore('duration', () => {
   const userStore = useUserStore();
 
   const date = ref(today(getLocalTimeZone()));
-  const duration = ref('month'); // 'month', 'week', 'day'
+  const duration = ref('day'); // 'month', 'week', 'day'
 
   const user = computed(() => userStore.user);
 
