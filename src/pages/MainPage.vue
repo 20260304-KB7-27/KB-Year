@@ -2,7 +2,6 @@
 import draggable from 'vuedraggable';
 
 import { h, ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { today, getLocalTimeZone } from '@internationalized/date';
 
 import { Calendar } from '@/components/ui/calendar';
 import Card from '@/components/Card.vue';
@@ -23,6 +22,9 @@ const userStore = useUserStore(); // 유저 정보 관리
 const user = computed(() => userStore.user);
 const durationStore = useDurationStore(); // 수입/지출 내역 기간 관리
 const barChartStore = useBarChartStore(); // barChart 데이터 관리
+
+const cardOn = ref(false);
+const isFirstLoad = ref(true);
 
 // pwa 설치
 const deferredPrompt = ref(null);
@@ -104,11 +106,17 @@ const showInstallToast = () => {
 
 onMounted(() => {
   showInstallToast();
+  setTimeout(() => {
+    cardOn.value = true;
+    isFirstLoad.value = false;
+  }, 300);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 });
+
+const movePage = async (e) => {};
 
 const date = computed({
   get: () => durationStore.date,
@@ -149,6 +157,11 @@ const onDateClick = (selectedDate) => {
   durationStore.handleDateChange(selectedDate);
   durationStore.handleDurationChange('day');
 };
+
+const hideCards = () => {
+  console.log('애니메이션 시작!');
+  cardOn.value = false; // 카드를 투명하게 만듦
+};
 </script>
 
 <template>
@@ -175,7 +188,8 @@ const onDateClick = (selectedDate) => {
         animation="250"
         :delay="200"
         :delay-on-touch-only="true"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
+        class="opacity-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
+        :class="{ 'fade-in-items': cardOn, 'fade-out-items': !cardOn && !isFirstLoad }"
       >
         <template #item="{ element }">
           <Card>
@@ -184,7 +198,10 @@ const onDateClick = (selectedDate) => {
               :user="user"
             />
 
-            <TimeLine v-else-if="element.type === 'activity'" />
+            <TimeLine
+              v-else-if="element.type === 'activity'"
+              @start-hide="hideCards"
+            />
 
             <DashboardContainer v-else-if="element.type === 'dashboard'" />
 
@@ -222,4 +239,52 @@ const onDateClick = (selectedDate) => {
   </div>
 </template>
 
-<style scope></style>
+<style scope>
+.fade-in-items {
+  animation: fade-in 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.fade-out-items {
+  /* 사라질 때는 화면 아래로 떨어지도록 설정 */
+  animation: fade-out 0.6s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes fade-in-bg {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out-bg {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px); /* 화면 아래로 사라지는 효과 */
+  }
+}
+</style>
