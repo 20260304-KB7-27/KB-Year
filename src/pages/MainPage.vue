@@ -24,7 +24,10 @@ const barChartStore = useBarChartStore(); // barChart 데이터 관리
 
 const date = computed({
   get: () => durationStore.date,
-  set: (val) => (durationStore.date = val),
+  set: (val) => {
+    if (!val) return;
+    durationStore.date = val;
+  },
 });
 
 // 날짜별 수입/지출 횟수
