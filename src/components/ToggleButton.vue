@@ -8,16 +8,29 @@
   </div>
 
   <div
-    class="group fixed right-4 bottom-20 z-50 flex items-center justify-center h-12 w-12 hover:h-40 hover:w-40 bg-gradient-to-r from-[#fcaf17] to-[#fdb913] text-white rounded-2xl transition-all duration-300 ease-in-out shadow-lg"
+    v-if="toggleActive"
+    class="fixed inset-0 z-40"
+    @click="toggleActive = false"
+    @touchstart="toggleActive = false"
+  ></div>
+
+  <div
+    class="fixed right-4 bottom-20 z-50 flex items-center justify-center bg-linear-to-r from-[#fcaf17] to-[#fdb913] text-white rounded-2xl transition-all duration-300 ease-in-out shadow-lg"
+    :class="toggleActive ? 'h-40 w-40' : 'h-12 w-12'"
+    @mouseenter="toggleActive = true"
+    @mouseleave="toggleActive = false"
   >
     <div
-      class="absolute transition-opacity duration-300 opacity-100 group-hover:opacity-0 flex items-center justify-center pointer-events-none"
+      class="absolute transition-opacity duration-300 flex items-center justify-center w-full h-full cursor-pointer"
+      :class="toggleActive ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'"
+      @click="toggleActive = true"
     >
       <i class="fa fa-navicon text-lg"></i>
     </div>
 
     <div
-      class="absolute inset-0 flex flex-col justify-center gap-3 p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none group-hover:pointer-events-auto"
+      class="absolute inset-0 flex flex-col justify-center gap-3 p-4 transition-opacity duration-300 whitespace-nowrap"
+      :class="toggleActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
     >
       <CustomSelect
         v-model="selectedValue"
@@ -52,7 +65,6 @@ const BtnYellowClass = computed(() => [
   'active:shadow-[inset_4px_4px_8px_#d79e10,inset_-4px_-4px_8px_#ffd416]',
 ]);
 
-const isSelectOpen = ref(false);
 const selectedValue = ref('month');
 
 const selectOptions = [
@@ -61,17 +73,15 @@ const selectOptions = [
   { label: '일간', value: 'day' },
 ];
 
-// 현재 선택된 라벨(텍스트) 계산
-const selectedLabel = computed(() => {
-  return selectOptions.find((opt) => opt.value === selectedValue.value)?.label || '월간';
-});
-
-// 옵션 클릭 시 실행되는 함수
-const handleSelect = (value) => {
-  selectedValue.value = value;
-  isSelectOpen.value = false; // 메뉴 닫기
-  emits('duration', value); // 부모로 데이터 전송 (기존과 동일)
-};
+const toggleActive = ref(false);
 </script>
 
-<style scoped></style>
+<style scoped>
+.toggle-active {
+  opacity: 100;
+}
+
+.toggle-inactive {
+  opacity: 0;
+}
+</style>

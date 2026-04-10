@@ -74,7 +74,7 @@ const isOpen = ref(false);
 
 // 현재 선택된 라벨 찾기
 const selectedLabel = computed(() => {
-  console.log(props.options, props.modelValue);
+  // console.log(props.options, props.modelValue);
   const selected = props.options.find((opt) => opt.value === props.modelValue);
   return selected ? selected.label : '선택해주세요';
 });
