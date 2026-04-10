@@ -18,6 +18,7 @@ export const useDurationStore = defineStore('duration', () => {
     const y = dateObj.getFullYear();
     const m = String(dateObj.getMonth() + 1).padStart(2, '0');
     const d = String(dateObj.getDate()).padStart(2, '0');
+
     return isEnd ? `${y}-${m}-${d}T23:59:59` : `${y}-${m}-${d}T00:00:00`;
   };
 
@@ -106,6 +107,10 @@ export const useDurationStore = defineStore('duration', () => {
     duration.value = selectedValue;
   };
 
+  const handleDateChange = (newDate) => {
+    date.value = newDate;
+  };
+
   watch(
     () => user.value?.userid,
     (userId) => {
@@ -125,6 +130,8 @@ export const useDurationStore = defineStore('duration', () => {
     { immediate: true, deep: true }
   );
 
+  const isLoading = computed(() => transactionsStore.isLoading);
+
   return {
     date,
     duration,
@@ -136,6 +143,9 @@ export const useDurationStore = defineStore('duration', () => {
     netProfit,
     dateTransactionNumber,
     dateRange,
-    handleDurationChange, // 💡 컴포넌트에서 쓸 수 있도록 내보내기 추가
+    handleDurationChange,
+    handleDateChange,
+    transactionsStore,
+    isLoading,
   };
 });

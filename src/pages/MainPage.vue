@@ -24,7 +24,16 @@ const barChartStore = useBarChartStore(); // barChart 데이터 관리
 
 const date = computed({
   get: () => durationStore.date,
-  set: (val) => (durationStore.date = val),
+  set: (val) => {
+    if (!val) return;
+    durationStore.date = val;
+  },
+});
+
+const duration = computed(() => {
+  if (durationStore.duration == 'month') return '이번 달 핵심 요약';
+  else if (durationStore.duration == 'day') return '오늘의 핵심 요약';
+  else return '최근 1주 핵심 요약';
 });
 
 // 날짜별 수입/지출 횟수
@@ -47,10 +56,15 @@ const cards = ref([...initialCards]);
 const resetLayout = () => {
   cards.value = [...initialCards];
 };
+
+const onDateClick = (selectedDate) => {
+  durationStore.handleDateChange(selectedDate);
+  durationStore.handleDurationChange('day');
+};
 </script>
 
 <template>
-  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center p-10">
+  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center px-16 py-10">
     <div class="w-full lg:max-w-5xl md:max-w-2xl">
       <!-- 초기화 버튼 -->
       <!-- <div class="fixed right-5 bottom-1 flex justify-end mb-4 z-50">
@@ -89,11 +103,12 @@ const resetLayout = () => {
               v-model="date"
               :data="dateTransactionNumber"
               class="rounded-2xl p-5 h-full neo-inset content-center"
+              @update:model-value="onDateClick"
             />
 
             <BarChart
               v-else-if="element.type === 'bar'"
-              title="이번 달 핵심 요약"
+              :title-data="duration"
               :income-data="barIncome"
               :expense-data="barExpense"
             />

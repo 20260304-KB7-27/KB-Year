@@ -29,13 +29,16 @@ export const useUserStore = defineStore('user', () => {
   // 2. 로그인 (SignIn)
   const signIn = async (credentials, rememberMe = false) => {
     try {
+      console.log('전달된 로그인 데이터:', credentials); // 여기서 키 이름 확인!
       // url 뒤에 /users를 또 붙이지 않도록 수정
+
       const response = await axios.get(uri, {
         params: {
           userid: credentials.userid,
           password: credentials.password,
         },
       });
+      console.log(response);
 
       if (response.data.length > 0) {
         const userData = response.data[0];
