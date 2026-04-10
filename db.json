@@ -1856,6 +1856,51 @@
       "category": "식비",
       "amount": 3200,
       "memo": "마지막 편의점"
+    },
+    {
+      "date": "2026-04-10T00:11:00.000Z",
+      "type": "expense",
+      "category": "식비",
+      "amount": 7000,
+      "memo": "김밥 라면",
+      "userid": "user1",
+      "id": 201
+    },
+    {
+      "date": "2026-04-10T00:12:00.000Z",
+      "type": "income",
+      "category": "식비",
+      "amount": 10000,
+      "memo": "식비 지원",
+      "userid": "user1",
+      "id": 202
+    },
+    {
+      "date": "2026-04-10T00:30:00.000Z",
+      "type": "expense",
+      "category": "쇼핑/생활",
+      "amount": 50000,
+      "memo": "마트 쇼핑",
+      "userid": "user1",
+      "id": 203
+    },
+    {
+      "date": "2026-04-10T00:51:00.000Z",
+      "type": "income",
+      "category": "교통비",
+      "amount": 50000,
+      "memo": "교통비",
+      "userid": "user1",
+      "id": 204
+    },
+    {
+      "date": "2026-04-10T04:48:00.000Z",
+      "type": "income",
+      "category": "기타",
+      "amount": 1000000,
+      "memo": "로또 당첨",
+      "userid": "user1",
+      "id": 205
     }
   ]
 }
