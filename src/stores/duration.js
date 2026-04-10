@@ -108,6 +108,7 @@ export const useDurationStore = defineStore('duration', () => {
   };
 
   const handleDateChange = (newDate) => {
+    if (!newDate) return;
     date.value = newDate;
   };
 
