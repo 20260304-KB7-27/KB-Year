@@ -36,7 +36,7 @@ const formatNumber = (num) => (num || 0).toLocaleString();
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
         @click="handleMonthChange(-1)"
       >
-        <span class="text-sm">＜</span>
+        <span class="text-sm font-bold text-gray-400">＜</span>
       </button>
 
       <span class="text-lg font-black text-gray-500 min-w-[120px] text-center tracking-tight">
@@ -47,7 +47,7 @@ const formatNumber = (num) => (num || 0).toLocaleString();
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
         @click="handleMonthChange(1)"
       >
-        <span class="text-sm">＞</span>
+        <span class="text-sm font-bold text-gray-400">＞</span>
       </button>
     </div>
   </div>
@@ -90,48 +90,3 @@ const formatNumber = (num) => (num || 0).toLocaleString();
     </div>
   </div>
 </template>
-
-<style scoped>
-.neo-inset {
-  background: #f4f2ee;
-  box-shadow:
-    inset 6px 6px 12px #dbd9d4,
-    inset -6px -6px 12px #ffffff;
-}
-
-.neo-outset {
-  background: #f4f2ee;
-  box-shadow:
-    6px 6px 12px #dbd9d4,
-    -6px -6px 12px #ffffff;
-}
-
-.neo-inset:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    6px 6px 16px #dbd9d4,
-    -6px -6px 16px #ffffff;
-}
-
-.neo-interactive {
-  background: #f4f2ee;
-  border: none;
-  box-shadow:
-    2px 2px 5px #e8e6e0,
-    -2px -2px 5px #ffffff;
-}
-
-.neo-interactive:hover {
-  box-shadow:
-    5px 5px 10px #dbd9d4,
-    -5px -5px 10px #ffffff;
-  transform: translateY(-1px);
-}
-
-.neo-interactive:active {
-  box-shadow:
-    inset 4px 4px 8px #dbd9d4,
-    inset -4px -4px 8px #ffffff;
-  transform: translateY(0);
-}
-</style>
