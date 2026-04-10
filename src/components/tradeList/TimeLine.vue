@@ -179,3 +179,40 @@ watch(
   { deep: true, immediate: true }
 );
 </script>
+<style scoped>
+.timeline-scroll {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #e0e0e0 transparent;
+}
+
+.timeline-scroll::-webkit-scrollbar {
+  width: 12px;
+}
+
+.timeline-scroll::-webkit-scrollbar-track {
+  background: #e0e5ec;
+  border-radius: 10px;
+  box-shadow:
+    inset 2px 2px 5px #babecc,
+    inset -5px -5px 10px #ffffff;
+  margin: 5px;
+}
+
+.timeline-scroll::-webkit-scrollbar-thumb {
+  background: #e0e5ec;
+  border-radius: 10px;
+  box-shadow:
+    2px 2px 5px #babecc,
+    -2px -2px 5px #ffffff;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.timeline-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #e0e5ec;
+  box-shadow:
+    inset 2px 2px 5px #babecc,
+    inset -2px -2px 5px #ffffff;
+}
+</style>
