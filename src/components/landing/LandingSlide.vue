@@ -30,7 +30,7 @@
                 class="w-16 h-16 rounded-full bg-[#f4f2ee] shadow-[6px_6px_12px_#d9d5ce,-6px_-6px_12px_#ffffff] flex items-center justify-center"
               >
                 <Vue3Lottie
-                  :animation-data="pigHeroAnimation"
+                  :animation-data="slide.ani"
                   :height="50"
                   :width="50"
                 />
@@ -63,26 +63,22 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { Vue3Lottie } from 'vue3-lottie';
 import pigHeroAnimation from '@/assets/lottie/piggy-bank-dancing.json';
+import coinOut from '@/assets/lottie/coin-out.json';
+import coinIn from '@/assets/lottie/coin-in.json';
 
-interface Slide {
-  id: number;
-  title: string;
-  subtitle: string;
-}
-
-const slides: Slide[] = [
-  { id: 1, title: 'PiggyBank Savings', subtitle: '스마트 저축을 환영합니다.' },
-  { id: 2, title: 'Track Your Goals', subtitle: '목표를 향해 나아가세요.' },
-  { id: 3, title: 'Financial Freedom', subtitle: '재정적 자유를 경험하세요.' },
+const slides = [
+  { id: 1, title: 'KB-YEAR Savings', subtitle: '스마트 저축을 환영합니다.', ani: pigHeroAnimation },
+  { id: 2, title: 'Track Your Goals', subtitle: '목표를 향해 나아가세요.', ani: coinIn },
+  { id: 3, title: 'Financial Freedom', subtitle: '재정적 자유를 경험하세요.', ani: coinOut },
 ];
 
-const currentSlide = ref<number>(0);
-let timer: ReturnType<typeof setInterval> | null = null;
+const currentSlide = ref(0);
+let timer = null;
 
 const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % slides.length;
@@ -90,7 +86,7 @@ const nextSlide = () => {
 const prevSlide = () => {
   currentSlide.value = (currentSlide.value - 1 + slides.length) % slides.length;
 };
-const goToSlide = (i: number) => {
+const goToSlide = (i) => {
   if (currentSlide.value === i) return;
   currentSlide.value = i;
   resetTimer();
