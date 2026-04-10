@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full flex flex-col p-1">
+  <div class="w-full h-75 flex flex-col p-1">
     <div class="flex items-center mb-4 gap-3">
       <button
         class="flex items-center justify-center w-8 h-8 rounded-full bg-[#f4f2ee] shadow-[2px_2px_5px_#d9d5ce,-2px_-2px_5px_#ffffff] text-gray-500 transition-all active:shadow-[inset_2px_2px_5px_#d9d5ce,inset_-2px_-2px_5px_#ffffff]"
@@ -10,7 +10,7 @@
       <h2 class="text-gray-700 font-bold text-lg cursor-default">{{ category }} 상세 내역</h2>
     </div>
 
-    <div class="flex-1 overflow-y-auto flex flex-col gap-3 pr-1 custom-scrollbar">
+    <div class="flex-1 overflow-y-scroll flex flex-col gap-3 pr-1 custom-scrollbar">
       <p
         v-if="data.length === 0"
         class="text-center text-sm text-gray-400 mt-5"
