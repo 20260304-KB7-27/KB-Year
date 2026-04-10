@@ -11,6 +11,7 @@
   --background: 0 0% 100%;
   --foreground: 222 47% 11%;
 }
+
 @layer base {
   .theme {
     --font-heading: var(--font-sans);
@@ -93,7 +94,7 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    font-family: 'SpokaHanSansNeo';
   }
   /* 안으로 파인 뉴모피즘 효과 */
   .neo-inset {
@@ -116,4 +117,44 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+    font-family: 'SpokaHanSansNeo';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Thin.woff')
+        format('woff');
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpokaHanSansNeo';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Light.woff')
+        format('woff');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpokaHanSansNeo';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff')
+        format('woff');
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpokaHanSansNeo';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Medium.woff')
+        format('woff');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpokaHanSansNeo';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Bold.woff')
+        format('woff');
+    font-weight: 700;
+    font-display: swap;
 }
