@@ -6,7 +6,9 @@
       <PlusIcon class="h-5 w-5" />
     </DialogTrigger>
 
-    <DialogContent class="max-w-[380px] rounded-[24px] border-none bg-[#f4f2ee] p-0 shadow-2xl">
+    <DialogContent
+      class="max-w-[360px] sm:max-w-[400px] rounded-[24px] border-none bg-[#f4f2ee] p-0 shadow-2xl"
+    >
       <div class="p-6">
         <DialogHeader class="mb-5">
           <DialogTitle class="text-[20px] font-extrabold tracking-[-0.02em] text-[#4b4b4b]">

@@ -18,7 +18,7 @@ const handleLogout = async () => {
   if (confirm('로그아웃 하시겠습니까?')) {
     try {
       await signOut(); // 여기서 실제 로그아웃 함수 호출
-      console.log('로그아웃 성공');
+
       useRouter().push('/login');
       // 필요하다면 여기서 router.push('/login') 등을 추가하세요.
     } catch (error) {
@@ -103,11 +103,6 @@ const tierProgress = computed(() => {
   const current = netProfit.value - min;
   return Math.min(100, Math.max(0, (current / range) * 100));
 });
-
-const openEditProfile = () => {
-  console.log('Navigate to edit profile page or open drawer');
-  // 예: router.push('/profile/edit');
-};
 
 const avatarClass = computed(
   () =>

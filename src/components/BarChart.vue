@@ -23,11 +23,9 @@ const chartGroups = computed(() => {
   const topIncomes = [...props.incomeData].sort((a, b) => b.value - a.value).slice(0, 3);
   const topExpenses = [...props.expenseData].sort((a, b) => b.value - a.value).slice(0, 3);
 
-  // 💡 수입과 지출의 최대값을 각각 따로 구합니다.
   const maxIncome = topIncomes.length > 0 ? Math.max(...topIncomes.map((i) => i.value)) : 0;
   const maxExpense = topExpenses.length > 0 ? Math.max(...topExpenses.map((i) => i.value)) : 0;
 
-  // 💡 각각의 최대값을 기준으로 퍼센트를 계산합니다.
   const incomeItems = topIncomes.map((item) => ({
     ...item,
     percent: maxIncome === 0 ? 0 : Math.max((item.value / maxIncome) * 100, 2),
@@ -71,7 +69,7 @@ const chartGroups = computed(() => {
             <div class="flex flex-col gap-3 w-full">
               <p
                 v-if="group.items.length === 0"
-                class="text-center"
+                class="text-center text-gray-400"
               >
                 {{
                   group.type === 'income'
