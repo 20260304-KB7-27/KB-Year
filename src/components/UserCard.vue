@@ -35,6 +35,7 @@ const tiers = {
     desc: '이제 시작해요! 저축 습관 만들기 🌱',
     icon: Zap,
     bg: 'bg-[#cd7f32]',
+    shadow: '#cd7f32',
     img: new URL('@/assets/image/bronze.png', import.meta.url).href,
     color: 'text-white', // 브론즈는 진해서 흰색이 잘 보여요
   },
@@ -44,6 +45,7 @@ const tiers = {
     desc: '차곡차곡 쌓여가는 기쁨! 실버 🥈',
     icon: Shield,
     bg: 'bg-[#b0b0b0]', // 실버를 약간 더 진하게 조정
+    shadow: '#b0b0b0',
     img: new URL('@/assets/image/silver.png', import.meta.url).href,
     color: 'text-[#4a4a4a]', // 실버 배경엔 진한 회색 텍스트
   },
@@ -53,6 +55,7 @@ const tiers = {
     desc: '현명한 소비의 달인! 골드 🥇',
     icon: Award,
     bg: 'bg-[#ffd700]',
+    shadow: '#ffd700',
     img: new URL('@/assets/image/gold.png', import.meta.url).href,
     color: 'text-[#645b4c]', // 골드엔 갈색톤 텍스트가 고급스럽습니다
   },
@@ -62,6 +65,7 @@ const tiers = {
     desc: '자산 관리의 신! 플래티넘 🏆',
     icon: Crown,
     bg: 'bg-[#10b981]', // 초록색 계열로 변경
+    shadow: '#10b981',
     img: new URL('@/assets/image/platinum.png', import.meta.url).href,
     color: 'text-white', // 초록 배경에 잘 보이도록 흰색 글자
   },
@@ -127,7 +131,11 @@ const avatarClass = computed(
         </div>
 
         <!--  -->
-        <div :class="avatarClass">
+        <div
+          :class="avatarClass"
+          :style="{ '--glow-color': tiers[currentTier].shadow }"
+          class="glow-medal"
+        >
           <img :src="tiers[currentTier].img" />
         </div>
       </div>
@@ -160,3 +168,21 @@ const avatarClass = computed(
     </div>
   </div>
 </template>
+
+<style scope>
+.glow-medal {
+  animation: glow 2s infinite ease-in-out;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0px 0px 10px var(--glow-color);
+  }
+  50% {
+    box-shadow: 0px 0px 25px var(--glow-color);
+  }
+  100% {
+    box-shadow: 0px 0px 10px var(--glow-color);
+  }
+}
+</style>
