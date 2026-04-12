@@ -1,7 +1,7 @@
 <script setup>
 import draggable from 'vuedraggable';
 
-import { markRaw, ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { markRaw, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 
 import { Calendar } from '@/components/ui/calendar';
 import Card from '@/components/Card.vue';
@@ -82,10 +82,35 @@ const initialCards = [
   { id: 6, type: 'line' },
 ];
 
-const cards = ref([...initialCards]);
+const CARDS_ORDER_STORAGE_KEY = 'kb-year-main-cards-order';
+
+const loadSavedCardsOrder = () => {
+  try {
+    const raw = localStorage.getItem(CARDS_ORDER_STORAGE_KEY);
+    if (!raw) return null;
+    const ids = JSON.parse(raw);
+    if (!Array.isArray(ids) || ids.length !== initialCards.length) return null;
+    const validIds = new Set(initialCards.map((c) => c.id));
+    if (!ids.every((id) => validIds.has(id)) || new Set(ids).size !== ids.length) return null;
+    return ids.map((id) => initialCards.find((c) => c.id === id));
+  } catch {
+    return null;
+  }
+};
+
+const cards = ref(loadSavedCardsOrder() ?? [...initialCards]);
+
+watch(
+  cards,
+  (val) => {
+    localStorage.setItem(CARDS_ORDER_STORAGE_KEY, JSON.stringify(val.map((c) => c.id)));
+  },
+  { deep: true }
+);
 
 const resetLayout = () => {
   cards.value = [...initialCards];
+  localStorage.removeItem(CARDS_ORDER_STORAGE_KEY);
 };
 
 const onDateClick = (selectedDate) => {
@@ -98,15 +123,11 @@ const hideCards = () => {
 };
 
 const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad, {
-  directions: {
-    user: 'top',
-    activity: 'top',
-    dashboard: 'top',
-    calendar: 'bottom',
-    bar: 'bottom',
-    line: 'bottom',
+  gridSplit: {
+    at: 3,
+    first: 'top',
+    second: 'bottom',
   },
-  defaultDirection: 'bottom',
 });
 </script>
 
@@ -136,10 +157,10 @@ const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad, {
         :delay-on-touch-only="true"
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
       >
-        <template #item="{ element }">
+        <template #item="{ element, index }">
           <Card
             class="opacity-0"
-            :class="cardEnterLeaveClass(element.type)"
+            :class="cardEnterLeaveClass(index)"
           >
             <UserCard
               v-if="element.type === 'user'"
