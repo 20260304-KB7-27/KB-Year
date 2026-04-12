@@ -110,7 +110,7 @@ onMounted(() => {
   setTimeout(() => {
     cardOn.value = true;
     isFirstLoad.value = false;
-  }, 300);
+  }, 200);
 });
 
 onBeforeUnmount(() => {
@@ -163,7 +163,17 @@ const hideCards = () => {
   cardOn.value = false; // 카드를 투명하게 만듦
 };
 
-const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad);
+const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad, {
+  directions: {
+    user: 'top',
+    activity: 'top',
+    dashboard: 'top',
+    calendar: 'bottom',
+    bar: 'bottom',
+    line: 'bottom',
+  },
+  defaultDirection: 'bottom',
+});
 </script>
 
 <template>
