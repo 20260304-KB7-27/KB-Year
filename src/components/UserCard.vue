@@ -120,8 +120,8 @@ const avatarClass = computed(
     <div class="place-self-end">
       <EditProfile />
     </div>
-    <div class="mb-5 mt-10">
-      <div class="flex justify-center items-center gap-3 mb-3">
+    <div class="w-70 mb-5 mt-10 text-center">
+      <div class="flex justify-evenly items-center mb-3">
         <div class="flex flex-col justify-center">
           <h2 class="text-[#645b4c] font-bold text-2xl">{{ user.name }}</h2>
           <button
@@ -143,16 +143,16 @@ const avatarClass = computed(
         </div>
       </div>
       <p
-        class="text-xs font-semibold h-7 w-48 flex items-center justify-center rounded-full mb-5 shadow-sm"
+        class="text-xs font-semibold h-7 w-48 flex items-center justify-center rounded-full m-auto mb-5 shadow-sm"
         :class="[tiers[currentTier].bg, tiers[currentTier].color]"
       >
         {{ tiers[currentTier].desc }}
       </p>
       <!-- 이달의 순수익 등급 -->
       <div
-        class="w-full bg-[#f4f2ee] rounded-3xl p-5 mb-8 shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff]"
+        class="w-full bg-[#f4f2ee] rounded-3xl p-5 mb-2 shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff]"
       >
-        <div class="flex justify-between text-[10px] text-[#a39b8f] mb-2">
+        <div class="flex justify-between text-[10px] text-[#a39b8f]">
           <span class="font-medi um">이번 달 순수익 등급</span>
           <span class="font-bold text-[#645b4c] tracking-wider">{{ currentTier }}</span>
         </div>
