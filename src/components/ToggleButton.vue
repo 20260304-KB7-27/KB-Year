@@ -52,8 +52,11 @@
 import { computed, ref } from 'vue';
 import TradePostBtn from '@/components/tradeList/TradePostBtn.vue';
 import CustomSelect from './ui/custom-select/CustomSelect.vue';
+import { useDurationStore } from '@/stores/duration';
 
 const emits = defineEmits(['reset', 'duration']);
+
+const durationStore = useDurationStore();
 
 const BtnYellowClass = computed(() => [
   'w-full px-4 py-2.5 rounded-xl font-bold cursor-pointer transition-all',
@@ -65,7 +68,7 @@ const BtnYellowClass = computed(() => [
   'active:shadow-[inset_4px_4px_8px_#d79e10,inset_-4px_-4px_8px_#ffd416]',
 ]);
 
-const selectedValue = ref('day');
+const selectedValue = computed(() => durationStore.duration);
 
 const selectOptions = [
   { label: '월간', value: 'month' },

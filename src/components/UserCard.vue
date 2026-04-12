@@ -165,7 +165,7 @@ const avatarClass = computed(
         </div>
         <p class="text-[9px] text-[#a39b8f] mt-2.5 text-center font-medium">
           현재 수익:
-          <span class="text-[#645b4c] font-bold">₩{{ netProfit }}</span>
+          <span class="text-[#645b4c] font-bold">₩{{ netProfit.toLocaleString() }}</span>
         </p>
       </div>
     </div>

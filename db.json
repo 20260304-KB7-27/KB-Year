@@ -1898,7 +1898,7 @@
       "type": "income",
       "category": "기타",
       "amount": 1000000,
-      "memo": "로또 당첨 ddddd",
+      "memo": "로또 당첨",
       "userid": "user1",
       "id": 205
     },

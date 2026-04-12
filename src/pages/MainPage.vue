@@ -19,7 +19,6 @@ import { useCardFadeAnimation } from '@/composables/useCardFadeAnimation';
 import PwaInstallToast from '@/components/PwaInstallToast.vue';
 import { shouldShowPwaInstallToast } from '@/utils/pwaInstallToastStorage.js';
 import { usePwaInstall } from '@/composables/usePwaInstall';
-
 import { toast } from 'vue-sonner';
 // 상태 관리
 const userStore = useUserStore(); // 유저 정보 관리
@@ -61,11 +60,7 @@ const date = computed({
   },
 });
 
-const duration = computed(() => {
-  if (durationStore.duration == 'month') return '이번 달 핵심 요약';
-  else if (durationStore.duration == 'day') return '오늘의 핵심 요약';
-  else return '최근 1주 핵심 요약';
-});
+const duration = computed(() => durationStore.durationSummary);
 
 // 날짜별 수입/지출 횟수
 const dateTransactionNumber = computed(() => durationStore.dateTransactionNumber);
