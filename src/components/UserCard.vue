@@ -19,6 +19,7 @@ const handleLogout = async () => {
   if (confirm('로그아웃 하시겠습니까?')) {
     try {
       await signOut(); // 여기서 실제 로그아웃 함수 호출
+
       useRouter().push('/login');
       // 필요하다면 여기서 router.push('/login') 등을 추가하세요.
     } catch (error) {

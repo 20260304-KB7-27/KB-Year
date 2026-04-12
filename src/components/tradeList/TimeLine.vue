@@ -9,7 +9,7 @@
   </div>
 
   <div
-    class="w-full rounded-2xl px-4 py-3"
+    class="w-full rounded-2xl px-4 py-3 h-full cursor-pointer"
     @click="handleTradeList()"
   >
     <div

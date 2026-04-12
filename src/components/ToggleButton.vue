@@ -65,7 +65,7 @@ const BtnYellowClass = computed(() => [
   'active:shadow-[inset_4px_4px_8px_#d79e10,inset_-4px_-4px_8px_#ffd416]',
 ]);
 
-const selectedValue = ref('month');
+const selectedValue = ref('day');
 
 const selectOptions = [
   { label: '월간', value: 'month' },
