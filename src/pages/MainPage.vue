@@ -2,7 +2,6 @@
 import draggable from 'vuedraggable';
 
 import { h, ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { today, getLocalTimeZone } from '@internationalized/date';
 
 import { Calendar } from '@/components/ui/calendar';
 import Card from '@/components/Card.vue';
@@ -16,6 +15,7 @@ import { useBarChartStore } from '@/stores/barChart';
 import TimeLine from '@/components/tradeList/TimeLine.vue';
 
 import { useDurationStore } from '@/stores/duration';
+import { useCardFadeAnimation } from '@/composables/useCardFadeAnimation';
 
 import { toast } from 'vue-sonner';
 // 상태 관리
@@ -23,6 +23,9 @@ const userStore = useUserStore(); // 유저 정보 관리
 const user = computed(() => userStore.user);
 const durationStore = useDurationStore(); // 수입/지출 내역 기간 관리
 const barChartStore = useBarChartStore(); // barChart 데이터 관리
+
+const cardOn = ref(false);
+const isFirstLoad = ref(true);
 
 // pwa 설치
 const deferredPrompt = ref(null);
@@ -104,11 +107,17 @@ const showInstallToast = () => {
 
 onMounted(() => {
   showInstallToast();
+  setTimeout(() => {
+    cardOn.value = true;
+    isFirstLoad.value = false;
+  }, 200);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 });
+
+const movePage = async (e) => {};
 
 const date = computed({
   get: () => durationStore.date,
@@ -149,6 +158,22 @@ const onDateClick = (selectedDate) => {
   durationStore.handleDateChange(selectedDate);
   durationStore.handleDurationChange('day');
 };
+
+const hideCards = () => {
+  cardOn.value = false; // 카드를 투명하게 만듦
+};
+
+const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad, {
+  directions: {
+    user: 'top',
+    activity: 'top',
+    dashboard: 'top',
+    calendar: 'bottom',
+    bar: 'bottom',
+    line: 'bottom',
+  },
+  defaultDirection: 'bottom',
+});
 </script>
 
 <template>
@@ -178,13 +203,19 @@ const onDateClick = (selectedDate) => {
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
       >
         <template #item="{ element }">
-          <Card>
+          <Card
+            class="opacity-0"
+            :class="cardEnterLeaveClass(element.type)"
+          >
             <UserCard
               v-if="element.type === 'user'"
               :user="user"
             />
 
-            <TimeLine v-else-if="element.type === 'activity'" />
+            <TimeLine
+              v-else-if="element.type === 'activity'"
+              @start-hide="hideCards"
+            />
 
             <DashboardContainer v-else-if="element.type === 'dashboard'" />
 
@@ -202,17 +233,6 @@ const onDateClick = (selectedDate) => {
               :income-data="barIncome"
               :expense-data="barExpense"
             />
-
-            <!-- <PieChart
-              v-else-if="element.type === 'pie' && pieType === 'in'"
-              title="수입 유형"
-              :value="100"
-              :incomeData="pieIncome"
-              :expenseData="pieExpense"
-              :total="100"
-              unit="%"
-              @click="togglePieType"
-            /> -->
 
             <LineChart v-else-if="element.type === 'line'" />
           </Card>
