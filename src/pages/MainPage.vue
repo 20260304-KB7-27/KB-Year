@@ -13,6 +13,7 @@ import ToggleButton from '@/components/ToggleButton.vue';
 import BarChart from '@/components/BarChart.vue';
 import { useBarChartStore } from '@/stores/barChart';
 import TimeLine from '@/components/tradeList/TimeLine.vue';
+import MainCardJumpNav from '@/components/main/MainCardJumpNav.vue';
 
 import { useDurationStore } from '@/stores/duration';
 import { useCardFadeAnimation } from '@/composables/useCardFadeAnimation';
@@ -124,10 +125,17 @@ const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad, {
     second: 'bottom',
   },
 });
+
+const scrollToCard = (type) => {
+  const el = document.getElementById(`main-card-${type}`);
+  el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
 </script>
 
 <template>
-  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center px-3 sm:px-8 py-7">
+  <div
+    class="bg-[#f4f2ee] min-h-screen flex items-center justify-center sm:px-8 sm:py-7 sm:pb-0 p-3 pb-20"
+  >
     <div class="w-full lg:max-w-5xl md:max-w-2xl">
       <!-- 초기화 버튼 -->
       <!-- <div class="fixed right-5 bottom-1 flex justify-end mb-4 z-50">
@@ -150,44 +158,51 @@ const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad, {
         animation="250"
         :delay="200"
         :delay-on-touch-only="true"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
+        class="grid grid-cols-1 items-stretch justify-items-stretch gap-10 sm:grid-cols-2 lg:grid-cols-3"
       >
         <template #item="{ element, index }">
-          <Card
-            class="opacity-0"
-            :class="cardEnterLeaveClass(index)"
+          <div
+            :id="`main-card-${element.type}`"
+            class="flex h-full min-h-0 w-full max-w-full scroll-mt-4 flex-col"
           >
-            <UserCard
-              v-if="element.type === 'user'"
-              :user="user"
-            />
+            <Card
+              class="h-full min-h-0 opacity-0"
+              :class="cardEnterLeaveClass(index)"
+            >
+              <UserCard
+                v-if="element.type === 'user'"
+                :user="user"
+              />
 
-            <TimeLine
-              v-else-if="element.type === 'activity'"
-              @start-hide="hideCards"
-            />
+              <TimeLine
+                v-else-if="element.type === 'activity'"
+                @start-hide="hideCards"
+              />
 
-            <DashboardContainer v-else-if="element.type === 'dashboard'" />
+              <DashboardContainer v-else-if="element.type === 'dashboard'" />
 
-            <Calendar
-              v-else-if="element.type === 'calendar'"
-              v-model="date"
-              :data="dateTransactionNumber"
-              class="rounded-2xl p-5 h-full neo-inset content-center"
-              @update:model-value="onDateClick"
-            />
+              <Calendar
+                v-else-if="element.type === 'calendar'"
+                v-model="date"
+                :data="dateTransactionNumber"
+                class="rounded-2xl p-5 h-full neo-inset content-center"
+                @update:model-value="onDateClick"
+              />
 
-            <BarChart
-              v-else-if="element.type === 'bar'"
-              :title-data="duration"
-              :income-data="barIncome"
-              :expense-data="barExpense"
-            />
+              <BarChart
+                v-else-if="element.type === 'bar'"
+                :title-data="duration"
+                :income-data="barIncome"
+                :expense-data="barExpense"
+              />
 
-            <LineChart v-else-if="element.type === 'line'" />
-          </Card>
+              <LineChart v-else-if="element.type === 'line'" />
+            </Card>
+          </div>
         </template>
       </draggable>
+
+      <MainCardJumpNav @jump="scrollToCard" />
     </div>
   </div>
 </template>
