@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive } from 'vue';
+import { computed, ref } from 'vue';
 import TradePostBtn from '@/components/tradeList/TradePostBtn.vue';
 import CustomSelect from './ui/custom-select/CustomSelect.vue';
 

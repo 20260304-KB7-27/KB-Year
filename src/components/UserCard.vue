@@ -1,11 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { useDurationStore } from '@/stores/duration';
 import { LogOut, Settings, Award, Shield, Crown, Zap, User } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
+import EditProfile from './profile/EditProfile.vue';
 // 1. 기본 유저 정보 (추후 DB 연동 가능)
 const userStore = useUserStore();
 
@@ -22,7 +23,7 @@ const handleLogout = async () => {
       useRouter().push('/login');
       // 필요하다면 여기서 router.push('/login') 등을 추가하세요.
     } catch (error) {
-      console.error('로그아웃 실패:', error);
+      alert('로그아웃 중 오류가 발생했습니다. 다시 시도해 주세요.');
     }
   }
 };
@@ -112,6 +113,13 @@ const avatarClass = computed(
 
 <template>
   <div class="flex flex-col items-center">
+    <!-- Setting Modal -->
+    <!-- <Settings
+      class="cursor-pointer place-self-end group-hover:translate-x-0.5 transition-transform"
+    /> -->
+    <div class="place-self-end">
+      <EditProfile />
+    </div>
     <div class="mb-5 mt-10">
       <div class="flex justify-center items-center gap-3 mb-3">
         <div class="flex flex-col justify-center">

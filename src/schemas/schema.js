@@ -42,7 +42,54 @@ export const signUpSchema = z
       .string()
       .regex(/^010-\d{3,4}-\d{4}$/, '올바른 핸드폰 번호 형식(010-0000-0000)을 입력해주세요.'),
 
+    job: z.string().nonempty('직업을 입력해주세요.'),
+  })
+  .refine(
+    (data) => {
+      return data.password === data.confirmPassword;
+    },
+    {
+      message: '비밀번호가 일치하지 않습니다.',
+      path: ['confirmPassword'], // 에러 메시지가 표시될 필드 위치
+    }
+  );
+
+export const editProfileSchema = z
+  .object({
+    // 1. 읽기 전용 필드 (검증은 하되 수정은 안 됨)
+    userid: z.string(),
+    name: z.string(),
+    birthDate: z.string(),
+    gender: z.enum(['MALE', 'FEMALE']),
+
+    // 2. 수정 가능 필드 (기존 signUpSchema 로직 유지)
+    email: z.string().min(1, '이메일을 입력해주세요.').email('올바른 이메일 형식이 아닙니다.'),
+
+    phone: z
+      .string()
+      .regex(/^010-\d{3,4}-\d{4}$/, '올바른 핸드폰 번호 형식(010-0000-0000)을 입력해주세요.'),
+
     job: z.string().nonempty('직업을 선택하거나 입력해주세요.'),
+
+    // 3. 비밀번호 (수정 시에는 '입력하지 않음'이 허용되어야 하므로 optional 처리)
+    password: z
+      .string()
+      // 입력을 아예 안 했거나(empty), 입력했다면 8자 이상 + 조건 충족
+      .refine((val) => val === '' || val.length >= 8, {
+        message: '비밀번호는 최소 8자 이상이어야 합니다.',
+      })
+      .refine((val) => val === '' || /[a-zA-Z]/.test(val), {
+        message: '영문자가 포함되어야 합니다.',
+      })
+      .refine((val) => val === '' || /[0-9]/.test(val), {
+        message: '숫자가 포함되어야 합니다.',
+      })
+      .refine((val) => val === '' || /[@$!%*?&]/.test(val), {
+        message: '특수문자가 포함되어야 합니다.',
+      })
+      .optional(),
+
+    confirmPassword: z.string().optional(),
   })
   .refine(
     (data) => {
