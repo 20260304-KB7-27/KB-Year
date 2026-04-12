@@ -1,14 +1,14 @@
 .fade-in-items-from-top {
-  animation: fade-in-from-top 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: fade-in-from-top 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .fade-in-items-from-bottom {
-  animation: fade-in-from-bottom 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: fade-in-from-bottom 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .fade-out-items-to-bottom {
-  animation: fade-out-to-bottom 0.6s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: fade-out-to-bottom 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .fade-out-items-to-top {
-  animation: fade-out-to-top 0.6s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: fade-out-to-top 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 @keyframes fade-in-bg {
