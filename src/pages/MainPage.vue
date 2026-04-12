@@ -1,7 +1,8 @@
 <script setup>
 import draggable from 'vuedraggable';
 
-import { markRaw, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { markRaw, ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import { Calendar } from '@/components/ui/calendar';
 import Card from '@/components/Card.vue';
@@ -16,6 +17,7 @@ import TimeLine from '@/components/tradeList/TimeLine.vue';
 import MainCardJumpNav from '@/components/main/MainCardJumpNav.vue';
 
 import { useDurationStore } from '@/stores/duration';
+import { useMainCardsStore } from '@/stores/mainCards';
 import { useCardFadeAnimation } from '@/composables/useCardFadeAnimation';
 import PwaInstallToast from '@/components/PwaInstallToast.vue';
 import { shouldShowPwaInstallToast } from '@/utils/pwaInstallToastStorage.js';
@@ -26,6 +28,8 @@ const userStore = useUserStore(); // 유저 정보 관리
 const user = computed(() => userStore.user);
 const durationStore = useDurationStore(); // 수입/지출 내역 기간 관리
 const barChartStore = useBarChartStore(); // barChart 데이터 관리
+const mainCardsStore = useMainCardsStore();
+const { cards } = storeToRefs(mainCardsStore);
 
 const cardOn = ref(false);
 const isFirstLoad = ref(true);
@@ -68,45 +72,8 @@ const dateTransactionNumber = computed(() => durationStore.dateTransactionNumber
 const barIncome = computed(() => barChartStore.barIncome);
 const barExpense = computed(() => barChartStore.barExpense);
 
-const initialCards = [
-  { id: 1, type: 'user' },
-  { id: 2, type: 'activity' },
-  { id: 3, type: 'dashboard' },
-  { id: 4, type: 'calendar' },
-  // { id: 5, type: 'pie' },
-  { id: 5, type: 'bar' },
-  { id: 6, type: 'line' },
-];
-
-const CARDS_ORDER_STORAGE_KEY = 'kb-year-main-cards-order';
-
-const loadSavedCardsOrder = () => {
-  try {
-    const raw = localStorage.getItem(CARDS_ORDER_STORAGE_KEY);
-    if (!raw) return null;
-    const ids = JSON.parse(raw);
-    if (!Array.isArray(ids) || ids.length !== initialCards.length) return null;
-    const validIds = new Set(initialCards.map((c) => c.id));
-    if (!ids.every((id) => validIds.has(id)) || new Set(ids).size !== ids.length) return null;
-    return ids.map((id) => initialCards.find((c) => c.id === id));
-  } catch {
-    return null;
-  }
-};
-
-const cards = ref(loadSavedCardsOrder() ?? [...initialCards]);
-
-watch(
-  cards,
-  (val) => {
-    localStorage.setItem(CARDS_ORDER_STORAGE_KEY, JSON.stringify(val.map((c) => c.id)));
-  },
-  { deep: true }
-);
-
 const resetLayout = () => {
-  cards.value = [...initialCards];
-  localStorage.removeItem(CARDS_ORDER_STORAGE_KEY);
+  mainCardsStore.resetCards();
 };
 
 const onDateClick = (selectedDate) => {
