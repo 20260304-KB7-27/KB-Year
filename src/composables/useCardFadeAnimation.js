@@ -1,3 +1,6 @@
+/** `card-fade.css`의 `.fade-out-items-*` duration(0.6s)과 동일하게 유지 */
+export const CARD_FADE_LEAVE_MS = 600;
+
 /** `card-fade.css` 등장(enter)·퇴장(leave) 클래스 — 템플릿에서 직접 바인딩할 때 사용 */
 export const CARD_FADE_CLASS_BY_AXIS = Object.freeze({
   top: Object.freeze({
