@@ -1,0 +1,74 @@
+.fade-in-items-from-top {
+  animation: fade-in-from-top 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.fade-in-items-from-bottom {
+  animation: fade-in-from-bottom 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.fade-out-items-to-bottom {
+  animation: fade-out-to-bottom 0.6s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.fade-out-items-to-top {
+  animation: fade-out-to-top 0.6s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes fade-in-bg {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out-bg {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out-to-bottom {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+@keyframes fade-out-to-top {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}

@@ -15,6 +15,7 @@ import { useBarChartStore } from '@/stores/barChart';
 import TimeLine from '@/components/tradeList/TimeLine.vue';
 
 import { useDurationStore } from '@/stores/duration';
+import { useCardFadeAnimation } from '@/composables/useCardFadeAnimation';
 
 import { toast } from 'vue-sonner';
 // 상태 관리
@@ -159,9 +160,10 @@ const onDateClick = (selectedDate) => {
 };
 
 const hideCards = () => {
-  console.log('애니메이션 시작!');
   cardOn.value = false; // 카드를 투명하게 만듦
 };
+
+const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad);
 </script>
 
 <template>
@@ -188,11 +190,13 @@ const hideCards = () => {
         animation="250"
         :delay="200"
         :delay-on-touch-only="true"
-        class="opacity-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
-        :class="{ 'fade-in-items': cardOn, 'fade-out-items': !cardOn && !isFirstLoad }"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
       >
         <template #item="{ element }">
-          <Card>
+          <Card
+            class="opacity-0"
+            :class="cardEnterLeaveClass(element.type)"
+          >
             <UserCard
               v-if="element.type === 'user'"
               :user="user"
@@ -220,17 +224,6 @@ const hideCards = () => {
               :expense-data="barExpense"
             />
 
-            <!-- <PieChart
-              v-else-if="element.type === 'pie' && pieType === 'in'"
-              title="수입 유형"
-              :value="100"
-              :incomeData="pieIncome"
-              :expenseData="pieExpense"
-              :total="100"
-              unit="%"
-              @click="togglePieType"
-            /> -->
-
             <LineChart v-else-if="element.type === 'line'" />
           </Card>
         </template>
@@ -239,52 +232,4 @@ const hideCards = () => {
   </div>
 </template>
 
-<style scope>
-.fade-in-items {
-  animation: fade-in 0.8s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.fade-out-items {
-  /* 사라질 때는 화면 아래로 떨어지도록 설정 */
-  animation: fade-out 0.6s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-@keyframes fade-in-bg {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fade-out-bg {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-out {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(30px); /* 화면 아래로 사라지는 효과 */
-  }
-}
-</style>
+<style scope></style>

@@ -146,11 +146,23 @@ const monthTransactions = computed(() => {
   );
 });
 
+const cardOn = ref(false);
+const isFirstLoad = ref(true);
+
 onMounted(async () => {
   if (!transactions.value.length) {
     await store.fetchTransactions();
+    setTimeout(() => {
+      cardOn.value = true;
+      isFirstLoad.value = false;
+    }, 300);
   }
 });
+
+const hideCards = () => {
+  console.log('애니메이션 시작!');
+  cardOn.value = false; // 카드를 투명하게 만듦
+};
 
 const filteredTransactions = computed(() => {
   if (selectedType.value === 'all') return monthTransactions.value;
