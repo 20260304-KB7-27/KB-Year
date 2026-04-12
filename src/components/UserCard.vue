@@ -107,12 +107,12 @@ const tierProgress = computed(() => {
 
 const avatarClass = computed(
   () =>
-    'w-24 h-24 rounded-full flex items-center justify-center mb-4 transition-all duration-200 bg-[#f4f2ee]'
+    'w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center mb-4 transition-all duration-200 bg-[#f4f2ee]'
 );
 </script>
 
 <template>
-  <div class="flex flex-col items-center">
+  <div class="items-center">
     <!-- Setting Modal -->
     <!-- <Settings
       class="cursor-pointer place-self-end group-hover:translate-x-0.5 transition-transform"
@@ -120,7 +120,7 @@ const avatarClass = computed(
     <div class="place-self-end">
       <EditProfile />
     </div>
-    <div class="w-70 mb-5 mt-10 text-center">
+    <div class="mb-5 mt-5 text-center w-full">
       <div class="flex justify-evenly items-center mb-3">
         <div class="flex flex-col justify-center">
           <h2 class="text-[#645b4c] font-bold text-2xl">{{ user.name }}</h2>
@@ -142,16 +142,16 @@ const avatarClass = computed(
           <img :src="tiers[currentTier].img" />
         </div>
       </div>
-      <p
-        class="text-xs font-semibold h-7 w-48 flex items-center justify-center rounded-full m-auto mb-5 shadow-sm"
-        :class="[tiers[currentTier].bg, tiers[currentTier].color]"
-      >
-        {{ tiers[currentTier].desc }}
-      </p>
       <!-- 이달의 순수익 등급 -->
       <div
         class="w-full bg-[#f4f2ee] rounded-3xl p-5 mb-2 shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff]"
       >
+        <p
+          class="text-xs font-semibold h-7 w-48 flex items-center justify-center rounded-full m-auto mb-5 shadow-sm"
+          :class="[tiers[currentTier].bg, tiers[currentTier].color]"
+        >
+          {{ tiers[currentTier].desc }}
+        </p>
         <div class="flex justify-between text-[10px] text-[#a39b8f]">
           <span class="font-medi um">이번 달 순수익 등급</span>
           <span class="font-bold text-[#645b4c] tracking-wider">{{ currentTier }}</span>
