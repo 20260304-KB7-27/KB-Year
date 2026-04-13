@@ -202,6 +202,24 @@ const getPath = (points) => {
 onMounted(() => {
   scrollToRight();
 });
+
+const formatYAxis = (value) => {
+  if (value >= 100000000) {
+    return (value / 100000000).toFixed(1).replace(/\.0$/, '') + '억';
+  }
+  if (value >= 10000) {
+    return (value / 10000).toFixed(1).replace(/\.0$/, '') + '만';
+  }
+  if (value >= 1000) {
+    return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  }
+  return value.toLocaleString();
+};
+
+const truncateValue = (value) => {
+  const str = value.toLocaleString();
+  return str.length > 6 ? str.substring(0, 5) + '...' : str;
+};
 </script>
 
 <template>
@@ -301,7 +319,7 @@ onMounted(() => {
                 font-size="10"
                 font-weight="bold"
               >
-                {{ tick.value.toLocaleString() }}
+                {{ truncateValue(formatYAxis(tick.value)) }}
               </text>
             </g>
           </svg>

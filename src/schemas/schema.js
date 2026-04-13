@@ -1,5 +1,7 @@
 import { z } from 'zod/v4';
 
+const MAX_AMOUNT = 1000000000000000n;
+
 export const signUpSchema = z
   .object({
     userid: z
@@ -135,3 +137,35 @@ export const editProfileSchema = z
       path: ['confirmPassword'], // 에러 메시지가 표시될 필드 위치
     }
   );
+
+export const amountSchema = z
+  .preprocess((val) => {
+    // 1. 숫자가 들어온 경우 (1e20 등)
+    if (typeof val === 'number') {
+      // 안전한 정수 범위를 넘어가면 이미 오염된 데이터이므로
+      // 맥시멈보다 큰 값을 던져서 에러를 유도합니다.
+      if (!Number.isSafeInteger(val)) return MAX_AMOUNT + 1n;
+      return BigInt(val);
+    }
+
+    // 2. 문자열이 들어온 경우 (정상적인 폼 입력)
+    if (typeof val === 'string') {
+      // 지수 표기법(e)이 포함되어 있다면 이미 정밀도 위험이 있으므로 차단
+      if (val.toLowerCase().includes('e')) return MAX_AMOUNT + 1n;
+
+      const cleaned = val.replace(/,/g, '');
+      if (cleaned === '') return 0n;
+      return BigInt(cleaned);
+    }
+
+    return val; // 나머지는 Zod 기본 검증에 맡김
+  }, z.bigint()) // 여기서 BigInt 타입인지 1차 검증
+  .refine((val) => val <= MAX_AMOUNT, {
+    message: '입력 가능한 최대 금액(1,000조)을 초과했거나 올바르지 않은 형식입니다.',
+  })
+  .transform((val) => {
+    const num = Number(val);
+    if (num >= 100000000) return (num / 100000000).toFixed(1) + '억';
+    if (num >= 10000) return (num / 10000).toFixed(1) + '만';
+    return new Intl.NumberFormat('ko-KR').format(val) + '원';
+  });
