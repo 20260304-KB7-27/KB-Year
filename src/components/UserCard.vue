@@ -29,7 +29,7 @@ const formattedNetProfit = computed(() => {
   }
 
   // 에러 발생 시(1,000조 초과 등) 표시할 기본값
-  return '금액 초과';
+  return '1,000조';
 });
 const handleLogout = async () => {
   if (confirm('로그아웃 하시겠습니까?')) {
