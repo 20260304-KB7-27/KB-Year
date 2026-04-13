@@ -5,7 +5,6 @@
 
 <img width="918" height="508" alt="image" src="https://github.com/user-attachments/assets/28608c22-9fbe-42d5-ab81-5c5498564829" />
 
-
 ---
 
 ## 📌 프로젝트 소개
@@ -38,14 +37,27 @@ KB-Year는 여러 페이지를 이동하지 않고
 
 ---
 
+## 🛠️ Tech Stack
+
+| Category      | Stack                     |
+| ------------- | ------------------------- |
+| Frontend      | Vue 3, Vite               |
+| State & Data  | Pinia, Axios, JSON Server |
+| Styling       | Tailwind CSS              |
+| UI            | shadcn/ui                 |
+| Tooling       | ESLint, Prettier          |
+| Collaboration | GitHub, Jira              |
+
+---
+
 ## 👨‍👩‍👧‍👦 팀 구성
 
-| 이름   | 담당                           |github|
-| ------ | ------------------------------ |---|
-| 강태훈 | 랜딩 페이지 / 유저 로직 / JIRA |[@rhcharles0](https://github.com/rhcharles0)|
-| 김충훈 | 캘린더 / 세부 내역 / JIRA      |[@kchun0513](https://github.com/kchun0513)|
-| 김주영 | 거래 내역 / 거래 CRUD / PPT    |[@1juyoung](https://github.com/1juyoung)|
-| 김나현 | 요약 카드 / 그래프 / UI/UX     |[@nhkim06](https://github.com/nhkim06)|
+| 이름   | 담당                           | github                                       |
+| ------ | ------------------------------ | -------------------------------------------- |
+| 강태훈 | 랜딩 페이지 / 유저 로직 / JIRA | [@rhcharles0](https://github.com/rhcharles0) |
+| 김충훈 | 캘린더 / 세부 내역 / JIRA      | [@kchun0513](https://github.com/kchun0513)   |
+| 김주영 | 거래 내역 / 거래 CRUD / PPT    | [@1juyoung](https://github.com/1juyoung)     |
+| 김나현 | 요약 카드 / 그래프 / UI/UX     | [@nhkim06](https://github.com/nhkim06)       |
 
 ---
 
