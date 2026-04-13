@@ -25,9 +25,9 @@
 
     <div class="flex flex-row items-end gap-3">
       <div class="my-auto flex flex-col items-end justify-center">
-        <div class="flex flex-row mx-auto justify-end">
+        <div class="flex flex-row mx-auto justify-end w-50">
           <span
-            class="flex mx-auto text-[0.9em] font-extrabold leading-none overflow-x-auto justify-end w-[200px]"
+            class="block text-[0.9em] font-extrabold leading-none text-left max-w-30 whitespace-nowrap overflow-hidden text-ellipsis"
             :class="transaction.type === 'income' ? 'text-[#4CD67A]' : 'text-[#FF6F6F]'"
           >
             {{ transaction.type === 'income' ? '+' : '-' }}{{ formatAmount(transaction.amount) }}

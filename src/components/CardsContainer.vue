@@ -69,29 +69,34 @@ const formatNumber = (num) => (num || 0).toLocaleString();
       />
     </div>
 
-    <div class="flex flex-col gap-3">
-      <div
+    <div class="flex flex-col gap-3 items-center">
+      <template
         v-for="card in cards"
         :key="card.id"
-        class="neo-inset py-4 px-6 rounded-[40px] min-w-[240px] flex items-center gap-6 transition-all duration-300"
       >
-        <div class="w-10 h-10 rounded-2xl neo-outset flex items-center justify-center shrink-0">
-          <div
-            class="rounded-full w-5 h-5"
-            :style="{ backgroundColor: card.color }"
-          ></div>
-        </div>
+        <div
+          class="group flex min-w-60 hover:w-full hover:z-50 w-30 neo-inset py-4 px-6 rounded-[40px] items-center gap-3 transition-all duration-300"
+        >
+          <div class="w-10 h-10 rounded-2xl neo-outset flex items-center justify-center shrink-0">
+            <div
+              class="rounded-full w-5 h-5"
+              :style="{ backgroundColor: card.color }"
+            ></div>
+          </div>
 
-        <div class="flex flex-col">
-          <span class="text-gray-500 text-sm font-medium mb-1">{{ card.title }}</span>
-          <div class="flex items-baseline gap-1">
-            <span class="text-2xl font-black text-gray-800 tracking-tight truncate max-w-[150px]">
-              {{ formatNumber(card.value) }}
-            </span>
-            <span class="text-gray-400 font-bold text-sm">KRW</span>
+          <div class="flex flex-col">
+            <span class="text-gray-500 text-[0.7rem] font-bold">{{ card.title }}</span>
+            <div class="flex items-baseline gap-1">
+              <span
+                class="text-[1.2rem] font-black text-gray-800 tracking-tight whitespace-nowrap overflow-hidden text-ellipsis transition-all duration-300 max-w-30 group-hover:max-w-50"
+              >
+                {{ formatNumber(card.value) }}
+              </span>
+              <span class="text-gray-400 font-bold text-[12px]">KRW</span>
+            </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
