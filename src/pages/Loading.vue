@@ -17,7 +17,7 @@
         </div>
 
         <!-- Loading text  -->
-        <h2 class="text-[#645b4c] font-bold text-xl mb-2">PiggyBank</h2>
+        <h2 class="text-[#645b4c] font-bold text-xl mb-2">KB-YEAR</h2>
         <p class="text-[#a39b8f] text-sm mb-6">Loading your savings...</p>
 
         <!-- Progress bar container - neumorphic inset -->
@@ -50,14 +50,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { Vue3Lottie } from 'vue3-lottie';
 import loadingAnimation from '@/assets/lottie/piggy-bank-dancing.json';
 
 // 1. 필요한 상태(ref)와 인터벌 변수 선언
-const progress = ref<number>(0);
-let intervalId: ReturnType<typeof setInterval> | null = null;
+const progress = ref(0);
+let intervalId = null;
 
 const emit = defineEmits(['loadingComplete']);
 

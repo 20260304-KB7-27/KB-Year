@@ -39,9 +39,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
       const params = new URLSearchParams();
       params.append('userid', userId);
-      console.log(params.toString());
       const response = await axios.get(`${url}/transactions?${params.toString()}`);
-      console.log(response);
       transactions.value = response.data;
     } catch (err) {
       error.value = err;

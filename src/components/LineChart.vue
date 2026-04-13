@@ -51,7 +51,6 @@ const scrollToRight = async () => {
 
 // 1. transactionsStore의 전체 데이터를 감시하여 차트 갱신
 const trendData = computed(() => {
-  const now = new Date();
   // 기준점을 durationStore.date(현재 선택된 달)로 잡으면 더 정확한 연동이 가능합니다.
   const referenceDate = durationStore.date
     ? new Date(durationStore.date.year, durationStore.date.month - 1)
@@ -308,58 +307,3 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.neo-inset {
-  background: #f4f2ee;
-  box-shadow:
-    inset 6px 6px 12px #dbd9d4,
-    inset -6px -6px 12px #ffffff;
-}
-
-.neo-interactive {
-  background: #f4f2ee;
-  border: none;
-  box-shadow:
-    2px 2px 5px #e8e6e0,
-    -2px -2px 5px #ffffff;
-  cursor: pointer;
-  outline: none;
-}
-
-.neo-interactive:hover:not(:disabled) {
-  box-shadow:
-    5px 5px 10px #dbd9d4,
-    -5px -5px 10px #ffffff;
-  transform: translateY(-0.1px);
-  color: #4a5568;
-}
-
-.neo-interactive:active:not(:disabled) {
-  box-shadow:
-    inset 4px 4px 8px #dbd9d4,
-    inset -4px -4px 8px #ffffff;
-  transform: translateY(0);
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-path,
-circle {
-  transition:
-    d 0.3s ease-in-out,
-    cx 0.3s ease-in-out,
-    cy 0.3s ease-in-out;
-}
-
-.no-drag {
-  user-select: none;
-  -webkit-user-drag: none;
-}
-</style>

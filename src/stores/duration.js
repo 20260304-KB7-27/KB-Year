@@ -9,7 +9,7 @@ export const useDurationStore = defineStore('duration', () => {
   const userStore = useUserStore();
 
   const date = ref(today(getLocalTimeZone()));
-  const duration = ref('month'); // 'month', 'week', 'day'
+  const duration = ref('day'); // 'month', 'week', 'day'
 
   const user = computed(() => userStore.user);
 
@@ -18,6 +18,7 @@ export const useDurationStore = defineStore('duration', () => {
     const y = dateObj.getFullYear();
     const m = String(dateObj.getMonth() + 1).padStart(2, '0');
     const d = String(dateObj.getDate()).padStart(2, '0');
+
     return isEnd ? `${y}-${m}-${d}T23:59:59` : `${y}-${m}-${d}T00:00:00`;
   };
 
@@ -88,6 +89,36 @@ export const useDurationStore = defineStore('duration', () => {
     };
   });
 
+  const dateFormat = computed(() => {
+    const cal = date.value;
+    return {
+      year: cal.year,
+      month: cal.month,
+      day: cal.day,
+    };
+  });
+
+  /** BarChart 등에 쓰는 기간 요약 문구 (month / day / week) */
+  const durationSummary = computed(() => {
+    if (duration.value === 'month') {
+      return `${dateFormat.value.year}년 ${dateFormat.value.month}월 핵심 요약`;
+    }
+    if (duration.value === 'day') {
+      return `${dateFormat.value.year}년 ${dateFormat.value.month}월 ${dateFormat.value.day}일 핵심 요약`;
+    }
+    const end = date.value.toDate(getLocalTimeZone());
+    const start = new Date(end);
+    start.setDate(start.getDate() - 6);
+    const sm = start.getMonth() + 1;
+    const sd = start.getDate();
+    const em = end.getMonth() + 1;
+    const ed = end.getDate();
+    if (sm === em) {
+      return `${sm}월 ${sd}일 ~ ${ed}일 핵심 요약`;
+    }
+    return `${sm}월 ${sd}일 ~ ${em}월 ${ed}일 핵심 요약`;
+  });
+
   const totalIncome = computed(() => {
     return monthlyTrans.value
       .filter((t) => t.type?.toUpperCase() === 'INCOME')
@@ -104,6 +135,11 @@ export const useDurationStore = defineStore('duration', () => {
 
   const handleDurationChange = (selectedValue) => {
     duration.value = selectedValue;
+  };
+
+  const handleDateChange = (newDate) => {
+    if (!newDate) return;
+    date.value = newDate;
   };
 
   watch(
@@ -130,6 +166,8 @@ export const useDurationStore = defineStore('duration', () => {
   return {
     date,
     duration,
+    dateFormat,
+    durationSummary,
     filteredTrans,
     monthlyTrans,
     durationTrans,
@@ -139,6 +177,7 @@ export const useDurationStore = defineStore('duration', () => {
     dateTransactionNumber,
     dateRange,
     handleDurationChange,
+    handleDateChange,
     transactionsStore,
     isLoading,
   };

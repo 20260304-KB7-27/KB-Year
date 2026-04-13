@@ -1,6 +1,6 @@
 <template>
   <form
-    class="flex flex-col gap-4"
+    class="mx-auto flex flex-col gap-4"
     @submit.prevent="handleSubmit"
   >
     <div class="flex flex-col gap-2">
@@ -15,30 +15,18 @@
 
     <div class="flex flex-col gap-2">
       <label class="text-sm font-bold text-[#645B4C]">유형</label>
-      <select
+      <CustomSelect
         v-model="form.type"
-        class="w-full appearance-none rounded-xl border-none bg-white/90 px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm outline-none transition duration-300 focus:ring-2 focus:ring-[#fcaf17]/40 cursor-pointer"
-      >
-        <option value="income">수입</option>
-        <option value="expense">지출</option>
-      </select>
+        :options="typeOptions"
+      />
     </div>
 
     <div class="flex flex-col gap-2">
       <label class="text-sm font-bold text-[#645B4C]">카테고리</label>
-      <select
+      <CustomSelect
         v-model="form.category"
-        class="w-full appearance-none rounded-xl border-none bg-white/90 px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm outline-none transition duration-300 focus:ring-2 focus:ring-[#fcaf17]/40 cursor-pointer"
-      >
-        <option value="식비">식비</option>
-        <option value="문화/여가">문화/여가</option>
-        <option value="쇼핑/생활">쇼핑/생활</option>
-        <option value="주거비">주거비</option>
-        <option value="부수입">부수입</option>
-        <option value="교통비">교통비</option>
-        <option value="주수입">주수입</option>
-        <option value="기타">기타</option>
-      </select>
+        :options="categoryOptions"
+      />
     </div>
 
     <div class="flex flex-col gap-2">
@@ -89,6 +77,7 @@
 
 <script setup>
 import { computed, reactive, watch } from 'vue';
+import CustomSelect from '../ui/custom-select/CustomSelect.vue';
 
 const props = defineProps({
   mode: {
@@ -126,6 +115,22 @@ const form = reactive({
   amount: '',
   memo: '',
 });
+
+const typeOptions = [
+  { label: '수입', value: 'income' },
+  { label: '지출', value: 'expense' },
+];
+
+const categoryOptions = [
+  { label: '식비', value: '식비' },
+  { label: '문화/여가', value: '문화/여가' },
+  { label: '쇼핑/생활', value: '쇼핑/생활' },
+  { label: '주거비', value: '주거비' },
+  { label: '부수입', value: '부수입' },
+  { label: '교통비', value: '교통비' },
+  { label: '주수입', value: '주수입' },
+  { label: '기타', value: '기타' },
+];
 
 watch(
   () => props.initialValue,

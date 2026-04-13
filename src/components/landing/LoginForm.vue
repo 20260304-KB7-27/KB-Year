@@ -6,10 +6,10 @@
       <div
         class="w-20 h-20 rounded-full bg-[#f4f2ee] shadow-[8px_8px_16px_#d9d5ce,-8px_-8px_16px_#ffffff] flex items-center justify-center mb-4"
       >
-        <span class="text-3xl font-black text-[#fcaf17]">PB</span>
+        <span class="text-3xl font-black text-[#fcaf17]">KB</span>
       </div>
       <div class="text-center">
-        <span class="text-lg font-bold text-[#645b4c]">PiggyBank</span>
+        <span class="text-lg font-bold text-[#645b4c]">KB-YEAR</span>
         <p class="text-sm text-[#a39b8f]">Savings Platform</p>
       </div>
     </div>
@@ -20,6 +20,7 @@
         type="text"
         placeholder="아이디를 입력해 주세요."
         class="w-full px-5 py-4 bg-[#f4f2ee] rounded-xl text-[#645b4c] outline-none shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] focus:shadow-[inset_6px_6px_12px_#d9d5ce,inset_-6px_-6px_12px_#ffffff] transition-all"
+        @keyup.enter="handleLogin"
       />
 
       <div class="relative">
@@ -28,6 +29,7 @@
           :type="showPassword ? 'text' : 'password'"
           placeholder="비밀번호를 입력해 주세요."
           class="w-full px-5 py-4 bg-[#f4f2ee] rounded-xl text-[#645b4c] outline-none shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] focus:shadow-[inset_6px_6px_12px_#d9d5ce,inset_-6px_-6px_12px_#ffffff] transition-all"
+          @keyup.enter="handleLogin"
         />
         <button
           class="absolute right-4 top-1/2 -translate-y-1/2 text-[#a39b8f] hover:text-[#645b4c]"
@@ -70,7 +72,7 @@
     </div>
 
     <div class="text-center pt-4 border-t border-[#e8e4dc]">
-      <p class="text-[#a39b8f] text-sm mb-4">PiggyBank는 처음이신가요?</p>
+      <p class="text-[#a39b8f] text-sm mb-4">KB-YEAR는 처음이신가요?</p>
       <button
         class="px-8 py-3 bg-[#f4f2ee] text-[#645b4c] font-medium rounded-xl opacity-60 hover:opacity-100 hover:text-[#fcaf17] shadow-[4px_4px_8px_#d9d5ce,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#d9d5ce,-6px_-6px_12px_#ffffff] transition-all"
         @click="$emit('open-signup')"
