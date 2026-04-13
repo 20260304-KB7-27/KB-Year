@@ -37,6 +37,18 @@ KB-Year는 여러 페이지를 이동하지 않고
 <img width="919" height="511" alt="image" src="https://github.com/user-attachments/assets/6ff331f6-b9a8-427b-a31e-50bbfded052a" />
 
 ---
+## 🛠 Tech Stack
+
+| Category | Stack |
+|----------|------|
+| Frontend | Vue 3, Vite |
+| State & Data | Pinia, Axios, JSON Server |
+| Styling | Tailwind CSS |
+| UI | shadcn/ui |
+| Tooling | ESLint, Prettier |
+| Collaboration | GitHub, Jira |
+
+---
 
 ## 👨‍👩‍👧‍👦 팀 구성
 
