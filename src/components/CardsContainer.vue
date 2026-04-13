@@ -85,7 +85,7 @@ const formatNumber = (num) => (num || 0).toLocaleString();
         <div class="flex flex-col">
           <span class="text-gray-500 text-sm font-medium mb-1">{{ card.title }}</span>
           <div class="flex items-baseline gap-1">
-            <span class="text-2xl font-black text-gray-800 tracking-tight">
+            <span class="text-2xl font-black text-gray-800 tracking-tight truncate max-w-[150px]">
               {{ formatNumber(card.value) }}
             </span>
             <span class="text-gray-400 font-bold text-sm">KRW</span>
