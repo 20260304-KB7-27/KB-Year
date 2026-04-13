@@ -9,6 +9,7 @@ import { useRouter } from 'vue-router';
 import EditProfile from './profile/EditProfile.vue';
 // 1. 기본 유저 정보 (추후 DB 연동 가능)
 const userStore = useUserStore();
+const router = useRouter();
 
 const { user } = storeToRefs(userStore);
 const { signOut } = userStore;
@@ -20,8 +21,7 @@ const handleLogout = async () => {
     try {
       await signOut(); // 여기서 실제 로그아웃 함수 호출
 
-      useRouter().push('/login');
-      // 필요하다면 여기서 router.push('/login') 등을 추가하세요.
+      router.push('/login');
     } catch (error) {
       alert('로그아웃 중 오류가 발생했습니다. 다시 시도해 주세요.');
     }
