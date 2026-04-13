@@ -3,6 +3,9 @@
 > **정보를 한눈에!**  
 > 수입, 지출, 순수익과 소비 흐름을 한 화면에서 확인할 수 있는 가계부 웹 서비스
 
+<img width="918" height="508" alt="image" src="https://github.com/user-attachments/assets/28608c22-9fbe-42d5-ab81-5c5498564829" />
+
+
 ---
 
 ## 📌 프로젝트 소개
@@ -30,46 +33,19 @@ KB-Year는 여러 페이지를 이동하지 않고
 - 🏅 **재정 상태 뱃지**
   - 소비 습관을 시각적으로 표현
 
+<img width="918" height="509" alt="image" src="https://github.com/user-attachments/assets/83c1e1df-aadf-488b-9d86-07f2f797d4de" />
+<img width="919" height="511" alt="image" src="https://github.com/user-attachments/assets/6ff331f6-b9a8-427b-a31e-50bbfded052a" />
+
 ---
 
 ## 👨‍👩‍👧‍👦 팀 구성
 
-| 이름   | 담당                           |
-| ------ | ------------------------------ |
-| 강태훈 | 랜딩 페이지 / 유저 로직 / JIRA |
-| 김충훈 | 캘린더 / 세부 내역 / JIRA      |
-| 김주영 | 거래 내역 / 거래 CRUD / PPT    |
-| 김나현 | 요약 카드 / 그래프 / UI/UX     |
-
----
-
-## 🤝 협업 방식
-
-- Jira 기반 이슈 관리
-- 기능 단위 작업 분리 및 진행 상태 공유
-- 특정 인원에 치우치지 않은 **균형 잡힌 협업**
-
----
-
-## 📊 결과
-
-- ✅ **Best Practices 점수 향상**
-- ⚠️ 기능 추가로 인한 **Performance 점수 하락**
-
----
-
-## ⚠️ 아쉬운 점
-
-- 초기 로딩 비용 증가로 성능 저하
-- 일부 컴포넌트가 화면에 완전히 노출되지 않음
-
----
-
-## 🔧 개선 방향
-
-- 초기 렌더링 최적화
-- 반응형 레이아웃 개선
-- 컴포넌트 크기 및 구조 개선
+| 이름   | 담당                           |github|
+| ------ | ------------------------------ |---|
+| 강태훈 | 랜딩 페이지 / 유저 로직 / JIRA |[@rhcharles0](https://github.com/rhcharles0)|
+| 김충훈 | 캘린더 / 세부 내역 / JIRA      |[@kchun0513](https://github.com/kchun0513)|
+| 김주영 | 거래 내역 / 거래 CRUD / PPT    |[@1juyoung](https://github.com/1juyoung)|
+| 김나현 | 요약 카드 / 그래프 / UI/UX     |[@nhkim06](https://github.com/nhkim06)|
 
 ---
 
