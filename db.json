@@ -1876,15 +1876,6 @@
       "id": 202
     },
     {
-      "date": "2026-04-10T00:30:00.000Z",
-      "type": "expense",
-      "category": "쇼핑/생활",
-      "amount": 50000,
-      "memo": "마트 쇼핑",
-      "userid": "user1",
-      "id": 203
-    },
-    {
       "date": "2026-04-10T00:51:00.000Z",
       "type": "income",
       "category": "교통비",
@@ -1982,6 +1973,33 @@
       "memo": "",
       "userid": "user2",
       "id": 214
+    },
+    {
+      "date": "2026-04-10T06:56:00.000Z",
+      "type": "expense",
+      "category": "식비",
+      "amount": 0,
+      "memo": "",
+      "userid": "user2",
+      "id": 215
+    },
+    {
+      "date": "2026-04-13T00:47:00.000Z",
+      "type": "expense",
+      "category": "식비",
+      "amount": 123,
+      "memo": "",
+      "userid": "user1",
+      "id": 216
+    },
+    {
+      "date": "2026-04-13T00:47:00.000Z",
+      "type": "expense",
+      "category": "식비",
+      "amount": 123,
+      "memo": "",
+      "userid": "user1",
+      "id": 217
     }
   ]
 }
