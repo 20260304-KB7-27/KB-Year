@@ -318,9 +318,11 @@
           <div class="pt-6">
             <button
               type="submit"
+              :disabled="isSubmitting"
               class="w-full py-5 bg-[#f4f2ee] text-[#fcaf17] font-bold text-lg rounded-[2rem] shadow-[6px_6px_12px_rgba(217,213,206,0.8),-6px_-6px_12px_rgba(255,255,255,0.9)] hover:shadow-[8px_8px_16px_rgba(217,213,206,0.9),-8px_-8px_16px_rgba(255,255,255,1)] active:shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] transition-all active:scale-[0.98]"
             >
-              가입하기
+              <span v-if="isSubmitting">가입 처리 중...</span>
+              <span v-else>가입하기</span>
             </button>
           </div>
         </form>
@@ -331,7 +333,7 @@
 
 <script setup>
 import { reactive, ref, watch } from 'vue';
-import { X, Eye, EyeOff } from 'lucide-vue-next';
+import { X } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/user';
 import { signUpSchema } from '@/schemas/schema';
 
@@ -341,6 +343,8 @@ const emit = defineEmits(['close']);
 const isIdChecked = ref(false); // 중복 확인 버튼을 눌렀는지 여부
 const isIdAvailable = ref(false); // 실제 사용 가능한 아이디인지 여부
 const isIdChecking = ref(false); // 로딩 상태 추가
+
+const isSubmitting = ref(false);
 const handleIdInput = () => {
   touched.userid = true;
   isIdChecked.value = false; // 입력이 바뀌면 다시 중복 확인을 하도록 리셋
@@ -424,6 +428,8 @@ const checkIdDuplicate = async () => {
 
 const handleSignup = async () => {
   // 1. 모든 필드를 '건드린 것'으로 간주하여 에러 메시지가 화면에 나오게 함
+  if (isSubmitting.value) return;
+
   Object.keys(touched).forEach((key) => {
     touched[key] = true;
   });
@@ -433,11 +439,15 @@ const handleSignup = async () => {
 
   // 3. 아이디 중복 확인 체크
   if (!isIdChecked.value || !isIdAvailable.value) {
+    errors.value = {};
+    result.error.issues.forEach((issue) => {
+      const fieldName = issue.path[0];
+      errors.value[fieldName] = issue.message;
+    });
     alert('아이디 중복 확인을 완료해 주세요.');
     return;
   }
 
-  // 4. 검증 실패 시 처리
   if (!result.success) {
     // 에러 객체 업데이트 (watch에서 수행하지만, 제출 시 즉각 반영을 위해 한 번 더 실행)
     errors.value = {};
@@ -452,6 +462,9 @@ const handleSignup = async () => {
 
   // 5. 통과 시 제출 로직...
   const { confirmPassword: _, ...payload } = result.data;
+
+  isSubmitting.value = true;
+
   try {
     const success = await userStore.signUp(payload);
     if (success) {
@@ -460,6 +473,7 @@ const handleSignup = async () => {
     }
   } catch (err) {
     alert('네트워크 오류가 발생했습니다.');
+    isSubmitting.value = false;
   }
 };
 
