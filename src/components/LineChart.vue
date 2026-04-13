@@ -19,7 +19,6 @@ const changeZoom = (delta) => {
   }
 };
 
-const dynamicViewboxWidth = computed(() => (baseWidth * zoomLevel.value) / 100);
 const COLORS = { income: '#4ade80', expense: '#f87171' };
 
 // --- 자동 스크롤 로직 ---
@@ -49,51 +48,110 @@ const scrollToRight = async () => {
 
 // --- 데이터 연동 로직 ---
 
-// 1. transactionsStore의 전체 데이터를 감시하여 차트 갱신
 const trendData = computed(() => {
-  // 기준점을 durationStore.date(현재 선택된 달)로 잡으면 더 정확한 연동이 가능합니다.
+  // 1. 기준점 설정
   const referenceDate = durationStore.date
-    ? new Date(durationStore.date.year, durationStore.date.month - 1)
+    ? new Date(durationStore.date.year, durationStore.date.month - 1, durationStore.date.day || 1)
     : new Date();
 
-  const months = [];
+  const points = [];
+  const type = durationStore.duration; // 'day', 'week', 'month'
 
-  // 최근 12개월 월별 라벨 생성
-  for (let i = 11; i >= 0; i--) {
-    const d = new Date(referenceDate.getFullYear(), referenceDate.getMonth() - i, 1);
-    months.push({
-      year: d.getFullYear(),
-      month: d.getMonth(),
-      label: `${d.getMonth() + 1}월`,
-    });
+  // 2. 기간 타입에 따른 데이터 포인트(라벨/기준날짜) 생성
+  if (type === 'day') {
+    // 최근 7일간 (오늘 포함 과거 6일)
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(referenceDate);
+      d.setDate(referenceDate.getDate() - i);
+      points.push({
+        year: d.getFullYear(),
+        month: d.getMonth(),
+        day: d.getDate(),
+        label: `${d.getDate()}일`,
+      });
+    }
+  } else if (type === 'week') {
+    // 최근 8주간 (이번 주 포함 과거 7주)
+    for (let i = 7; i >= 0; i--) {
+      const d = new Date(referenceDate);
+      d.setDate(referenceDate.getDate() - i * 7);
+      const startOfWeek = new Date(d);
+      startOfWeek.setDate(d.getDate() - d.getDay()); // 해당 주의 일요일로 고정
+      points.push({
+        year: startOfWeek.getFullYear(),
+        month: startOfWeek.getMonth(),
+        day: startOfWeek.getDate(),
+        label: `${startOfWeek.getMonth() + 1}/${startOfWeek.getDate()}주`,
+      });
+    }
+  } else {
+    // 최근 12개월 (이번 달 포함 과거 11개월)
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(referenceDate.getFullYear(), referenceDate.getMonth() - i, 1);
+      points.push({
+        year: d.getFullYear(),
+        month: d.getMonth(),
+        label: `${d.getMonth() + 1}월`,
+      });
+    }
   }
 
-  // 데이터가 없을 때 기본값
-  if (!transactionsStore.transactions || transactionsStore.transactions.length === 0) {
-    return months.map((m) => ({ ...m, income: 0, expense: 0 }));
-  }
-
-  return months.map((m) => {
-    const monthly = transactionsStore.transactions.filter((t) => {
+  // 3. 필터링 및 합산 로직
+  return points.map((p) => {
+    const matchedTrans = (transactionsStore.transactions || []).filter((t) => {
       const tDate = new Date(t.date);
-      return tDate.getFullYear() === m.year && tDate.getMonth() === m.month;
+      if (type === 'day') {
+        return (
+          tDate.getFullYear() === p.year &&
+          tDate.getMonth() === p.month &&
+          tDate.getDate() === p.day
+        );
+      } else if (type === 'week') {
+        const weekStart = new Date(p.year, p.month, p.day);
+        weekStart.setHours(0, 0, 0, 0);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        weekEnd.setHours(23, 59, 59, 999);
+        return tDate >= weekStart && tDate <= weekEnd;
+      } else {
+        return tDate.getFullYear() === p.year && tDate.getMonth() === p.month;
+      }
     });
 
-    const income = monthly
+    const income = matchedTrans
       .filter((t) => t.type?.toLowerCase() === 'income')
       .reduce((a, c) => a + Number(c.amount), 0);
 
-    const expense = monthly
+    const expense = matchedTrans
       .filter((t) => t.type?.toLowerCase() === 'expense')
       .reduce((a, c) => a + Number(c.amount), 0);
 
     return {
-      label: m.label,
-      income: income,
-      expense: expense,
+      label: p.label,
+      income: income || 0,
+      expense: expense || 0,
     };
   });
 });
+
+// 4. 차트 너비 유동적 관리
+const dynamicBaseWidth = computed(() => {
+  const count = trendData.value.length;
+  // 포인트가 적은 '일별'은 촘촘하게, 많은 '월별'은 넉넉하게 너비 확보
+  const minWidth = 450;
+  const calculatedWidth = count * (durationStore.duration === 'month' ? 45 : 60);
+  return Math.max(minWidth, calculatedWidth);
+});
+
+const dynamicViewboxWidth = computed(() => (dynamicBaseWidth.value * zoomLevel.value) / 100);
+// 4. 기간 변경 시 자동 스크롤
+watch(
+  () => durationStore.duration,
+  async () => {
+    await nextTick();
+    scrollToRight();
+  }
+);
 
 // 차트 좌표 계산
 const viewboxHeight = 200;
