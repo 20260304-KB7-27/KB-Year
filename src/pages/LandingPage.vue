@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import Loading from './Loading.vue';
