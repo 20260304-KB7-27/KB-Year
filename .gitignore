@@ -117,3 +117,5 @@ vite.config.ts.timestamp-*
 *.njsproj
 *.sln
 *.sw?
+
+!.vscode/settings.json

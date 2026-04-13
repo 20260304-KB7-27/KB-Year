@@ -1,0 +1,344 @@
+<script setup>
+import { getLocalTimeZone, today } from '@internationalized/date';
+import { createReusableTemplate, reactiveOmit, useVModel } from '@vueuse/core';
+import { CalendarRoot, useDateFormatter, useForwardPropsEmits } from 'reka-ui';
+import { createYear, createYearRange, toDate } from 'reka-ui/date';
+import { computed, toRaw, ref, watch } from 'vue';
+import { cn } from '@/lib/utils';
+import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
+import {
+  CalendarCell,
+  CalendarCellTrigger,
+  CalendarGrid,
+  CalendarGridBody,
+  CalendarGridHead,
+  CalendarGridRow,
+  CalendarHeadCell,
+  CalendarHeader,
+  CalendarHeading,
+  CalendarNextButton,
+  CalendarPrevButton,
+} from '.';
+
+const props = defineProps({
+  defaultValue: { type: null, required: false },
+  defaultPlaceholder: { type: null, required: false },
+  placeholder: { type: null, required: false },
+  pagedNavigation: { type: Boolean, required: false },
+  preventDeselect: { type: Boolean, required: false },
+  weekStartsOn: { type: Number, required: false },
+  weekdayFormat: { type: String, required: false },
+  calendarLabel: { type: String, required: false },
+  fixedWeeks: { type: Boolean, required: false },
+  maxValue: { type: null, required: false },
+  minValue: { type: null, required: false },
+  locale: { type: String, required: false },
+  numberOfMonths: { type: Number, required: false },
+  disabled: { type: Boolean, required: false },
+  readonly: { type: Boolean, required: false },
+  initialFocus: { type: Boolean, required: false },
+  isDateDisabled: { type: Function, required: false },
+  isDateUnavailable: { type: Function, required: false },
+  dir: { type: String, required: false },
+  nextPage: { type: Function, required: false },
+  prevPage: { type: Function, required: false },
+  modelValue: { type: null, required: false, default: undefined },
+  multiple: { type: Boolean, required: false },
+  disableDaysOutsideCurrentView: { type: Boolean, required: false },
+  asChild: { type: Boolean, required: false },
+  as: { type: null, required: false },
+  class: {
+    type: [Boolean, null, String, Object, Array],
+    required: false,
+    skipCheck: true,
+  },
+  layout: { type: null, required: false, default: undefined },
+  yearRange: { type: Array, required: false },
+  data: { type: Object, required: true },
+});
+const emits = defineEmits(['update:modelValue', 'update:placeholder']);
+
+const delegatedProps = reactiveOmit(props, 'class', 'layout', 'placeholder');
+
+const placeholder = useVModel(props, 'placeholder', emits, {
+  passive: true,
+  defaultValue: props.defaultPlaceholder ?? today(getLocalTimeZone()),
+});
+
+const formatter = useDateFormatter(props.locale ?? 'en');
+
+const yearRange = computed(() => {
+  return (
+    props.yearRange ??
+    createYearRange({
+      start:
+        props?.minValue ??
+        (toRaw(props.placeholder) ?? props.defaultPlaceholder ?? today(getLocalTimeZone())).cycle(
+          'year',
+          -100
+        ),
+
+      end:
+        props?.maxValue ??
+        (toRaw(props.placeholder) ?? props.defaultPlaceholder ?? today(getLocalTimeZone())).cycle(
+          'year',
+          10
+        ),
+    })
+  );
+});
+
+const getTransactionData = (dateObj) => {
+  if (!props.data) return null;
+
+  // dateObj.year, dateObj.month, dateObj.day를 'YYYY-MM-DD' 형식으로 변환
+  const year = dateObj.year;
+  const month = String(dateObj.month).padStart(2, '0');
+  const day = String(dateObj.day).padStart(2, '0');
+  const key = `${year}-${month}-${day}`;
+
+  return props.data[key]; // [수입 횟수, 지출 횟수] 또는 undefined
+};
+
+const [DefineMonthTemplate, ReuseMonthTemplate] = createReusableTemplate();
+const [DefineYearTemplate, ReuseYearTemplate] = createReusableTemplate();
+
+const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const slideDirection = ref('');
+
+// 연도와 월을 조합하여 절대적인 '달(Month)'의 크기를 비교
+const getMonthValue = (dateObj) => {
+  if (!dateObj) return 0;
+  return dateObj.year * 100 + dateObj.month;
+};
+
+watch(
+  () => getMonthValue(placeholder.value),
+  (newMonthVal, oldMonthVal) => {
+    // 이전 값이 없거나, 월이 아예 똑같으면 애니메이션 끄기
+    if (!oldMonthVal || newMonthVal === oldMonthVal) {
+      slideDirection.value = '';
+      return;
+    }
+
+    // 숫자를 비교하여 완벽하게 방향 설정
+    if (newMonthVal > oldMonthVal) {
+      slideDirection.value = 'slide-left'; // 미래(다음달)로 갈 때
+    } else {
+      slideDirection.value = 'slide-right'; // 과거(이전달)로 갈 때
+    }
+  },
+  { flush: 'sync' } // 이 옵션이 타이밍 꼬임(버그)을 완벽하게 잡아줍니다!
+);
+</script>
+
+<template>
+  <DefineMonthTemplate
+    v-slot="{ date }"
+    class="h-full"
+  >
+    <div class="**:data-[slot=native-select-icon]:right-1">
+      <div class="relative">
+        <div class="absolute inset-0 flex h-full items-center text-sm pl-2 pointer-events-none">
+          {{ formatter.custom(toDate(date), { month: 'short' }) }}
+        </div>
+        <NativeSelect
+          class="text-xs h-8 pr-6 pl-2 text-transparent relative"
+          :model-value="date.month"
+          @change="
+            (e) => {
+              placeholder = placeholder.set({
+                month: Number(e?.target?.value),
+              });
+            }
+          "
+        >
+          <NativeSelectOption
+            v-for="month in createYear({ dateObj: date })"
+            :key="month.toString()"
+            :value="month.month"
+            :selected="date.month === month.month"
+          >
+            {{ formatter.custom(toDate(month), { month: 'short' }) }}
+          </NativeSelectOption>
+        </NativeSelect>
+      </div>
+    </div>
+  </DefineMonthTemplate>
+
+  <DefineYearTemplate v-slot="{ date }">
+    <div class="**:data-[slot=native-select-icon]:right-1">
+      <div class="relative">
+        <div class="absolute inset-0 flex h-full items-center text-sm pl-2 pointer-events-none">
+          {{ formatter.custom(toDate(date), { year: 'numeric' }) }}
+        </div>
+        <NativeSelect
+          class="text-xs h-8 pr-6 pl-2 text-transparent relative"
+          :model-value="date.year"
+          @change="
+            (e) => {
+              placeholder = placeholder.set({
+                year: Number(e?.target?.value),
+              });
+            }
+          "
+        >
+          <NativeSelectOption
+            v-for="year in yearRange"
+            :key="year.toString()"
+            :value="year.year"
+            :selected="date.year === year.year"
+          >
+            {{ formatter.custom(toDate(year), { year: 'numeric' }) }}
+          </NativeSelectOption>
+        </NativeSelect>
+      </div>
+    </div>
+  </DefineYearTemplate>
+
+  <CalendarRoot
+    v-slot="{ grid, weekDays, date }"
+    v-bind="forwarded"
+    v-model:placeholder="placeholder"
+    data-slot="calendar"
+    :class="cn('p-3', props.class)"
+  >
+    <CalendarHeader class="pt-0">
+      <nav class="flex items-center gap-1 absolute top-0 inset-x-0 justify-between">
+        <CalendarPrevButton>
+          <slot name="calendar-prev-icon" />
+        </CalendarPrevButton>
+        <CalendarNextButton>
+          <slot name="calendar-next-icon" />
+        </CalendarNextButton>
+      </nav>
+
+      <slot
+        name="calendar-heading"
+        :date="date"
+        :month="ReuseMonthTemplate"
+        :year="ReuseYearTemplate"
+      >
+        <template v-if="layout === 'month-and-year'">
+          <div class="flex items-center justify-center gap-1">
+            <ReuseMonthTemplate :date="date" />
+            <ReuseYearTemplate :date="date" />
+          </div>
+        </template>
+        <template v-else-if="layout === 'month-only'">
+          <div class="flex items-center justify-center gap-1">
+            <ReuseMonthTemplate :date="date" />
+            {{ formatter.custom(toDate(date), { year: 'numeric' }) }}
+          </div>
+        </template>
+        <template v-else-if="layout === 'year-only'">
+          <div class="flex items-center justify-center gap-1">
+            {{ formatter.custom(toDate(date), { month: 'short' }) }}
+            <ReuseYearTemplate :date="date" />
+          </div>
+        </template>
+        <template v-else>
+          <CalendarHeading />
+        </template>
+      </slot>
+    </CalendarHeader>
+
+    <div class="relative overflow-hidden mt-4 sm:gap-x-4 sm:gap-y-0 min-h-[220px] w-full">
+      <transition :name="slideDirection">
+        <div
+          :key="`${placeholder.year}-${placeholder.month}`"
+          class="flex flex-col gap-y-4 w-full absolute top-0 left-0"
+        >
+          <CalendarGrid
+            v-for="month in grid"
+            :key="month.value.toString()"
+            class="w-full"
+          >
+            <CalendarGridHead>
+              <CalendarGridRow>
+                <CalendarHeadCell
+                  v-for="day in weekDays"
+                  :key="day"
+                >
+                  {{ day }}
+                </CalendarHeadCell>
+              </CalendarGridRow>
+            </CalendarGridHead>
+
+            <CalendarGridBody>
+              <CalendarGridRow
+                v-for="(weekDates, index) in month.rows"
+                :key="`weekDate-${index}`"
+                class="mt-2 w-full"
+              >
+                <CalendarCell
+                  v-for="weekDate in weekDates"
+                  :key="weekDate.toString()"
+                  :date="weekDate"
+                  class="relative"
+                >
+                  <CalendarCellTrigger
+                    :day="weekDate"
+                    :month="month.value"
+                    class="cursor-pointer"
+                  />
+
+                  <div
+                    v-if="props.data"
+                    class="absolute bottom-0.4 left-0 right-0 flex justify-center gap-1 pointer-events-none"
+                  >
+                    <span
+                      v-if="getTransactionData(weekDate)?.[0] > 0"
+                      class="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-sm"
+                    ></span>
+                    <span
+                      v-if="getTransactionData(weekDate)?.[1] > 0"
+                      class="w-1.5 h-1.5 rounded-full bg-[#ec3737] shadow-sm"
+                    ></span>
+                  </div>
+                </CalendarCell>
+              </CalendarGridRow>
+            </CalendarGridBody>
+          </CalendarGrid>
+        </div>
+      </transition>
+    </div>
+  </CalendarRoot>
+</template>
+
+<style scope>
+/* 공통 애니메이션 속성 */
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.slide-left-leave-active,
+.slide-right-leave-active {
+  position: absolute;
+  width: 100%;
+}
+
+/* 다음 달로 넘길 때 (왼쪽으로 밀기) */
+.slide-left-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-left-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* 이전 달로 넘길 때 (오른쪽으로 밀기) */
+.slide-right-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-right-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+</style>
