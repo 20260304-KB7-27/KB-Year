@@ -40,7 +40,7 @@ export const useDurationStore = defineStore('duration', () => {
 
   const dateTransactionNumber = computed(() => {
     const data = {};
-    monthlyTrans.value.forEach((t) => {
+    allTransactions.value.forEach((t) => {
       if (!t.date) return;
 
       // 날짜 키 생성 (YYYY-MM-DD)
@@ -97,6 +97,8 @@ export const useDurationStore = defineStore('duration', () => {
       day: cal.day,
     };
   });
+
+  const allTransactions = computed(() => transactionsStore.transactions);
 
   /** BarChart 등에 쓰는 기간 요약 문구 (month / day / week) */
   const durationSummary = computed(() => {
