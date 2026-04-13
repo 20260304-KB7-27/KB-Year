@@ -9,7 +9,7 @@
   </div>
 
   <div
-    class="w-full rounded-2xl px-4 py-3"
+    class="w-full rounded-2xl px-4 py-3 h-full cursor-pointer"
     @click="handleTradeList()"
   >
     <div
@@ -97,8 +97,18 @@ const setItemRef = (el, index) => {
   if (el) itemRefs.value[index] = el;
 };
 
+// 부모에게 보낼 이벤트를 정의합니다.
+const emit = defineEmits(['start-hide']);
+
 const handleTradeList = () => {
-  router.push('/tradeList');
+  // 1. 부모(Main.vue)에게 카드를 숨기라는 이벤트를 보냅니다.
+  emit('start-hide');
+
+  // 2. 애니메이션 진행 시간(400ms)만큼 기다린 후에 라우팅합니다.
+  setTimeout(() => {
+    // 기존에 있던 라우팅 코드를 이곳에 넣습니다.
+    router.push('/tradelist');
+  }, 400);
 };
 
 const setScrollPadding = async () => {

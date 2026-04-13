@@ -73,13 +73,13 @@ const formatNumber = (num) => (num || 0).toLocaleString();
       <div
         v-for="card in cards"
         :key="card.id"
-        class="neo-inset py-4 px-6 rounded-[40px] min-w-[260px] flex items-center gap-6 transition-all duration-300"
+        class="neo-inset py-4 px-6 rounded-[40px] min-w-[240px] flex items-center gap-6 transition-all duration-300"
       >
-        <div
-          class="w-12 h-12 rounded-2xl neo-outset flex items-center justify-center shrink-0"
-          :style="{ color: card.color }"
-        >
-          <span class="text-xl font-bold">●</span>
+        <div class="w-10 h-10 rounded-2xl neo-outset flex items-center justify-center shrink-0">
+          <div
+            class="rounded-full w-5 h-5"
+            :style="{ backgroundColor: card.color }"
+          ></div>
         </div>
 
         <div class="flex flex-col">
