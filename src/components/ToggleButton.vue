@@ -3,7 +3,7 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   />
-  <div class="fixed right-4 bottom-4 z-50">
+  <div class="fixed right-4 z-50 bottom-20 lg:bottom-2">
     <TradePostBtn />
   </div>
 
@@ -15,7 +15,7 @@
   ></div>
 
   <div
-    class="fixed right-4 bottom-20 z-50 flex items-center justify-center bg-linear-to-r from-[#fcaf17] to-[#fdb913] text-white rounded-2xl transition-all duration-300 ease-in-out shadow-lg"
+    class="fixed right-4 z-50 flex items-center justify-center bg-linear-to-r from-[#fcaf17] to-[#fdb913] text-white rounded-2xl transition-all duration-300 ease-in-out shadow-lg bottom-36 lg:bottom-20"
     :class="toggleActive ? 'h-40 w-40' : 'h-12 w-12'"
     @mouseenter="toggleActive = true"
     @mouseleave="toggleActive = false"
@@ -52,8 +52,11 @@
 import { computed, ref } from 'vue';
 import TradePostBtn from '@/components/tradeList/TradePostBtn.vue';
 import CustomSelect from './ui/custom-select/CustomSelect.vue';
+import { useDurationStore } from '@/stores/duration';
 
 const emits = defineEmits(['reset', 'duration']);
+
+const durationStore = useDurationStore();
 
 const BtnYellowClass = computed(() => [
   'w-full px-4 py-2.5 rounded-xl font-bold cursor-pointer transition-all',
@@ -65,7 +68,7 @@ const BtnYellowClass = computed(() => [
   'active:shadow-[inset_4px_4px_8px_#d79e10,inset_-4px_-4px_8px_#ffd416]',
 ]);
 
-const selectedValue = ref('month');
+const selectedValue = computed(() => durationStore.duration);
 
 const selectOptions = [
   { label: '월간', value: 'month' },

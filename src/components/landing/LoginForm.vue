@@ -20,6 +20,7 @@
         type="text"
         placeholder="아이디를 입력해 주세요."
         class="w-full px-5 py-4 bg-[#f4f2ee] rounded-xl text-[#645b4c] outline-none shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] focus:shadow-[inset_6px_6px_12px_#d9d5ce,inset_-6px_-6px_12px_#ffffff] transition-all"
+        @keyup.enter="handleLogin"
       />
 
       <div class="relative">
@@ -28,6 +29,7 @@
           :type="showPassword ? 'text' : 'password'"
           placeholder="비밀번호를 입력해 주세요."
           class="w-full px-5 py-4 bg-[#f4f2ee] rounded-xl text-[#645b4c] outline-none shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff] focus:shadow-[inset_6px_6px_12px_#d9d5ce,inset_-6px_-6px_12px_#ffffff] transition-all"
+          @keyup.enter="handleLogin"
         />
         <button
           class="absolute right-4 top-1/2 -translate-y-1/2 text-[#a39b8f] hover:text-[#645b4c]"

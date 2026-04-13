@@ -1,6 +1,6 @@
 <template>
   <form
-    class="flex flex-col gap-4"
+    class="mx-auto flex flex-col gap-4"
     @submit.prevent="handleSubmit"
   >
     <div class="flex flex-col gap-2">
@@ -94,8 +94,9 @@ const emit = defineEmits(['submit', 'cancel']);
 
 const getCurrentDateTimeLocal = () => {
   const now = new Date();
-  const offset = now.getTimezoneOffset();
-  const local = new Date(now.getTime() - offset * 60 * 1000);
+  // const offset = now.getTimezoneOffset();
+  const offset = 9 * 60 * 60 * 1000;
+  const local = new Date(now.getTime() + offset);
   return local.toISOString().slice(0, 16);
 };
 
@@ -168,7 +169,7 @@ const handleSubmit = () => {
   emit('submit', {
     ...form,
     amount: Number(form.amount),
-    date: new Date(form.date).toISOString(),
+    date: form.date,
   });
 };
 </script>
