@@ -21,19 +21,21 @@
       <div
         v-for="tx in sortedData"
         :key="tx.id"
-        class="flex items-center justify-between p-3 rounded-xl bg-white/60 shadow-sm border border-white/50"
+        class="group min-h-[60px] flex items-center justify-between p-3 rounded-xl bg-white/60 shadow-sm border border-white/50 cursor-pointer"
       >
-        <div class="flex flex-col gap-1">
+        <div class="flex flex-col gap-1 group-hover:hidden">
           <span class="text-[10px] font-bold text-[#a39b8f]">
             {{ formatTime(tx.date) }}
           </span>
-          <span class="text-sm font-bold text-gray-700">
+          <span
+            class="block text-sm font-bold text-gray-700 w-30 whitespace-nowrap overflow-hidden text-ellipsis"
+          >
             {{ tx.memo || '내용 없음' }}
           </span>
         </div>
 
         <span
-          class="font-extrabold text-[15px]"
+          class="block font-extrabold text-[15px] w-30 whitespace-nowrap overflow-hidden text-ellipsis text-right group-hover:w-full group-hover:text-center"
           :class="tx.type === 'income' ? 'text-[#10B981]' : 'text-[#EF4444]'"
         >
           {{ tx.type === 'income' ? '+' : '-' }}{{ tx.amount.toLocaleString() }}원
