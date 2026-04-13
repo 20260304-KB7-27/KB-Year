@@ -269,7 +269,7 @@ onMounted(() => {
 
     <div class="relative group">
       <div
-        class="absolute left-[40px] top-0 bottom-0 w-10 z-20 flex items-center pl-2 bg-gradient-to-r from-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity no-drag pointer-events-none group-hover:pointer-events-auto"
+        class="absolute left-10 top-0 bottom-0 w-10 z-20 flex items-center pl-2 bg-gradient-to-r from-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity no-drag pointer-events-none group-hover:pointer-events-auto"
         @mouseenter="startAutoScroll('left')"
         @mouseleave="stopAutoScroll"
       >
@@ -284,7 +284,7 @@ onMounted(() => {
       </div>
 
       <div class="flex items-start">
-        <div class="w-[40px] shrink-0 h-52">
+        <div class="w-10 shrink-0 h-52">
           <svg
             :viewBox="`0 0 40 ${viewboxHeight}`"
             class="w-full h-full overflow-visible"
@@ -372,11 +372,17 @@ onMounted(() => {
               </svg>
             </div>
 
-            <div class="flex justify-between px-[40px] mt-0">
+            <div
+              :class="displayCount <= 7 && zoomLevel <= 25 ? 'px-20' : 'px-10'"
+              class="flex justify-between mt-0"
+            >
               <span
                 v-for="d in trendData"
                 :key="d.label"
-                class="text-[11px] text-gray-400 font-bold whitespace-nowrap w-0 flex justify-center overflow-visible"
+                :class="
+                  parseInt(d.label.split('일')[0]) % 2 || zoomLevel >= 50 ? 'opacity-100' : 'hidden'
+                "
+                class="text-[0.5em] text-gray-400 font-bold whitespace-nowrap w-0 flex justify-center overflow-visible rotate-315"
               >
                 {{ d.label }}
               </span>
