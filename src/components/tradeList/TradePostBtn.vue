@@ -21,6 +21,7 @@
 
         <TradeForm
           mode="create"
+          :loading="isSubmitting"
           @submit="handleSubmit"
           @cancel="open = false"
         />
@@ -45,16 +46,25 @@ import { useUserStore } from '@/stores/user';
 import TradeForm from '@/components/tradeList/TradeForm.vue';
 
 const open = ref(false);
+const isSubmitting = ref(false);
 
 const store = useTransactionsStore();
 const userStore = useUserStore();
 
 const handleSubmit = async (payload) => {
-  await store.addTransaction({
-    ...payload,
-    userid: userStore.user.userid,
-  });
-
-  open.value = false;
+  if (isSubmitting.value) return;
+  try {
+    isSubmitting.value = true;
+    await store.addTransaction({
+      ...payload,
+      userid: userStore.user.userid,
+    });
+    console.log('isSubmitting', isSubmitting.value);
+    open.value = false;
+  } catch (error) {
+    console.error('거래 등록 실패:', error);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
