@@ -25,12 +25,19 @@
 
     <div class="flex flex-row items-end gap-3">
       <div class="my-auto flex flex-col items-end justify-center">
-        <span
-          class="text-[0.9em] font-extrabold leading-none"
-          :class="transaction.type === 'income' ? 'text-[#4CD67A]' : 'text-[#FF6F6F]'"
-        >
-          {{ transaction.type === 'income' ? '+' : '-' }}{{ formatAmount(transaction.amount) }}원
-        </span>
+        <div class="flex flex-row mx-auto justify-end">
+          <span
+            class="flex mx-auto text-[0.9em] font-extrabold leading-none overflow-x-auto justify-end w-[200px]"
+            :class="transaction.type === 'income' ? 'text-[#4CD67A]' : 'text-[#FF6F6F]'"
+          >
+            {{ transaction.type === 'income' ? '+' : '-' }}{{ formatAmount(transaction.amount) }}
+          </span>
+          <span
+            class="text-[0.9em] font-extrabold leading-none"
+            :class="transaction.type === 'income' ? 'text-[#4CD67A]' : 'text-[#FF6F6F]'"
+            >원</span
+          >
+        </div>
         <span class="mt-2 text-[12px] leading-none text-[#8d8d8d]">
           {{ formatTime(transaction.date) }}
         </span>

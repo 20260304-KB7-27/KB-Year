@@ -36,11 +36,13 @@
       >
         <input
           v-model="form.amount"
-          type="number"
+          type="text"
+          inputmode="numeric"
           min="0"
           step="1"
-          placeholder="3200"
+          placeholder="0"
           class="w-full border-none bg-transparent text-sm font-semibold text-slate-700 outline-none"
+          @input="handleAmountInput"
         />
         <span class="ml-2 shrink-0 text-sm font-bold text-[#8d8d8d]">원</span>
       </div>
@@ -51,7 +53,8 @@
       <textarea
         v-model="form.memo"
         rows="4"
-        placeholder="메모를 입력하세요"
+        maxlength="200"
+        placeholder="메모를 입력하세요 (최대 200자 작성 가능합니다.)"
         class="w-full resize-none rounded-xl border-none bg-white/90 px-3 py-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition duration-300 focus:ring-2 focus:ring-[#fcaf17]/40"
       />
     </div>
@@ -67,7 +70,8 @@
 
       <button
         type="submit"
-        class="flex-1 rounded-xl bg-gradient-to-r from-[#fcaf17] to-[#fdb913] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:scale-[1.02] active:scale-[0.98]"
+        :disabled="loading"
+        class="flex-1 rounded-xl bg-gradient-to-r from-[#fcaf17] to-[#fdb913] px-4 py-3 text-sm font-bold text-white shadow-md transition hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:pointer-events-none disabled:hover:scale-100 disabled:active:scale-100"
       >
         {{ submitLabel }}
       </button>
@@ -87,6 +91,10 @@ const props = defineProps({
   initialValue: {
     type: Object,
     default: () => ({}),
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -132,6 +140,13 @@ const categoryOptions = [
   { label: '주수입', value: '주수입' },
   { label: '기타', value: '기타' },
 ];
+const sanitizeAmount = (value) => {
+  if (!value) return '';
+
+  return String(value)
+    .replace(/[^0-9]/g, '')
+    .slice(0, 16);
+};
 
 watch(
   () => props.initialValue,
@@ -139,7 +154,7 @@ watch(
     form.date = toDateTimeLocal(value?.date);
     form.type = value?.type ?? 'expense';
     form.category = value?.category ?? '식비';
-    form.amount = value?.amount ?? '';
+    form.amount = sanitizeAmount(value?.amount ?? '');
     form.memo = value?.memo ?? '';
   },
   { immediate: true, deep: true }
@@ -171,5 +186,12 @@ const handleSubmit = () => {
     amount: Number(form.amount),
     date: form.date,
   });
+};
+
+const handleAmountInput = (e) => {
+  const onlyNumbers = e.target.value.replace(/[^0-9]/g, '').slice(0, 16);
+
+  e.target.value = onlyNumbers;
+  form.amount = onlyNumbers;
 };
 </script>
