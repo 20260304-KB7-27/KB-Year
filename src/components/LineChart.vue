@@ -51,7 +51,6 @@ const scrollToRight = async () => {
 
 // 1. transactionsStore의 전체 데이터를 감시하여 차트 갱신
 const trendData = computed(() => {
-  const now = new Date();
   // 기준점을 durationStore.date(현재 선택된 달)로 잡으면 더 정확한 연동이 가능합니다.
   const referenceDate = durationStore.date
     ? new Date(durationStore.date.year, durationStore.date.month - 1)

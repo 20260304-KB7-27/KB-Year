@@ -26,7 +26,6 @@ export const useTransactionStore = defineStore('transaction', () => {
         params: { userid: id, date_gte: from, date_lte: to },
       });
       if (response.status === 200) {
-        console.log(response.data, '호출됨!');
         // console.log(response.data.filter((t) => t.type === 'income'));
         durationTrans.value.income = response.data.filter((t) => t.type === 'income');
         durationTrans.value.expense = response.data.filter((t) => t.type === 'expense');
@@ -126,7 +125,6 @@ export const useTransactionStore = defineStore('transaction', () => {
       const response = await axios.get(uri, {
         params: { userid: id, date_gte: from, date_lte: to, _sort: '-date' },
       });
-      console.log(response.data);
       if (response.status === 200) {
         monthlyTrans.value = response.data;
         getTransactionNumber();

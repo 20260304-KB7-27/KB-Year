@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between rounded-[22px] bg-[#f4f2ee] px-5 py-4 neo-outset">
     <div class="flex items-center gap-4">
       <div
-        class="flex h-14 w-14 items-center justify-center rounded-[18px] bg-[#f4f2ee] neo-inset"
+        class="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[#f4f2ee] neo-inset"
         :class="transaction.type === 'income' ? 'text-[#4CD67A]' : 'text-[#FF6F6F]'"
       >
         <component
@@ -12,7 +12,9 @@
       </div>
 
       <div class="flex flex-col">
-        <span class="text-[15px] font-extrabold leading-none text-[#4b4b4b]">
+        <span
+          class="text-[0.9em] font-extrabold leading-none text-[#4b4b4b] w-20 text-ellipsis whitespace-nowrap overflow-hidden"
+        >
           {{ transaction.memo }}
         </span>
         <span class="mt-2 text-[12px] leading-none text-[#8d8d8d]">
@@ -21,10 +23,10 @@
       </div>
     </div>
 
-    <div class="flex flex-row items-end gap-5">
+    <div class="flex flex-row items-end gap-3">
       <div class="my-auto flex flex-col items-end justify-center">
         <span
-          class="text-[15px] font-extrabold leading-none"
+          class="text-[0.9em] font-extrabold leading-none"
           :class="transaction.type === 'income' ? 'text-[#4CD67A]' : 'text-[#FF6F6F]'"
         >
           {{ transaction.type === 'income' ? '+' : '-' }}{{ formatAmount(transaction.amount) }}원

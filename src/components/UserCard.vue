@@ -1,13 +1,15 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { useDurationStore } from '@/stores/duration';
 import { LogOut, Settings, Award, Shield, Crown, Zap, User } from 'lucide-vue-next';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
+import EditProfile from './profile/EditProfile.vue';
 // 1. 기본 유저 정보 (추후 DB 연동 가능)
 const userStore = useUserStore();
+const router = useRouter();
 
 const { user } = storeToRefs(userStore);
 const { signOut } = userStore;
@@ -18,11 +20,10 @@ const handleLogout = async () => {
   if (confirm('로그아웃 하시겠습니까?')) {
     try {
       await signOut(); // 여기서 실제 로그아웃 함수 호출
-      console.log('로그아웃 성공');
-      useRouter().push('/login');
-      // 필요하다면 여기서 router.push('/login') 등을 추가하세요.
+
+      router.push('/login');
     } catch (error) {
-      console.error('로그아웃 실패:', error);
+      alert('로그아웃 중 오류가 발생했습니다. 다시 시도해 주세요.');
     }
   }
 };
@@ -104,21 +105,23 @@ const tierProgress = computed(() => {
   return Math.min(100, Math.max(0, (current / range) * 100));
 });
 
-const openEditProfile = () => {
-  console.log('Navigate to edit profile page or open drawer');
-  // 예: router.push('/profile/edit');
-};
-
 const avatarClass = computed(
   () =>
-    'w-24 h-24 rounded-full flex items-center justify-center mb-4 transition-all duration-200 bg-[#f4f2ee]'
+    'w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center mb-4 transition-all duration-200 bg-[#f4f2ee]'
 );
 </script>
 
 <template>
-  <div class="flex flex-col items-center">
-    <div class="mb-5 mt-10">
-      <div class="flex justify-center items-center gap-3 mb-3">
+  <div class="items-center">
+    <!-- Setting Modal -->
+    <!-- <Settings
+      class="cursor-pointer place-self-end group-hover:translate-x-0.5 transition-transform"
+    /> -->
+    <div class="place-self-end">
+      <EditProfile />
+    </div>
+    <div class="mb-5 mt-5 text-center w-full">
+      <div class="flex justify-evenly items-center mb-3">
         <div class="flex flex-col justify-center">
           <h2 class="text-[#645b4c] font-bold text-2xl">{{ user.name }}</h2>
           <button
@@ -139,17 +142,17 @@ const avatarClass = computed(
           <img :src="tiers[currentTier].img" />
         </div>
       </div>
-      <p
-        class="text-xs font-semibold h-7 w-48 flex items-center justify-center rounded-full mb-5 shadow-sm"
-        :class="[tiers[currentTier].bg, tiers[currentTier].color]"
-      >
-        {{ tiers[currentTier].desc }}
-      </p>
       <!-- 이달의 순수익 등급 -->
       <div
-        class="w-full bg-[#f4f2ee] rounded-3xl p-5 mb-8 shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff]"
+        class="w-full bg-[#f4f2ee] rounded-3xl p-5 mb-2 shadow-[inset_4px_4px_8px_#d9d5ce,inset_-4px_-4px_8px_#ffffff]"
       >
-        <div class="flex justify-between text-[10px] text-[#a39b8f] mb-2">
+        <p
+          class="text-xs font-semibold h-7 w-48 flex items-center justify-center rounded-full m-auto mb-5 shadow-sm"
+          :class="[tiers[currentTier].bg, tiers[currentTier].color]"
+        >
+          {{ tiers[currentTier].desc }}
+        </p>
+        <div class="flex justify-between text-[10px] text-[#a39b8f]">
           <span class="font-medi um">이번 달 순수익 등급</span>
           <span class="font-bold text-[#645b4c] tracking-wider">{{ currentTier }}</span>
         </div>
@@ -162,7 +165,7 @@ const avatarClass = computed(
         </div>
         <p class="text-[9px] text-[#a39b8f] mt-2.5 text-center font-medium">
           현재 수익:
-          <span class="text-[#645b4c] font-bold">₩{{ netProfit }}</span>
+          <span class="text-[#645b4c] font-bold">₩{{ netProfit.toLocaleString() }}</span>
         </p>
       </div>
     </div>
