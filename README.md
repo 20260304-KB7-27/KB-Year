@@ -1,38 +1,78 @@
-# KB-Year
+# 🐷 KB-Year (캐비어)
 
-1년 365일 함께하는 가계부 플랫폼 캐비어
+> **정보를 한눈에!**  
+> 수입, 지출, 순수익과 소비 흐름을 한 화면에서 확인할 수 있는 가계부 웹 서비스
 
-## Recommended IDE Setup
+---
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 📌 프로젝트 소개
 
-## Recommended Browser Setup
+KB-Year는 여러 페이지를 이동하지 않고  
+**재정 상태와 소비 흐름을 한눈에 파악할 수 있도록 만든 가계부 서비스**입니다.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+---
 
-## Customize configuration
+## ✨ 주요 기능
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- 📊 **재정 요약 카드**
+  - 수입 / 지출 / 순수익을 한눈에 확인
 
-## Project Setup
+- 📅 **캘린더 기반 소비 패턴**
+  - 날짜별 수입/지출 확인
+  - 특정 날짜 클릭 시 상세 내역 조회
 
-```sh
-npm install
-```
+- 🧾 **거래 내역 관리**
+  - 거래 등록 / 수정 / 삭제
 
-### Compile and Hot-Reload for Development
+- 📈 **수입·지출 그래프**
+  - 재정 흐름을 직관적으로 확인
 
-```sh
-npm run dev
-```
+- 🏅 **재정 상태 뱃지**
+  - 소비 습관을 시각적으로 표현
 
-### Compile and Minify for Production
+---
 
-```sh
-npm run build
-```
+## 👨‍👩‍👧‍👦 팀 구성
+
+| 이름   | 담당                           |
+| ------ | ------------------------------ |
+| 강태훈 | 랜딩 페이지 / 유저 로직 / JIRA |
+| 김충훈 | 캘린더 / 세부 내역 / JIRA      |
+| 김주영 | 거래 내역 / 거래 CRUD / PPT    |
+| 김나현 | 요약 카드 / 그래프 / UI/UX     |
+
+---
+
+## 🤝 협업 방식
+
+- Jira 기반 이슈 관리
+- 기능 단위 작업 분리 및 진행 상태 공유
+- 특정 인원에 치우치지 않은 **균형 잡힌 협업**
+
+---
+
+## 📊 결과
+
+- ✅ **Best Practices 점수 향상**
+- ⚠️ 기능 추가로 인한 **Performance 점수 하락**
+
+---
+
+## ⚠️ 아쉬운 점
+
+- 초기 로딩 비용 증가로 성능 저하
+- 일부 컴포넌트가 화면에 완전히 노출되지 않음
+
+---
+
+## 🔧 개선 방향
+
+- 초기 렌더링 최적화
+- 반응형 레이아웃 개선
+- 컴포넌트 크기 및 구조 개선
+
+---
+
+## 🚀 한 줄 정리
+
+> **흩어진 소비 정보를 하나의 화면으로 모아, 재정 흐름을 직관적으로 보여주는 가계부 서비스**
