@@ -13,13 +13,25 @@ export const CARD_FADE_CLASS_BY_AXIS = Object.freeze({
   }),
 });
 
+/**
+ * @param {object} [options]
+ * @param {Record<string, 'top' | 'bottom'>} [options.directions] 카드 type → 축
+ * @param {'top' | 'bottom'} [options.defaultDirection='bottom']
+ * @param {{ at: number, first: 'top' | 'bottom', second: 'top' | 'bottom' }} [options.gridSplit]
+ *        `gridSplit`이 있으면 `cardEnterLeaveClass`에 **그리드 순서 index(0…)** 를 넘김. index < at → first, 아니면 second.
+ */
 export const useCardFadeAnimation = (cardOn, isFirstLoad, options = {}) => {
-  const { directions = {}, defaultDirection = 'bottom' } = options;
+  const { directions = {}, defaultDirection = 'bottom', gridSplit } = options;
 
-  const cardEnterLeaveClass = (type) => {
+  const cardEnterLeaveClass = (typeOrIndex) => {
     const on = cardOn.value;
     const leaving = !on && !isFirstLoad.value;
-    const axis = directions[type] ?? defaultDirection;
+    let axis;
+    if (gridSplit && typeof typeOrIndex === 'number') {
+      axis = typeOrIndex < gridSplit.at ? gridSplit.first : gridSplit.second;
+    } else {
+      axis = directions[typeOrIndex] ?? defaultDirection;
+    }
     const pair = CARD_FADE_CLASS_BY_AXIS[axis] ?? CARD_FADE_CLASS_BY_AXIS.bottom;
     return {
       [pair.enter]: on,

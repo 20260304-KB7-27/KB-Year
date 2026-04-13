@@ -2,6 +2,7 @@
 import draggable from 'vuedraggable';
 
 import { markRaw, ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import { Calendar } from '@/components/ui/calendar';
 import Card from '@/components/Card.vue';
@@ -13,19 +14,22 @@ import ToggleButton from '@/components/ToggleButton.vue';
 import BarChart from '@/components/BarChart.vue';
 import { useBarChartStore } from '@/stores/barChart';
 import TimeLine from '@/components/tradeList/TimeLine.vue';
+import MainCardJumpNav from '@/components/main/MainCardJumpNav.vue';
 
 import { useDurationStore } from '@/stores/duration';
+import { useMainCardsStore } from '@/stores/mainCards';
 import { useCardFadeAnimation } from '@/composables/useCardFadeAnimation';
 import PwaInstallToast from '@/components/PwaInstallToast.vue';
 import { shouldShowPwaInstallToast } from '@/utils/pwaInstallToastStorage.js';
 import { usePwaInstall } from '@/composables/usePwaInstall';
-
 import { toast } from 'vue-sonner';
 // 상태 관리
 const userStore = useUserStore(); // 유저 정보 관리
 const user = computed(() => userStore.user);
 const durationStore = useDurationStore(); // 수입/지출 내역 기간 관리
 const barChartStore = useBarChartStore(); // barChart 데이터 관리
+const mainCardsStore = useMainCardsStore();
+const { cards } = storeToRefs(mainCardsStore);
 
 const cardOn = ref(false);
 const isFirstLoad = ref(true);
@@ -61,31 +65,15 @@ const date = computed({
   },
 });
 
-const duration = computed(() => {
-  if (durationStore.duration == 'month') return '이번 달 핵심 요약';
-  else if (durationStore.duration == 'day') return '오늘의 핵심 요약';
-  else return '최근 1주 핵심 요약';
-});
+const duration = computed(() => durationStore.durationSummary);
 
 // 날짜별 수입/지출 횟수
 const dateTransactionNumber = computed(() => durationStore.dateTransactionNumber);
 const barIncome = computed(() => barChartStore.barIncome);
 const barExpense = computed(() => barChartStore.barExpense);
 
-const initialCards = [
-  { id: 1, type: 'user' },
-  { id: 2, type: 'activity' },
-  { id: 3, type: 'dashboard' },
-  { id: 4, type: 'calendar' },
-  // { id: 5, type: 'pie' },
-  { id: 5, type: 'bar' },
-  { id: 6, type: 'line' },
-];
-
-const cards = ref([...initialCards]);
-
 const resetLayout = () => {
-  cards.value = [...initialCards];
+  mainCardsStore.resetCards();
 };
 
 const onDateClick = (selectedDate) => {
@@ -98,20 +86,23 @@ const hideCards = () => {
 };
 
 const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad, {
-  directions: {
-    user: 'top',
-    activity: 'top',
-    dashboard: 'top',
-    calendar: 'bottom',
-    bar: 'bottom',
-    line: 'bottom',
+  gridSplit: {
+    at: 3,
+    first: 'top',
+    second: 'bottom',
   },
-  defaultDirection: 'bottom',
 });
+
+const scrollToCard = (type) => {
+  const el = document.getElementById(`main-card-${type}`);
+  el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
 </script>
 
 <template>
-  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center px-3 sm:px-8 py-7">
+  <div
+    class="bg-[#f4f2ee] min-h-screen flex items-center justify-center sm:px-8 sm:py-7 sm:pb-0 p-3 pb-20"
+  >
     <div class="w-full lg:max-w-5xl md:max-w-2xl">
       <!-- 초기화 버튼 -->
       <!-- <div class="fixed right-5 bottom-1 flex justify-end mb-4 z-50">
@@ -134,44 +125,51 @@ const { cardEnterLeaveClass } = useCardFadeAnimation(cardOn, isFirstLoad, {
         animation="250"
         :delay="200"
         :delay-on-touch-only="true"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center"
+        class="grid grid-cols-1 items-stretch justify-items-stretch gap-10 sm:grid-cols-2 lg:grid-cols-3"
       >
-        <template #item="{ element }">
-          <Card
-            class="opacity-0"
-            :class="cardEnterLeaveClass(element.type)"
+        <template #item="{ element, index }">
+          <div
+            :id="`main-card-${element.type}`"
+            class="flex h-full min-h-0 w-full max-w-full scroll-mt-4 flex-col"
           >
-            <UserCard
-              v-if="element.type === 'user'"
-              :user="user"
-            />
+            <Card
+              class="h-full min-h-0 opacity-0"
+              :class="cardEnterLeaveClass(index)"
+            >
+              <UserCard
+                v-if="element.type === 'user'"
+                :user="user"
+              />
 
-            <TimeLine
-              v-else-if="element.type === 'activity'"
-              @start-hide="hideCards"
-            />
+              <TimeLine
+                v-else-if="element.type === 'activity'"
+                @start-hide="hideCards"
+              />
 
-            <DashboardContainer v-else-if="element.type === 'dashboard'" />
+              <DashboardContainer v-else-if="element.type === 'dashboard'" />
 
-            <Calendar
-              v-else-if="element.type === 'calendar'"
-              v-model="date"
-              :data="dateTransactionNumber"
-              class="rounded-2xl p-5 h-full neo-inset content-center"
-              @update:model-value="onDateClick"
-            />
+              <Calendar
+                v-else-if="element.type === 'calendar'"
+                v-model="date"
+                :data="dateTransactionNumber"
+                class="rounded-2xl p-5 h-full neo-inset content-center"
+                @update:model-value="onDateClick"
+              />
 
-            <BarChart
-              v-else-if="element.type === 'bar'"
-              :title-data="duration"
-              :income-data="barIncome"
-              :expense-data="barExpense"
-            />
+              <BarChart
+                v-else-if="element.type === 'bar'"
+                :title-data="duration"
+                :income-data="barIncome"
+                :expense-data="barExpense"
+              />
 
-            <LineChart v-else-if="element.type === 'line'" />
-          </Card>
+              <LineChart v-else-if="element.type === 'line'" />
+            </Card>
+          </div>
         </template>
       </draggable>
+
+      <MainCardJumpNav @jump="scrollToCard" />
     </div>
   </div>
 </template>

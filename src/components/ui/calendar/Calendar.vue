@@ -244,7 +244,7 @@ watch(
       </slot>
     </CalendarHeader>
 
-    <div class="relative overflow-hidden mt-4 sm:gap-x-4 sm:gap-y-0 min-h-[200px] w-full">
+    <div class="relative overflow-hidden mt-4 sm:gap-x-4 sm:gap-y-0 min-h-[220px] w-full">
       <transition :name="slideDirection">
         <div
           :key="`${placeholder.year}-${placeholder.month}`"
