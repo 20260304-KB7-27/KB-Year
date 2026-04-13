@@ -100,9 +100,7 @@ const scrollToCard = (type) => {
 </script>
 
 <template>
-  <div
-    class="bg-[#f4f2ee] min-h-screen flex items-center justify-center sm:px-8 sm:py-7 sm:pb-0 p-3 pb-20"
-  >
+  <div class="bg-[#f4f2ee] min-h-screen flex items-center justify-center sm:px-8 sm:py-7 p-3 pb-20">
     <div class="w-full lg:max-w-5xl md:max-w-2xl">
       <!-- 초기화 버튼 -->
       <!-- <div class="fixed right-5 bottom-1 flex justify-end mb-4 z-50">
