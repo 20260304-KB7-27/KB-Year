@@ -1,28 +1,61 @@
 <script setup>
 import { ref, computed, onMounted, nextTick, watch } from 'vue';
 import { useTransactionsStore } from '@/stores/transactions';
+import { useDurationStore } from '@/stores/duration';
 
-const store = useTransactionsStore();
+const transactionsStore = useTransactionsStore();
+const durationStore = useDurationStore();
+
 const scrollContainer = ref(null);
 let scrollInterval = null;
 
-const zoomLevel = ref(100);
-const baseWidth = 450;
+// --- [수정] 로컬 스토리지 연동 (Zoom & DisplayCount) ---
 
-// 줌 값 변경
+// 1. 초기값 설정: 저장된 값이 있으면 사용, 없으면 기본값(100) 사용
+const savedZoom = localStorage.getItem('chart_zoom_level');
+const zoomLevel = ref(savedZoom ? Number(savedZoom) : 100);
+
+// 2. 초기값 설정: 저장된 표시 개수가 있으면 사용, 없으면 기본값(7) 사용
+const savedCount = localStorage.getItem('chart_display_count');
+const displayCount = ref(savedCount ? Number(savedCount) : 7);
+
+const MIN_ZOOM = 25;
+const MAX_ZOOM = 175;
+
+// 값이 변경될 때마다 로컬 스토리지에 저장
+watch(zoomLevel, (newVal) => {
+  localStorage.setItem('chart_zoom_level', newVal);
+});
+
+watch(displayCount, (newVal) => {
+  localStorage.setItem('chart_display_count', newVal);
+});
+
+// 기간 타입(duration)이 변경될 때의 로직은 유지하거나,
+// "새로고침 시에도 유지"를 최우선으로 하려면 아래 immediate 옵션을 신중히 결정해야 합니다.
+// 여기서는 처음 로드 시 스토리지 값을 존중하도록 수정했습니다.
+watch(
+  () => durationStore.duration,
+  (newType) => {
+    // 로컬 스토리지에 데이터가 없을 때만 타입별 기본값 적용
+    if (!localStorage.getItem('chart_display_count')) {
+      if (newType === 'day') displayCount.value = 7;
+      else if (newType === 'week') displayCount.value = 8;
+      else if (newType === 'month') displayCount.value = 12;
+    }
+  }
+);
+
 const changeZoom = (delta) => {
   const newZoom = zoomLevel.value + delta;
-  if (newZoom >= 50 && newZoom <= 150) {
+  if (newZoom >= MIN_ZOOM && newZoom <= MAX_ZOOM) {
     zoomLevel.value = newZoom;
   }
 };
 
-// 줌 레벨에 따른 실제 SVG 가로 너비
-const dynamicViewboxWidth = computed(() => (baseWidth * zoomLevel.value) / 100);
-
+// --- 이하 데이터 연동 및 스크롤 로직은 동일 ---
 const COLORS = { income: '#4ade80', expense: '#f87171' };
 
-// 호버 자동 스크롤
 const startAutoScroll = (direction) => {
   stopAutoScroll();
   scrollInterval = setInterval(() => {
@@ -47,47 +80,94 @@ const scrollToRight = async () => {
   }
 };
 
-watch(() => store.transactions.length, scrollToRight);
-watch(zoomLevel, scrollToRight);
-
 const trendData = computed(() => {
-  const now = new Date();
-  const months = [];
+  const referenceDate = durationStore.date
+    ? new Date(durationStore.date.year, durationStore.date.month - 1, durationStore.date.day || 1)
+    : new Date();
 
-  for (let i = 11; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    months.push({
-      year: d.getFullYear(),
-      month: d.getMonth(),
-      label: `${d.getMonth() + 1}월`,
-    });
+  const points = [];
+  const type = durationStore.duration;
+  const count = displayCount.value;
+
+  if (type === 'day') {
+    for (let i = count - 1; i >= 0; i--) {
+      const d = new Date(referenceDate);
+      d.setDate(referenceDate.getDate() - i);
+      points.push({
+        year: d.getFullYear(),
+        month: d.getMonth(),
+        day: d.getDate(),
+        label: `${d.getDate()}일`,
+      });
+    }
+  } else if (type === 'week') {
+    for (let i = count - 1; i >= 0; i--) {
+      const d = new Date(referenceDate);
+      d.setDate(referenceDate.getDate() - i * 7);
+      const startOfWeek = new Date(d);
+      startOfWeek.setDate(d.getDate() - d.getDay());
+      points.push({
+        year: startOfWeek.getFullYear(),
+        month: startOfWeek.getMonth(),
+        day: startOfWeek.getDate(),
+        label: `${startOfWeek.getMonth() + 1}/${startOfWeek.getDate()}주`,
+      });
+    }
+  } else {
+    for (let i = count - 1; i >= 0; i--) {
+      const d = new Date(referenceDate.getFullYear(), referenceDate.getMonth() - i, 1);
+      points.push({ year: d.getFullYear(), month: d.getMonth(), label: `${d.getMonth() + 1}월` });
+    }
   }
 
-  if (!store.transactions || store.transactions.length === 0) {
-    return months.map((m) => ({ ...m, income: 0, expense: 0 }));
-  }
-
-  return months.map((m) => {
-    const monthly = store.transactions.filter((t) => {
+  return points.map((p) => {
+    const matchedTrans = (transactionsStore.transactions || []).filter((t) => {
       const tDate = new Date(t.date);
-      return tDate.getFullYear() === m.year && tDate.getMonth() === m.month;
+      if (type === 'day') {
+        return (
+          tDate.getFullYear() === p.year &&
+          tDate.getMonth() === p.month &&
+          tDate.getDate() === p.day
+        );
+      } else if (type === 'week') {
+        const weekStart = new Date(p.year, p.month, p.day);
+        weekStart.setHours(0, 0, 0, 0);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        weekEnd.setHours(23, 59, 59, 999);
+        return tDate >= weekStart && tDate <= weekEnd;
+      } else {
+        return tDate.getFullYear() === p.year && tDate.getMonth() === p.month;
+      }
     });
 
-    const income = monthly
-      .filter((t) => Number(t.amount) > 0)
+    const income = matchedTrans
+      .filter((t) => t.type?.toLowerCase() === 'income')
+      .reduce((a, c) => a + Number(c.amount), 0);
+    const expense = matchedTrans
+      .filter((t) => t.type?.toLowerCase() === 'expense')
       .reduce((a, c) => a + Number(c.amount), 0);
 
-    const expense = monthly
-      .filter((t) => Number(t.amount) < 0)
-      .reduce((a, c) => a + Math.abs(Number(c.amount)), 0);
-
-    return {
-      label: m.label,
-      income: income,
-      expense: expense,
-    };
+    return { label: p.label, income: income || 0, expense: expense || 0 };
   });
 });
+
+const dynamicBaseWidth = computed(() => {
+  const count = trendData.value.length;
+  const minWidth = 450;
+  const calculatedWidth = count * 60;
+  return Math.max(minWidth, calculatedWidth);
+});
+
+const dynamicViewboxWidth = computed(() => (dynamicBaseWidth.value * zoomLevel.value) / 100);
+
+watch([() => durationStore.duration, displayCount, zoomLevel], async () => {
+  await nextTick();
+  scrollToRight();
+});
+
+watch(() => transactionsStore.transactions.length, scrollToRight);
+watch(() => durationStore.date, scrollToRight);
 
 const viewboxHeight = 200;
 const padding = { x: 40, y: 25 };
@@ -97,7 +177,6 @@ const chartData = computed(() => {
   const allValues = data.flatMap((d) => [d.income, d.expense]);
   const maxV = Math.max(...allValues, 0);
   const effectiveMaxY = maxV === 0 ? 1000 : maxV * 1.2;
-
   const usableW = dynamicViewboxWidth.value - padding.x * 2;
   const usableH = viewboxHeight - padding.y * 2;
 
@@ -108,15 +187,11 @@ const chartData = computed(() => {
     }));
 
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((ratio) => ({
-    value: Math.round((effectiveMaxY * ratio) / 100) * 100, // 표시될 금액
-    y: viewboxHeight - padding.y - ratio * usableH, // 선이 그려질 Y 좌표
+    value: Math.round((effectiveMaxY * ratio) / 100) * 100,
+    y: viewboxHeight - padding.y - ratio * usableH,
   }));
 
-  return {
-    incomePoints: getPoints('income'),
-    expensePoints: getPoints('expense'),
-    yTicks, // 이 값이 리턴되어야 위 template에서 사용 가능합니다.
-  };
+  return { incomePoints: getPoints('income'), expensePoints: getPoints('expense'), yTicks };
 });
 
 const getPath = (points) => {
@@ -124,23 +199,38 @@ const getPath = (points) => {
   return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
 };
 
-onMounted(async () => {
-  if (!store.transactions.length) await store.fetchTransactions();
+onMounted(() => {
   scrollToRight();
 });
 </script>
 
 <template>
   <div class="w-full">
-    <h2 class="text-gray-600 font-bold text-lg cursor-default mb-2">수입/지출 추이</h2>
+    <div class="flex justify-between items-end mb-2">
+      <h2 class="text-gray-600 font-bold text-lg cursor-default mb-2">수입/지출 추이</h2>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter"
+          >표시 개수</span
+        >
+        <select
+          v-model="displayCount"
+          class="text-[11px] font-bold bg-gray-50 border-none rounded px-2 py-1 text-gray-600 focus:ring-0 cursor-pointer"
+        >
+          <option :value="7">최근 7개</option>
+          <option :value="14">최근 14개</option>
+          <option :value="21">최근 21개</option>
+          <option :value="28">최근 28개</option>
+        </select>
+      </div>
+    </div>
 
     <div class="flex justify-between items-center mb-1 px-1">
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg no-drag">
           <button
-            @click="changeZoom(-25)"
             class="w-7 h-7 flex items-center justify-center rounded-lg neo-interactive text-[#718096] font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            :disabled="zoomLevel <= 50"
+            :disabled="zoomLevel <= 25"
+            @click="changeZoom(-25)"
           >
             <span class="mb-0.5">−</span>
           </button>
@@ -150,9 +240,9 @@ onMounted(async () => {
             </span>
           </div>
           <button
-            @click="changeZoom(25)"
             class="w-7 h-7 flex items-center justify-center rounded-lg neo-interactive text-[#718096] font-bold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            :disabled="zoomLevel >= 150"
+            :disabled="zoomLevel >= MAX_ZOOM"
+            @click="changeZoom(25)"
           >
             <span class="mb-0.5">+</span>
           </button>
@@ -179,7 +269,7 @@ onMounted(async () => {
 
     <div class="relative group">
       <div
-        class="absolute left-[40px] top-0 bottom-0 w-10 z-20 flex items-center pl-2 bg-gradient-to-r from-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity no-drag pointer-events-none group-hover:pointer-events-auto"
+        class="absolute left-10 top-0 bottom-0 w-10 z-20 flex items-center pl-2 bg-gradient-to-r from-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity no-drag pointer-events-none group-hover:pointer-events-auto"
         @mouseenter="startAutoScroll('left')"
         @mouseleave="stopAutoScroll"
       >
@@ -194,7 +284,7 @@ onMounted(async () => {
       </div>
 
       <div class="flex items-start">
-        <div class="w-[40px] shrink-0 h-52">
+        <div class="w-10 shrink-0 h-52">
           <svg
             :viewBox="`0 0 40 ${viewboxHeight}`"
             class="w-full h-full overflow-visible"
@@ -282,11 +372,17 @@ onMounted(async () => {
               </svg>
             </div>
 
-            <div class="flex justify-between px-[40px] mt-0">
+            <div
+              :class="displayCount <= 7 && zoomLevel <= 25 ? 'px-20' : 'px-10'"
+              class="flex justify-between mt-0"
+            >
               <span
                 v-for="d in trendData"
                 :key="d.label"
-                class="text-[11px] text-gray-400 font-bold whitespace-nowrap w-0 flex justify-center overflow-visible"
+                :class="
+                  parseInt(d.label.split('일')[0]) % 2 || zoomLevel >= 50 ? 'opacity-100' : 'hidden'
+                "
+                class="text-[0.5em] text-gray-400 font-bold whitespace-nowrap w-0 flex justify-center overflow-visible rotate-315"
               >
                 {{ d.label }}
               </span>
@@ -297,58 +393,3 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.neo-inset {
-  background: #f4f2ee;
-  box-shadow:
-    inset 6px 6px 12px #dbd9d4,
-    inset -6px -6px 12px #ffffff;
-}
-
-.neo-interactive {
-  background: #f4f2ee;
-  border: none;
-  box-shadow:
-    2px 2px 5px #e8e6e0,
-    -2px -2px 5px #ffffff;
-  cursor: pointer;
-  outline: none;
-}
-
-.neo-interactive:hover:not(:disabled) {
-  box-shadow:
-    5px 5px 10px #dbd9d4,
-    -5px -5px 10px #ffffff;
-  transform: translateY(-0.1px);
-  color: #4a5568;
-}
-
-.neo-interactive:active:not(:disabled) {
-  box-shadow:
-    inset 4px 4px 8px #dbd9d4,
-    inset -4px -4px 8px #ffffff;
-  transform: translateY(0);
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-path,
-circle {
-  transition:
-    d 0.3s ease-in-out,
-    cx 0.3s ease-in-out,
-    cy 0.3s ease-in-out;
-}
-
-.no-drag {
-  user-select: none;
-  -webkit-user-drag: none;
-}
-</style>

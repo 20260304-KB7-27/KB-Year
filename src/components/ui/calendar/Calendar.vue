@@ -3,7 +3,7 @@ import { getLocalTimeZone, today } from '@internationalized/date';
 import { createReusableTemplate, reactiveOmit, useVModel } from '@vueuse/core';
 import { CalendarRoot, useDateFormatter, useForwardPropsEmits } from 'reka-ui';
 import { createYear, createYearRange, toDate } from 'reka-ui/date';
-import { computed, toRaw } from 'vue';
+import { computed, toRaw, ref, watch } from 'vue';
 import { cn } from '@/lib/utils';
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
 import {
@@ -104,6 +104,33 @@ const [DefineMonthTemplate, ReuseMonthTemplate] = createReusableTemplate();
 const [DefineYearTemplate, ReuseYearTemplate] = createReusableTemplate();
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const slideDirection = ref('');
+
+// 연도와 월을 조합하여 절대적인 '달(Month)'의 크기를 비교
+const getMonthValue = (dateObj) => {
+  if (!dateObj) return 0;
+  return dateObj.year * 100 + dateObj.month;
+};
+
+watch(
+  () => getMonthValue(placeholder.value),
+  (newMonthVal, oldMonthVal) => {
+    // 이전 값이 없거나, 월이 아예 똑같으면 애니메이션 끄기
+    if (!oldMonthVal || newMonthVal === oldMonthVal) {
+      slideDirection.value = '';
+      return;
+    }
+
+    // 숫자를 비교하여 완벽하게 방향 설정
+    if (newMonthVal > oldMonthVal) {
+      slideDirection.value = 'slide-left'; // 미래(다음달)로 갈 때
+    } else {
+      slideDirection.value = 'slide-right'; // 과거(이전달)로 갈 때
+    }
+  },
+  { flush: 'sync' } // 이 옵션이 타이밍 꼬임(버그)을 완벽하게 잡아줍니다!
+);
 </script>
 
 <template>
@@ -217,59 +244,101 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       </slot>
     </CalendarHeader>
 
-    <div class="flex flex-col gap-y-4 mt-4 sm:flex-row sm:gap-x-4 sm:gap-y-0">
-      <CalendarGrid
-        v-for="month in grid"
-        :key="month.value.toString()"
-      >
-        <CalendarGridHead>
-          <CalendarGridRow>
-            <CalendarHeadCell
-              v-for="day in weekDays"
-              :key="day"
-            >
-              {{ day }}
-            </CalendarHeadCell>
-          </CalendarGridRow>
-        </CalendarGridHead>
-        <CalendarGridBody>
-          <CalendarGridRow
-            v-for="(weekDates, index) in month.rows"
-            :key="`weekDate-${index}`"
-            class="mt-2 w-full"
+    <div class="relative overflow-hidden mt-4 sm:gap-x-4 sm:gap-y-0 min-h-[220px] w-full">
+      <transition :name="slideDirection">
+        <div
+          :key="`${placeholder.year}-${placeholder.month}`"
+          class="flex flex-col gap-y-4 w-full absolute top-0 left-0"
+        >
+          <CalendarGrid
+            v-for="month in grid"
+            :key="month.value.toString()"
+            class="w-full"
           >
-            <CalendarCell
-              v-for="weekDate in weekDates"
-              :key="weekDate.toString()"
-              :date="weekDate"
-              class="relative"
-            >
-              <CalendarCellTrigger
-                :day="weekDate"
-                :month="month.value"
-                class="cursor-pointer"
-              />
+            <CalendarGridHead>
+              <CalendarGridRow>
+                <CalendarHeadCell
+                  v-for="day in weekDays"
+                  :key="day"
+                >
+                  {{ day }}
+                </CalendarHeadCell>
+              </CalendarGridRow>
+            </CalendarGridHead>
 
-              <div
-                v-if="props.data"
-                class="absolute bottom-0.5 left-0 right-0 flex justify-center gap-1 pointer-events-none"
+            <CalendarGridBody>
+              <CalendarGridRow
+                v-for="(weekDates, index) in month.rows"
+                :key="`weekDate-${index}`"
+                class="mt-2 w-full"
               >
-                <span
-                  v-if="getTransactionData(weekDate)?.[0] > 0"
-                  class="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-sm"
-                ></span>
+                <CalendarCell
+                  v-for="weekDate in weekDates"
+                  :key="weekDate.toString()"
+                  :date="weekDate"
+                  class="relative"
+                >
+                  <CalendarCellTrigger
+                    :day="weekDate"
+                    :month="month.value"
+                    class="cursor-pointer"
+                  />
 
-                <span
-                  v-if="getTransactionData(weekDate)?.[1] > 0"
-                  class="w-1.5 h-1.5 rounded-full bg-[#ec3737] shadow-sm"
-                ></span>
-              </div>
-            </CalendarCell>
-          </CalendarGridRow>
-        </CalendarGridBody>
-      </CalendarGrid>
+                  <div
+                    v-if="props.data"
+                    class="absolute bottom-0.4 left-0 right-0 flex justify-center gap-1 pointer-events-none"
+                  >
+                    <span
+                      v-if="getTransactionData(weekDate)?.[0] > 0"
+                      class="w-1.5 h-1.5 rounded-full bg-[#10B981] shadow-sm"
+                    ></span>
+                    <span
+                      v-if="getTransactionData(weekDate)?.[1] > 0"
+                      class="w-1.5 h-1.5 rounded-full bg-[#ec3737] shadow-sm"
+                    ></span>
+                  </div>
+                </CalendarCell>
+              </CalendarGridRow>
+            </CalendarGridBody>
+          </CalendarGrid>
+        </div>
+      </transition>
     </div>
   </CalendarRoot>
 </template>
 
-<style scope></style>
+<style scope>
+/* 공통 애니메이션 속성 */
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.slide-left-leave-active,
+.slide-right-leave-active {
+  position: absolute;
+  width: 100%;
+}
+
+/* 다음 달로 넘길 때 (왼쪽으로 밀기) */
+.slide-left-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-left-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* 이전 달로 넘길 때 (오른쪽으로 밀기) */
+.slide-right-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-right-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+</style>

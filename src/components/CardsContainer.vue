@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useDurationStore } from '@/stores/duration';
 import { Vue3Lottie } from 'vue3-lottie';
 import LoadAnimation from '../assets/lottie/LoadingDots.json';
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 const durationStore = useDurationStore();
 
@@ -36,7 +37,9 @@ const formatNumber = (num) => (num || 0).toLocaleString();
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
         @click="handleMonthChange(-1)"
       >
-        <span class="text-sm">＜</span>
+        <span class="text-sm font-bold text-gray-400"
+          ><ChevronLeft class="h-4 w-4 text-[#8d8d8d]"
+        /></span>
       </button>
 
       <span class="text-lg font-black text-gray-500 min-w-[120px] text-center tracking-tight">
@@ -47,7 +50,9 @@ const formatNumber = (num) => (num || 0).toLocaleString();
         class="w-10 h-10 rounded-full neo-interactive flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
         @click="handleMonthChange(1)"
       >
-        <span class="text-sm">＞</span>
+        <span class="text-sm font-bold text-gray-400"
+          ><ChevronRight class="h-4 w-4 text-[#8d8d8d]"
+        /></span>
       </button>
     </div>
   </div>
@@ -68,13 +73,13 @@ const formatNumber = (num) => (num || 0).toLocaleString();
       <div
         v-for="card in cards"
         :key="card.id"
-        class="neo-inset py-4 px-6 rounded-[40px] min-w-[290px] flex items-center gap-6 transition-all duration-300"
+        class="neo-inset py-4 px-6 rounded-[40px] min-w-[240px] flex items-center gap-6 transition-all duration-300"
       >
-        <div
-          class="w-12 h-12 rounded-2xl neo-outset flex items-center justify-center shrink-0"
-          :style="{ color: card.color }"
-        >
-          <span class="text-xl font-bold">●</span>
+        <div class="w-10 h-10 rounded-2xl neo-outset flex items-center justify-center shrink-0">
+          <div
+            class="rounded-full w-5 h-5"
+            :style="{ backgroundColor: card.color }"
+          ></div>
         </div>
 
         <div class="flex flex-col">
@@ -90,48 +95,3 @@ const formatNumber = (num) => (num || 0).toLocaleString();
     </div>
   </div>
 </template>
-
-<style scoped>
-.neo-inset {
-  background: #f4f2ee;
-  box-shadow:
-    inset 6px 6px 12px #dbd9d4,
-    inset -6px -6px 12px #ffffff;
-}
-
-.neo-outset {
-  background: #f4f2ee;
-  box-shadow:
-    6px 6px 12px #dbd9d4,
-    -6px -6px 12px #ffffff;
-}
-
-.neo-inset:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    6px 6px 16px #dbd9d4,
-    -6px -6px 16px #ffffff;
-}
-
-.neo-interactive {
-  background: #f4f2ee;
-  border: none;
-  box-shadow:
-    2px 2px 5px #e8e6e0,
-    -2px -2px 5px #ffffff;
-}
-
-.neo-interactive:hover {
-  box-shadow:
-    5px 5px 10px #dbd9d4,
-    -5px -5px 10px #ffffff;
-  transform: translateY(-1px);
-}
-
-.neo-interactive:active {
-  box-shadow:
-    inset 4px 4px 8px #dbd9d4,
-    inset -4px -4px 8px #ffffff;
-  transform: translateY(0);
-}
-</style>
