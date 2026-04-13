@@ -7,6 +7,8 @@ import { LogOut, Settings, Award, Shield, Crown, Zap, User } from 'lucide-vue-ne
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import EditProfile from './profile/EditProfile.vue';
+import { amountSchema } from '@/schemas/schema';
+
 // 1. 기본 유저 정보 (추후 DB 연동 가능)
 const userStore = useUserStore();
 const router = useRouter();
@@ -16,6 +18,19 @@ const { signOut } = userStore;
 const durationStore = useDurationStore();
 const netProfit = computed(() => (durationStore.netProfit < 0 ? 0 : durationStore.netProfit));
 
+// 2. 포맷팅된 수익 계산 (computed 추가)
+const formattedNetProfit = computed(() => {
+  // netProfit 값을 스키마를 통해 검증 및 변환
+  const result = amountSchema.safeParse(netProfit.value);
+  console.log(result);
+
+  if (result.success) {
+    return result.data; // "1.2억", "5,000" 등 변환된 문자열 반환
+  }
+
+  // 에러 발생 시(1,000조 초과 등) 표시할 기본값
+  return '금액 초과';
+});
 const handleLogout = async () => {
   if (confirm('로그아웃 하시겠습니까?')) {
     try {
@@ -165,7 +180,7 @@ const avatarClass = computed(
         </div>
         <p class="text-[9px] text-[#a39b8f] mt-2.5 text-center font-medium">
           현재 수익:
-          <span class="text-[#645b4c] font-bold">₩{{ netProfit.toLocaleString() }}</span>
+          <span class="text-[#645b4c] font-bold">{{ formattedNetProfit }}원</span>
         </p>
       </div>
     </div>
