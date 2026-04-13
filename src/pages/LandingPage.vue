@@ -45,15 +45,15 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 import Loading from './Loading.vue';
 import SignupModal from '@/components/landing/SignupModal.vue';
 import LoginForm from '@/components/landing/LoginForm.vue';
 import LandingSlide from '@/components/landing/LandingSlide.vue';
 
-const isLoading = ref<boolean>(true);
-const isSignupModalOpen = ref<boolean>(false);
+const isLoading = ref(true);
+const isSignupModalOpen = ref(false);
 
 const handleLoadingComplete = () => {
   isLoading.value = false;
