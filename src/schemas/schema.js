@@ -27,7 +27,25 @@ export const signUpSchema = z
 
     birthDate: z
       .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, '날짜 형식(YYYY-MM-DD)이 올바르지 않습니다.'),
+      .regex(/^\d{4}-\d{2}-\d{2}$/, '날짜 형식(YYYY-MM-DD)이 올바르지 않습니다.')
+      .refine(
+        (val) => {
+          // 1. 입력받은 날짜를 날짜 객체로 변환 (시/분/초 00:00:00으로 설정)
+          const selectedDate = new Date(val);
+          selectedDate.setHours(0, 0, 0, 0);
+
+          // 2. 현재 한국 시간 기준의 "오늘" 날짜 구하기
+          const now = new Date();
+          const kstToday = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+          kstToday.setHours(0, 0, 0, 0); // 오늘 날짜의 00:00:00
+
+          // 선택한 날짜가 오늘보다 작거나 같아야 통과
+          return selectedDate <= kstToday;
+        },
+        {
+          message: '생년월일은 오늘 이후의 날짜일 수 없습니다.',
+        }
+      ),
 
     gender: z.enum(['MALE', 'FEMALE'], {
       error: () => ({ message: '성별을 선택해주세요.' }),
@@ -59,7 +77,24 @@ export const editProfileSchema = z
     // 1. 읽기 전용 필드 (검증은 하되 수정은 안 됨)
     userid: z.string(),
     name: z.string(),
-    birthDate: z.string(),
+    birthDate: z.string().refine(
+      (val) => {
+        // 1. 입력받은 날짜를 날짜 객체로 변환 (시/분/초 00:00:00으로 설정)
+        const selectedDate = new Date(val);
+        selectedDate.setHours(0, 0, 0, 0);
+
+        // 2. 현재 한국 시간 기준의 "오늘" 날짜 구하기
+        const now = new Date();
+        const kstToday = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+        kstToday.setHours(0, 0, 0, 0); // 오늘 날짜의 00:00:00
+
+        // 선택한 날짜가 오늘보다 작거나 같아야 통과
+        return selectedDate <= kstToday;
+      },
+      {
+        message: '생년월일은 오늘 이후의 날짜일 수 없습니다.',
+      }
+    ),
     gender: z.enum(['MALE', 'FEMALE']),
 
     // 2. 수정 가능 필드 (기존 signUpSchema 로직 유지)

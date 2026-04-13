@@ -134,12 +134,6 @@ const moveMonth = (diff) => {
   const newDate = new Date(selectedDate.value);
   newDate.setMonth(newDate.getMonth() + diff);
 
-  const today = new Date();
-  const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-  const targetMonthStart = new Date(newDate.getFullYear(), newDate.getMonth(), 1);
-
-  if (targetMonthStart > currentMonthStart) return;
-
   selectedDate.value = newDate;
 };
 

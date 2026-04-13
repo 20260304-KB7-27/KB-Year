@@ -47,10 +47,13 @@
         </div>
 
         <div :class="index === transactions.length - 1 ? 'pb-0' : 'pb-6'">
-          <p class="text-sm leading-5 text-gray-700 font-bold">
-            {{ trade.amount.toLocaleString() }}원
-          </p>
-          <p class="text-xs text-gray-500">
+          <div class="flex flex-row">
+            <p class="max-w-25 truncate text-sm leading-5 text-gray-700 font-bold">
+              {{ trade.amount.toLocaleString() }}
+            </p>
+            <p class="text-sm leading-5 text-gray-700 font-bold">원</p>
+          </div>
+          <p class="text-xs text-gray-500 max-w-25 truncate">
             {{ trade.memo }}
           </p>
         </div>
