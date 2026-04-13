@@ -94,7 +94,6 @@ export const useTransactionsStore = defineStore('transactions', () => {
   const addTransaction = async (payload) => {
     isLoading.value = true;
     error.value = null;
-
     try {
       await axios.post(`${url}/transactions`, payload);
       await refetchTransactions();
